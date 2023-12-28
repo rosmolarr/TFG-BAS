@@ -11,8 +11,8 @@ import org.springframework.samples.petclinic.auth.payload.request.SignupRequest;
 import org.springframework.samples.petclinic.clinic.Clinic;
 import org.springframework.samples.petclinic.clinic.ClinicService;
 import org.springframework.samples.petclinic.clinic.PricingPlan;
-import org.springframework.samples.petclinic.clinicowner.ClinicOwner;
-import org.springframework.samples.petclinic.clinicowner.ClinicOwnerService;
+import org.springframework.samples.petclinic.entidad.Entidad;
+import org.springframework.samples.petclinic.entidad.EntidadService;
 import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.samples.petclinic.owner.OwnerService;
 import org.springframework.samples.petclinic.user.AuthoritiesService;
@@ -36,7 +36,7 @@ public class AuthServiceTests {
 	@Autowired
 	protected ClinicService clinicService;
 	@Autowired
-	protected ClinicOwnerService clinicOwnerService;
+	protected EntidadService entidadService;
 	@Autowired
 	protected AuthoritiesService authoritiesService;
 
@@ -88,22 +88,22 @@ public class AuthServiceTests {
 		request.setUsername(username);
 
 		if(auth == "OWNER" || auth == "VET") {
-			User clinicOwnerUser = new User();
-			clinicOwnerUser.setUsername("clinicOwnerTest");
-			clinicOwnerUser.setPassword("clinicOwnerTest");
-			clinicOwnerUser.setAuthority(authoritiesService.findByAuthority("CLINIC_OWNER"));
-			userService.saveUser(clinicOwnerUser);
-			ClinicOwner clinicOwner = new ClinicOwner();
+			User entidadUser = new User();
+			entidadUser.setUsername("entidadTest");
+			entidadUser.setPassword("entidadTest");
+			entidadUser.setAuthority(authoritiesService.findByAuthority("CLINIC_OWNER"));
+			userService.saveUser(entidadUser);
+			Entidad entidad = new Entidad();
 			Clinic clinic = new Clinic();
-			clinicOwner.setFirstName("Test Name");
-			clinicOwner.setLastName("Test Surname");
-			clinicOwner.setUser(clinicOwnerUser);
-			clinicOwnerService.saveClinicOwner(clinicOwner);
+			entidad.setFirstName("Test Name");
+			entidad.setLastName("Test Surname");
+			entidad.setUser(entidadUser);
+			entidadService.saveEntidad(entidad);
 			clinic.setName("Clinic Test");
 			clinic.setAddress("Test Address");
 			clinic.setPlan(PricingPlan.PLATINUM);
 			clinic.setTelephone("123456789");
-			clinic.setClinicOwner(clinicOwner);
+			clinic.setEntidad(entidad);
 			clinicService.save(clinic);
 			request.setClinic(clinic);
 		}

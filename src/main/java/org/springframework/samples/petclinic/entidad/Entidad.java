@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.clinicowner;
+package org.springframework.samples.petclinic.entidad;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -23,15 +23,15 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@Table(name = "clinic_owners")
-public class ClinicOwner extends Person{
+@Table(name = "entidades")
+public class Entidad extends Person{
 
     @OneToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST })
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private User user;
 
-    @OneToMany(mappedBy = "clinicOwner", orphanRemoval = true)
+    @OneToMany(mappedBy = "entidad", orphanRemoval = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private Set<Clinic> clinics;

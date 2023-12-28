@@ -11,12 +11,6 @@ import org.springframework.samples.petclinic.vet.Vet;
 
 public interface ClinicRepository extends CrudRepository<Clinic, Integer> {
 
-    @Query("SELECT o FROM Owner o WHERE o.clinic.clinicOwner.user.id = :userId")
-    List<Owner> findOwnersOfUserClinics(int userId);
-
-    @Query("SELECT v FROM Vet v WHERE v.clinic.clinicOwner.user.id = :userId")
-    List<Vet> findVetsOfUserClinics(int userId);
-
-    @Query("SELECT c FROM Clinic c WHERE c.clinicOwner.user.id = :userId")
+    @Query("SELECT c FROM Clinic c WHERE c.entidad.user.id = :userId")
     List<Clinic> findClinicsByUserId(int userId);
 }

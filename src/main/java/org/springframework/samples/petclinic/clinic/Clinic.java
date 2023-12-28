@@ -15,7 +15,7 @@ import jakarta.validation.constraints.NotNull;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.samples.petclinic.clinicowner.ClinicOwner;
+import org.springframework.samples.petclinic.entidad.Entidad;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.owner.Owner;
 
@@ -50,8 +50,8 @@ public class Clinic extends BaseEntity{
 	private PricingPlan plan;
 
     @ManyToOne
-	@JoinColumn(name = "clinic_owner", referencedColumnName = "id")
-	private ClinicOwner clinicOwner;
+	@JoinColumn(name = "entidades", referencedColumnName = "id")
+	private Entidad entidad;
 
     @OneToMany(mappedBy = "clinic", orphanRemoval = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)

@@ -24,7 +24,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.samples.petclinic.clinic.Clinic;
 import org.springframework.samples.petclinic.clinic.PricingPlan;
-import org.springframework.samples.petclinic.clinicowner.ClinicOwner;
+import org.springframework.samples.petclinic.entidad.Entidad;
 import org.springframework.samples.petclinic.exceptions.ResourceNotFoundException;
 import org.springframework.samples.petclinic.user.Authorities;
 import org.springframework.samples.petclinic.user.User;
@@ -71,8 +71,8 @@ class OwnerRestControllerTests {
 	private Owner sara;
 	private Owner juan;
 	private User user;
-	private User userClinicOwner;
-	private ClinicOwner clinicOwner;
+	private User userEntidad;
+	private Entidad entidad;
 	private Clinic clinic;
 
 	@BeforeEach
@@ -105,9 +105,9 @@ class OwnerRestControllerTests {
 		ownerAuth.setId(1);
 		ownerAuth.setAuthority("OWNER");
 
-		Authorities clinicOwnerAuth = new Authorities();
+		Authorities entidadAuth = new Authorities();
 		ownerAuth.setId(2);
-		ownerAuth.setAuthority("CLINIC_OWNER");
+		ownerAuth.setAuthority("ENTIDAD");
 
 		user = new User();
 		user.setId(1);
@@ -115,17 +115,17 @@ class OwnerRestControllerTests {
 		user.setPassword("password");
 		user.setAuthority(ownerAuth);
 
-		userClinicOwner = new User();
-		userClinicOwner.setId(1);
-		userClinicOwner.setUsername("clinicOwner");
-		userClinicOwner.setPassword("clinic_owner");
-		userClinicOwner.setAuthority(clinicOwnerAuth);
+		userEntidad = new User();
+		userEntidad.setId(1);
+		userEntidad.setUsername("entidad");
+		userEntidad.setPassword("entidad");
+		userEntidad.setAuthority(entidadAuth);
 
-		clinicOwner = new ClinicOwner();
-		clinicOwner.setId(1);
-		clinicOwner.setFirstName("John");
-		clinicOwner.setLastName("Doe");
-		clinicOwner.setUser(userClinicOwner);
+		entidad = new Entidad();
+		entidad.setId(1);
+		entidad.setFirstName("John");
+		entidad.setLastName("Doe");
+		entidad.setUser(userEntidad);
 
 		clinic = new Clinic();
 		clinic.setId(1);
@@ -133,7 +133,7 @@ class OwnerRestControllerTests {
 		clinic.setAddress("Address");
 		clinic.setTelephone("123456789");
 		clinic.setPlan(PricingPlan.BASIC);
-		clinic.setClinicOwner(clinicOwner);
+		clinic.setEntidad(entidad);
 
 		george.setClinic(clinic);
 		sara.setClinic(clinic);

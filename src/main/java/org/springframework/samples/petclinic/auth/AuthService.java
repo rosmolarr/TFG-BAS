@@ -8,8 +8,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.auth.payload.request.SignupRequest;
 import org.springframework.samples.petclinic.clinic.ClinicService;
-import org.springframework.samples.petclinic.clinicowner.ClinicOwner;
-import org.springframework.samples.petclinic.clinicowner.ClinicOwnerService;
+import org.springframework.samples.petclinic.entidad.Entidad;
+import org.springframework.samples.petclinic.entidad.EntidadService;
 import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.samples.petclinic.owner.OwnerService;
 import org.springframework.samples.petclinic.user.Authorities;
@@ -29,18 +29,18 @@ public class AuthService {
 	private final UserService userService;
 	private final OwnerService ownerService;
 	private final VetService vetService;
-	private final ClinicOwnerService clinicOwnerService;
+	private final EntidadService entidadService;
 	private final ClinicService clinicService;
 
 	@Autowired
 	public AuthService(PasswordEncoder encoder, AuthoritiesService authoritiesService, UserService userService,
-			OwnerService ownerService, VetService vetService, ClinicOwnerService clinicOwnerService, ClinicService clinicService) {
+			OwnerService ownerService, VetService vetService, EntidadService entidadService, ClinicService clinicService) {
 		this.encoder = encoder;
 		this.authoritiesService = authoritiesService;
 		this.userService = userService;
 		this.ownerService = ownerService;
 		this.vetService = vetService;
-		this.clinicOwnerService = clinicOwnerService;
+		this.entidadService = entidadService;
 		this.clinicService = clinicService;
 	}
 
@@ -70,15 +70,15 @@ public class AuthService {
 			vet.setUser(user);
 			vetService.saveVet(vet);
 			break;
-		case "clinic owner":
-			role = authoritiesService.findByAuthority("CLINIC_OWNER");
+		case "entidades":
+			role = authoritiesService.findByAuthority("ENTIDAD");
 			user.setAuthority(role);
 			userService.saveUser(user);
-			ClinicOwner clinicOwner = new ClinicOwner();
-			clinicOwner.setFirstName(request.getFirstName());
-			clinicOwner.setLastName(request.getLastName());
-			clinicOwner.setUser(user);
-			clinicOwnerService.saveClinicOwner(clinicOwner);
+			Entidad entidad = new Entidad();
+			entidad.setFirstName(request.getFirstName());
+			entidad.setLastName(request.getLastName());
+			entidad.setUser(user);
+			entidadService.saveEntidad(entidad);
 			break;
 		default:
 			role = authoritiesService.findByAuthority("OWNER");
