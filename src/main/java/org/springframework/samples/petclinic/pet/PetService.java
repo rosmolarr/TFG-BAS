@@ -45,17 +45,6 @@ public class PetService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<PetType> findPetTypes() throws DataAccessException {
-		return petRepository.findPetTypes();
-	}
-
-	@Transactional(readOnly = true)
-	public PetType findPetTypeByName(String name) throws DataAccessException {
-		return petRepository.findPetTypeByName(name)
-				.orElseThrow(() -> new ResourceNotFoundException("PetType", "name", name));
-	}
-
-	@Transactional(readOnly = true)
 	public Collection<Pet> findAll() {
 		return (List<Pet>) petRepository.findAll();
 	}
@@ -107,7 +96,6 @@ public class PetService {
 	@Transactional
 	public void deletePet(int id) throws DataAccessException {
 		Pet toDelete = findPetById(id);
-		petRepository.deleteVisitsByPet(toDelete.getId());
 		petRepository.delete(toDelete);
 	}
 
@@ -136,22 +124,10 @@ public class PetService {
 		Integer countAll = this.petRepository.countAll();
 		int owners = this.petRepository.countAllOwners();
 		Double avgPetsByOwner = (double) countAll / owners;
-		Map<String, Integer> petsByType = getPetsByType();
 
 		res.put("totalPets", countAll);
 		res.put("avgPetsByOwner", avgPetsByOwner);
-		res.put("petsByType", petsByType);
 
 		return res;
-	}
-
-	private Map<String, Integer> getPetsByType() {
-		Map<String, Integer> unsortedPetsByType = new HashMap<>();
-		this.petRepository.countPetsGroupedByType().forEach(m -> {
-			String key = m.get("type");
-			Integer value = Integer.parseInt(m.get("pets"));
-			unsortedPetsByType.put(key, value);
-		});
-		return unsortedPetsByType;
 	}
 }

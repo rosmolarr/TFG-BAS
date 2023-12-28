@@ -57,9 +57,6 @@ class VetServiceTests {
 
 		Vet vet = EntityUtils.getById(vets, Vet.class, 3);
 		assertEquals("Douglas", vet.getLastName());
-		assertEquals(2, vet.getSpecialties().size());
-		assertEquals("surgery", vet.getSpecialties().get(0).getName());
-		assertEquals("dentistry", vet.getSpecialties().get(1).getName());
 	}
 
 	@Test
@@ -67,7 +64,6 @@ class VetServiceTests {
 		Vet vet = this.vetService.findVetById(1);
 		assertThat(vet.getLastName()).startsWith("Carter");
 		assertEquals("Sevilla", vet.getCity());
-		assertEquals(0, vet.getSpecialties().size());
 	}
 
 	@Test
@@ -155,67 +151,6 @@ class VetServiceTests {
 		assertEquals(firstCount, lastCount);
 	}
 
-	// Specialties Tests
-
-	@Test
-	void shouldFindSpecialties() {
-		Collection<Specialty> specialties = (Collection<Specialty>) this.vetService.findSpecialties();
-
-		Specialty specialty = EntityUtils.getById(specialties, Specialty.class, 1);
-		assertEquals("radiology", specialty.getName());
-	}
-
-	@Test
-	void shouldFindSingleSpecialty() {
-		Specialty specialty = this.vetService.findSpecialtyById(1);
-		assertEquals("radiology", specialty.getName());
-	}
-
-	@Test
-	void shouldNotFindSingleSpecialtyWithBadID() {
-		assertThrows(ResourceNotFoundException.class, () -> this.vetService.findSpecialtyById(100));
-	}
-
-	@Test
-	@Transactional
-	void shouldUpdateSpecialty() {
-		Specialty specialty = this.vetService.findSpecialtyById(1);
-		specialty.setName("Change");
-		vetService.updateSpecialty(specialty, 1);
-		specialty = this.vetService.findSpecialtyById(1);
-		assertEquals("Change", specialty.getName());
-	}
-
-	@Test
-	@Transactional
-	void shouldInsertSpecialty() {
-		Collection<Specialty> specialties = (Collection<Specialty>) this.vetService.findSpecialties();
-		int found = specialties.size();
-
-		Specialty specialty = new Specialty();
-		specialty.setName("Vaccination");
-		this.vetService.saveSpecialty(specialty);
-		assertNotEquals(0, specialty.getId().longValue());
-
-		specialties = (Collection<Specialty>) this.vetService.findSpecialties();
-		assertEquals(found + 1, specialties.size());
-	}
-
-	@Test
-	@Transactional
-	void shouldDeleteSpecialty() {
-		Integer firstCount = ((Collection<Specialty>) this.vetService.findSpecialties()).size();
-		Specialty specialty = new Specialty();
-		specialty.setName("Vaccination");
-		this.vetService.saveSpecialty(specialty);
-
-		Integer secondCount = ((Collection<Specialty>) this.vetService.findSpecialties()).size();
-		assertEquals(firstCount + 1, secondCount);
-		vetService.deleteSpecialty(specialty.getId());
-		Integer lastCount = ((Collection<Specialty>) this.vetService.findSpecialties()).size();
-		assertEquals(firstCount, lastCount);
-	}
-
 	@SuppressWarnings("unchecked")
 	@Test
 	@Transactional
@@ -223,8 +158,6 @@ class VetServiceTests {
 		Map<String, Object> stats = this.vetService.getVetsStats();
 		assertTrue(stats.containsKey("totalVets"));
 		assertEquals(6, stats.get("totalVets"));
-		assertTrue(stats.containsKey("vetsBySpecialty"));
-		assertEquals(2, ((Map<String, Integer>) stats.get("vetsBySpecialty")).get("surgery"));
 		assertTrue(stats.containsKey("vetsByCity"));
 		assertEquals(3, ((Map<String, Integer>) stats.get("vetsByCity")).get("Sevilla"));
 		assertTrue(stats.containsKey("visitsByVet"));

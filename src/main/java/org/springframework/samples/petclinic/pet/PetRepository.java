@@ -27,18 +27,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface PetRepository extends CrudRepository<Pet, Integer> {
 
-	@Query("SELECT ptype FROM PetType ptype ORDER BY ptype.name")
-	List<PetType> findPetTypes() throws DataAccessException;
-
-	@Query("SELECT ptype FROM PetType ptype WHERE ptype.name LIKE :name")
-	Optional<PetType> findPetTypeByName(String name) throws DataAccessException;
-
 	@Query(("SELECT p FROM Pet p WHERE p.owner.id = :id"))
 	List<Pet> findAllPetsByOwnerId(int id) throws DataAccessException;
-
-	@Modifying
-	@Query("DELETE FROM Visit v WHERE v.pet.id = :petId")
-	public void deleteVisitsByPet(@Param("petId") int petId);
 
 	@Query(("SELECT COUNT(p) FROM Pet p WHERE p.owner.id = :id"))
 	public Integer countPetsByOwner(int id);
@@ -53,8 +43,5 @@ public interface PetRepository extends CrudRepository<Pet, Integer> {
 
 	@Query("SELECT COUNT(o) FROM Owner o")
 	public Integer countAllOwners();
-
-	@Query("SELECT NEW MAP(p.type.name as type, cast(COUNT(p) as string) as pets) FROM Pet p GROUP BY p.type")
-	public List<Map<String, String>> countPetsGroupedByType();
 
 }

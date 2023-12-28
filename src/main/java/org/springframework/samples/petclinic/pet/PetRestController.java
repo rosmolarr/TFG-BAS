@@ -87,12 +87,6 @@ public class PetRestController {
 		throw new AccessDeniedException();
 	}
 
-	@GetMapping("types")
-	public ResponseEntity<List<PetType>> findAllTypes() {
-		List<PetType> res = (List<PetType>) petService.findPetTypes();
-		return new ResponseEntity<>(res, HttpStatus.OK);
-	}
-
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Pet> create(@RequestBody @Valid Pet pet)

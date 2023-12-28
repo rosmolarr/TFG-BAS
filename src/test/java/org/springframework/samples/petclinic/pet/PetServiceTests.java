@@ -42,8 +42,6 @@ import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.samples.petclinic.vet.VetRestController;
 import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.samples.petclinic.vet.VetService;
-import org.springframework.samples.petclinic.visit.Visit;
-import org.springframework.samples.petclinic.visit.VisitService;
 
 //@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @SpringBootTest
@@ -54,9 +52,6 @@ class PetServiceTests {
 
 	@Autowired
 	protected OwnerService ownerService;
-
-	@Autowired
-	protected VisitService visitService;
 
 	@Autowired
 	protected VetService vetService;
@@ -100,27 +95,6 @@ class PetServiceTests {
 	}
 
 	@Test
-	void shouldFindAllPetTypes() {
-		Collection<PetType> petTypes = this.petService.findPetTypes();
-
-		PetType petType1 = EntityUtils.getById(petTypes, PetType.class, 1);
-		assertEquals("cat", petType1.getName());
-		PetType petType4 = EntityUtils.getById(petTypes, PetType.class, 4);
-		assertEquals("snake", petType4.getName());
-	}
-
-	@Test
-	void shouldFindPetTypeWithCorrectName() {
-		PetType cat = this.petService.findPetTypeByName("cat");
-		assertEquals("cat", cat.getName());
-	}
-
-	@Test
-	void shouldNotFindPetTypeWithIncorrectName() {
-		assertThrows(ResourceNotFoundException.class, () -> this.petService.findPetTypeByName("dragon"));
-	}
-
-	@Test
 	@Transactional
 	void shouldInsertPetIntoDatabaseAndGenerateId() {
 		Owner owner6 = this.ownerService.findOwnerById(6);
@@ -128,8 +102,6 @@ class PetServiceTests {
 
 		Pet pet = new Pet();
 		pet.setName("bowser");
-		Collection<PetType> types = this.petService.findPetTypes();
-		pet.setType(EntityUtils.getById(types, PetType.class, 2));
 		pet.setBirthDate(LocalDate.now());
 		pet.setOwner(owner6);
 		this.petService.savePet(pet);
@@ -146,15 +118,12 @@ class PetServiceTests {
 		Owner owner6 = this.ownerService.findOwnerById(6);
 		Pet pet = new Pet();
 		pet.setName("wario");
-		Collection<PetType> types = this.petService.findPetTypes();
-		pet.setType(EntityUtils.getById(types, PetType.class, 2));
 		pet.setBirthDate(LocalDate.now());
 		pet.setOwner(owner6);
 		petService.savePet(pet);
 
 		Pet anotherPetWithTheSameName = new Pet();
 		anotherPetWithTheSameName.setName("wario");
-		anotherPetWithTheSameName.setType(EntityUtils.getById(types, PetType.class, 1));
 		anotherPetWithTheSameName.setBirthDate(LocalDate.now().minusWeeks(2));
 		anotherPetWithTheSameName.setOwner(owner6);
 		assertThrows(DuplicatedPetNameException.class, () -> petService.savePet(anotherPetWithTheSameName));
@@ -172,32 +141,6 @@ class PetServiceTests {
 
 		pet7 = this.petService.findPetById(7);
 		assertEquals(newName, pet7.getName());
-	}
-
-	@Test
-	@Transactional
-	void shouldDeletePetWithVisits() throws DataAccessException, DuplicatedPetNameException {
-		Integer firstCount = petService.findAll().size();
-
-		Owner owner6 = this.ownerService.findOwnerById(7);
-		Pet pet = new Pet();
-		pet.setName("wario22");
-		Collection<PetType> types = this.petService.findPetTypes();
-		pet.setType(EntityUtils.getById(types, PetType.class, 2));
-		pet.setBirthDate(LocalDate.now());
-		pet.setOwner(owner6);
-		petService.savePet(pet);
-		Visit visit = new Visit();
-		visit.setDatetime(LocalDateTime.now());
-		visit.setDescription("prueba");
-		visit.setPet(pet);
-		visit.setVet(vetService.findVetById(1));
-		visitService.saveVisit(visit);
-		Integer secondCount = petService.findAll().size();
-		assertEquals(firstCount + 1, secondCount);
-		petService.deletePet(pet.getId());
-		Integer lastCount = petService.findAll().size();
-		assertEquals(firstCount, lastCount);
 	}
 
 	@Test
@@ -239,10 +182,8 @@ class PetServiceTests {
 	}
 
 	private void createPet(String name, Owner owner) {
-		PetType type = this.petService.findPetTypeByName("cat");
 		Pet pet = new Pet();
 		pet.setName(name);
-		pet.setType(type);
 		pet.setBirthDate(LocalDate.now());
 		pet.setOwner(owner);
 		petService.savePet(pet);
@@ -255,8 +196,6 @@ class PetServiceTests {
 		Map<String, Object> stats = this.petService.getPetsStats();
 		assertTrue(stats.containsKey("totalPets"));
 		assertEquals(((Collection<Pet>) this.petService.findAll()).size(), stats.get("totalPets"));
-		assertTrue(stats.containsKey("petsByType"));
-		assertEquals(4, ((Map<String, Integer>) stats.get("petsByType")).get("cat"));
 		assertTrue(stats.containsKey("avgPetsByOwner"));
 		assertNotEquals(0, stats.get("avgPetsByOwner"));
 	}

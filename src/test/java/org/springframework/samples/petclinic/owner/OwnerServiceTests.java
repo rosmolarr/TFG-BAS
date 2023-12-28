@@ -81,8 +81,6 @@ public class OwnerServiceTests {
 		List<Pet> pets = petService.findAllPetsByOwnerId(owner.getId());
 		assertThat(owner.getLastName()).startsWith("Franklin");
 		assertEquals(1, pets.size());
-		assertNotNull(pets.get(0).getType());
-		assertEquals("cat", pets.get(0).getType().getName());
 	}
 
 	@Test
@@ -144,7 +142,6 @@ public class OwnerServiceTests {
 		Owner owner = createOwnerUser();
 		Pet pet = new Pet();
 		pet.setName("Sisi");
-		pet.setType(petService.findPetTypeByName("dog"));
 		pet.setOwner(owner);
 		petService.savePet(pet);
 

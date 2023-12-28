@@ -83,7 +83,6 @@ class PetRestControllerTests {
 	private Owner george;
 	private Pet simba;
 	private User user, logged;
-	private PetType lion;
 	private Clinic clinic;
 	private ClinicOwner clinicOwner;
 	private User clinicOwnerUser;
@@ -134,15 +133,10 @@ class PetRestControllerTests {
 
 		george.setUser(user);
 
-		lion = new PetType();
-		lion.setId(TEST_TYPE_ID);
-		lion.setName("lion");
-
 		simba = new Pet();
 		simba.setId(TEST_PET_ID);
 		simba.setName("Simba");
 		simba.setOwner(george);
-		simba.setType(lion);
 		simba.setBirthDate(LocalDate.of(2000, 01, 01));
 
 		when(this.userService.findCurrentUser()).thenReturn(getUserFromDetails(
@@ -262,25 +256,6 @@ class PetRestControllerTests {
 	}
 
 	@Test
-	@WithMockUser(value = "admin")
-	void shouldFindAllTypes() throws Exception {
-		PetType dog = new PetType();
-		dog.setId(2);
-		dog.setName("dog");
-
-		PetType cat = new PetType();
-		cat.setId(3);
-		cat.setName("cat");
-
-		when(this.petService.findPetTypes()).thenReturn(List.of(lion, dog, cat));
-
-		mockMvc.perform(get(BASE_URL + "/types")).andExpect(status().isOk()).andExpect(jsonPath("$.size()").value(3))
-				.andExpect(jsonPath("$[?(@.id == 1)].name").value("lion"))
-				.andExpect(jsonPath("$[?(@.id == 2)].name").value("dog"))
-				.andExpect(jsonPath("$[?(@.id == 3)].name").value("cat"));
-	}
-
-	@Test
 	@WithMockUser(value = "admin", authorities = { "ADMIN" })
 	void adminShouldFindPet() throws Exception {
 		logged.setId(1);
@@ -289,7 +264,6 @@ class PetRestControllerTests {
 
 		mockMvc.perform(get(BASE_URL + "/{id}", TEST_PET_ID)).andExpect(status().isOk())
 				.andExpect(jsonPath("$.id").value(TEST_PET_ID)).andExpect(jsonPath("$.name").value(simba.getName()))
-				.andExpect(jsonPath("$.type.name").value(simba.getType().getName()))
 				.andExpect(jsonPath("$.owner.firstName").value(george.getFirstName()));
 	}
 
@@ -303,7 +277,6 @@ class PetRestControllerTests {
 
 		mockMvc.perform(get(BASE_URL + "/{id}", TEST_PET_ID)).andExpect(status().isOk())
 				.andExpect(jsonPath("$.id").value(TEST_PET_ID)).andExpect(jsonPath("$.name").value(simba.getName()))
-				.andExpect(jsonPath("$.type.name").value(simba.getType().getName()))
 				.andExpect(jsonPath("$.owner.firstName").value(george.getFirstName()));
 	}
 
@@ -338,7 +311,6 @@ class PetRestControllerTests {
 		pet.setName("Prueba");
 		pet.setBirthDate(LocalDate.of(2010, 1, 1));
 		pet.setOwner(george);
-		pet.setType(lion);
 
 		mockMvc.perform(post(BASE_URL).with(csrf()).contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(pet))).andExpect(status().isCreated());
@@ -377,7 +349,6 @@ class PetRestControllerTests {
 		pet.setName("Prueba");
 		pet.setBirthDate(LocalDate.of(2010, 1, 1));
 		pet.setOwner(george);
-		pet.setType(lion);
 
 		when(this.userService.findOwnerByUser(TEST_USER_ID)).thenReturn(george);
 		when(this.petService.underLimit(george)).thenReturn(true);
@@ -395,7 +366,6 @@ class PetRestControllerTests {
 		pet.setName("Prueba");
 		pet.setBirthDate(LocalDate.of(2010, 1, 1));
 		pet.setOwner(george);
-		pet.setType(lion);
 
 		when(this.userService.findOwnerByUser(TEST_USER_ID)).thenReturn(george);
 		when(this.petService.underLimit(george)).thenReturn(false);
@@ -417,7 +387,6 @@ class PetRestControllerTests {
 		pet.setName("Simba");
 		pet.setBirthDate(LocalDate.of(2010, 1, 1));
 		pet.setOwner(george);
-		pet.setType(lion);
 
 		when(this.userService.findOwnerByUser(TEST_USER_ID)).thenReturn(george);
 		when(this.petService.underLimit(george)).thenReturn(true);
@@ -438,8 +407,7 @@ class PetRestControllerTests {
 
 		mockMvc.perform(put(BASE_URL + "/{id}", TEST_PET_ID).with(csrf()).contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(simba))).andExpect(status().isOk())
-				.andExpect(jsonPath("$.name").value(simba.getName()))
-				.andExpect(jsonPath("$.type.name").value(simba.getType().getName()));
+				.andExpect(jsonPath("$.name").value(simba.getName()));
 	}
 
 	@Test
@@ -467,8 +435,7 @@ class PetRestControllerTests {
 
 		mockMvc.perform(put(BASE_URL + "/{id}", TEST_PET_ID).with(csrf()).contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(simba))).andExpect(status().isOk())
-				.andExpect(jsonPath("$.name").value(simba.getName()))
-				.andExpect(jsonPath("$.type.name").value(simba.getType().getName()));
+				.andExpect(jsonPath("$.name").value(simba.getName()));
 	}
 
 	@Test

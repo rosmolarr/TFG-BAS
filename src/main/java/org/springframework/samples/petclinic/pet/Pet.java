@@ -50,10 +50,6 @@ public class Pet extends NamedEntity {
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate birthDate;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "type_id")
-	private PetType type;
-
 	@Valid
 	@ManyToOne(optional = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)

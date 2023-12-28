@@ -35,8 +35,4 @@ public interface VetRepository extends CrudRepository<Vet, Integer> {
 	@Query("SELECT NEW MAP(v.city as city, cast(COUNT(v) as string) as vets)" + " FROM Vet v GROUP BY v.city")
 	public List<Map<String, String>> countVetsGroupedByCity();
 
-	@Query("SELECT NEW MAP(v.vet.firstName as firstName, v.vet.lastName as lastName, cast(COUNT(v) as string) as visits)"
-			+ " FROM Visit v GROUP BY v.vet")
-	public List<Map<String, String>> countVisitsGroupedByVet();
-
 }

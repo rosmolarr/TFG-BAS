@@ -43,11 +43,6 @@ import lombok.Setter;
 @Setter
 public class Vet extends Person {
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "vet_specialties", joinColumns = @JoinColumn(name = "vet_id"), inverseJoinColumns = @JoinColumn(name = "specialty_id"), uniqueConstraints = {
-			@UniqueConstraint(columnNames = { "vet_id", "specialty_id" }) })
-	private List<Specialty> specialties;
-
 	@OneToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST })
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user;
@@ -59,13 +54,5 @@ public class Vet extends Person {
 	@ManyToOne
 	@JoinColumn(name = "clinic", referencedColumnName = "id")
 	private Clinic clinic;
-
-	public void removeSpecialty(Specialty s) {
-		specialties.remove(s);
-	}
-	
-	public void removeAllSpecialties() {
-		specialties = null;
-	}
 
 }
