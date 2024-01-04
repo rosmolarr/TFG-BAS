@@ -9,8 +9,8 @@ import jakarta.persistence.Table;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.samples.petclinic.communication.Communication;
 import org.springframework.samples.petclinic.model.Person;
-import org.springframework.samples.petclinic.clinic.Clinic;
 import org.springframework.samples.petclinic.user.User;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,6 +18,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 
 @Entity
@@ -34,5 +36,5 @@ public class Entidad extends Person{
     @OneToMany(mappedBy = "entidad", orphanRemoval = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
-	private Set<Clinic> clinics;
+	private Set<Communication> communications;
 }

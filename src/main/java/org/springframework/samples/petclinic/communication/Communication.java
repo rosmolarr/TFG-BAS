@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.clinic;
+package org.springframework.samples.petclinic.communication;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,17 +11,10 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.samples.petclinic.entidad.Entidad;
 import org.springframework.samples.petclinic.model.BaseEntity;
-import org.springframework.samples.petclinic.owner.Owner;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.util.Set;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -29,8 +22,8 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "clinics")
-public class Clinic extends BaseEntity{
+@Table(name = "communications")
+public class Communication extends BaseEntity{
 
     @Column(name = "name")
 	@NotBlank
@@ -45,16 +38,8 @@ public class Clinic extends BaseEntity{
 	@Digits(fraction = 0, integer = 10)
 	private String telephone;
 
-    @Enumerated(EnumType.STRING)
-	@NotNull
-	private PricingPlan plan;
-
     @ManyToOne
 	@JoinColumn(name = "entidades", referencedColumnName = "id")
 	private Entidad entidad;
 
-    @OneToMany(mappedBy = "clinic", orphanRemoval = true)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private Set<Owner> owners;
 }
