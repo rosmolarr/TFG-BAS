@@ -1,12 +1,12 @@
 :root{
-  --color-input: #303030;
-  --color-label: #5e5e5e;
+  --color-input: #141414;
+  --color-label: #323232;
   --color-btn-disabled: #5757577e;
   --color-error: #cc0033;
   --color-error-background: #fce4e4;
   --color-border-disabled: #706c6c;
-  --main-button-hover-dark-color: #23c483;
-  --main-button-hover-light-color: #23c483;
+  --main-button-hover-dark-color: #2C5699;
+  --main-button-hover-light-color: #4291D5;
   --main-button-shadow-hover-color: rgba(0,0,0,0.4);
   --main-black: #111;
 }
@@ -56,6 +56,7 @@ select.class-form-input {
   width: 100%;
   font-family: inherit;
   font-size: 1rem;
+  font-weight: bold;
   color: var(--color-input);
   padding: 0.6em 0.3em;
   border: none;
@@ -68,6 +69,7 @@ textarea.class-form-input {
   width: 100%;
   font-family: inherit;
   font-size: 1rem;
+  font-weight: bold;
   color: var(--color-input);
   padding: 0.6em 0.3em;
   border: 1px solid var(--main-button-hover-dark-color);
@@ -78,6 +80,7 @@ textarea.class-form-input {
 
 .class-form-label {
   color: var(--color-label);
+  font-weight: bold;
   cursor: text;
   position: absolute;
   top: 0;

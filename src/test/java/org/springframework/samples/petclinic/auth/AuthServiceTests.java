@@ -7,14 +7,15 @@ import java.util.Collection;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.samples.petclinic.auth.payload.request.SignupRequest;
-import org.springframework.samples.petclinic.communication.Communication;
-import org.springframework.samples.petclinic.communication.CommunicationService;
-import org.springframework.samples.petclinic.entidad.Entidad;
-import org.springframework.samples.petclinic.entidad.EntidadService;
-import org.springframework.samples.petclinic.user.AuthoritiesService;
-import org.springframework.samples.petclinic.user.User;
-import org.springframework.samples.petclinic.user.UserService;
+import org.springframework.samples.bas.auth.AuthService;
+import org.springframework.samples.bas.auth.payload.request.SignupRequest;
+import org.springframework.samples.bas.communication.Communication;
+import org.springframework.samples.bas.communication.CommunicationService;
+import org.springframework.samples.bas.entidad.Entidad;
+import org.springframework.samples.bas.entidad.EntidadService;
+import org.springframework.samples.bas.user.AuthoritiesService;
+import org.springframework.samples.bas.user.User;
+import org.springframework.samples.bas.user.UserService;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest

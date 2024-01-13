@@ -5,16 +5,19 @@
     right: 0;
     bottom: 0;
     z-index: -1;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('../../images/home_background.jpg');
-    background-size: cover;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6)), url('../../images/image2.jpg');
+    background-size: cover; 
+    background-repeat: no-repeat;
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: background-image 0.5s ease; 
+
 }
 
 .hero-div{
-    background-color: rgba(255, 255, 255, 0.3);
-    padding: 2rem;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 3rem;
     border-radius: 25px;
     backdrop-filter: blur(10px);
     display: flex;
@@ -22,15 +25,43 @@
     justify-content: center;
     align-items: center;
 }
+  
+.logo-image {
+    width: 400px; 
+    height: auto;
+}
 
-.hero-div h1{
-    font-size: 3rem;
-    font-weight: 700;
-    color: #2f324f;
-    text-align: center;
+.logo-image-phone {
+    width: 270px; 
+    height: auto;
+}
+
+.login-button {
+    margin-top: 10%;
+    padding: 1.3em 3em;
+    font-size: 12px;
     text-transform: uppercase;
-}
-
-.hero-div h3{
-    text-align: center;
-}
+    letter-spacing: 2.5px;
+    font-weight: bolder;
+    color: #000;
+    background-color: #fff;
+    border: solid 2px var(--main-green-color);
+    border-radius: 45px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    text-decoration: none;
+  }
+  
+  .login-button:hover {
+    background-color: var(--main-green-color);
+    box-shadow: 0px 15px 20px rgba(0, 92, 251, 0.4);
+    color: #fff;
+    transform: translateY(-7px);
+  }
+  
+  .login-button:active {
+    transform: translateY(-1px);
+  }
+    
