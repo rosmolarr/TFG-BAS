@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.samples.bas.auth.AuthService;
 import org.springframework.samples.bas.auth.payload.request.SignupRequest;
-import org.springframework.samples.bas.communication.Communication;
-import org.springframework.samples.bas.communication.CommunicationService;
 import org.springframework.samples.bas.entidad.Entidad;
 import org.springframework.samples.bas.entidad.EntidadService;
 import org.springframework.samples.bas.user.AuthoritiesService;
@@ -25,8 +23,6 @@ public class AuthServiceTests {
 	protected AuthService authService;
 	@Autowired
 	protected UserService userService;
-	@Autowired
-	protected CommunicationService clinicService;
 	@Autowired
 	protected EntidadService entidadService;
 	@Autowired
@@ -44,13 +40,8 @@ public class AuthServiceTests {
 
 	private SignupRequest createRequest(String auth, String username) {
 		SignupRequest request = new SignupRequest();
-		request.setAddress("prueba");
 		request.setAuthority(auth);
-		request.setCity("prueba");
-		request.setFirstName("prueba");
-		request.setLastName("prueba");
 		request.setPassword("prueba");
-		request.setTelephone("123123123");
 		request.setUsername(username);
 
 		if(auth == "ENTIDAD") {
@@ -60,17 +51,8 @@ public class AuthServiceTests {
 			entidadUser.setAuthority(authoritiesService.findByAuthority("ENTIDAD"));
 			userService.saveUser(entidadUser);
 			Entidad entidad = new Entidad();
-			Communication communication = new Communication();
-			entidad.setFirstName("Test Name");
-			entidad.setLastName("Test Surname");
 			entidad.setUser(entidadUser);
 			entidadService.saveEntidad(entidad);
-			communication.setName("Clinic Test");
-			communication.setAddress("Test Address");
-			communication.setTelephone("123456789");
-			communication.setEntidad(entidad);
-			clinicService.save(communication);
-			request.setCommunication(communication);
 		}
 
 		return request;

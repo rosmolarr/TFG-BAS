@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.bas.auth.payload.request.SignupRequest;
-import org.springframework.samples.bas.communication.CommunicationService;
 import org.springframework.samples.bas.entidad.Entidad;
 import org.springframework.samples.bas.entidad.EntidadService;
 import org.springframework.samples.bas.user.Authorities;
@@ -24,16 +23,14 @@ public class AuthService {
 	private final AuthoritiesService authoritiesService;
 	private final UserService userService;
 	private final EntidadService entidadService;
-	private final CommunicationService clinicService;
 
 	@Autowired
 	public AuthService(PasswordEncoder encoder, AuthoritiesService authoritiesService, UserService userService,
-			EntidadService entidadService, CommunicationService clinicService) {
+			EntidadService entidadService) {
 		this.encoder = encoder;
 		this.authoritiesService = authoritiesService;
 		this.userService = userService;
 		this.entidadService = entidadService;
-		this.clinicService = clinicService;
 	}
 
 	@Transactional
@@ -55,8 +52,6 @@ public class AuthService {
 			user.setAuthority(role);
 			userService.saveUser(user);
 			Entidad entidad = new Entidad();
-			entidad.setFirstName(request.getFirstName());
-			entidad.setLastName(request.getLastName());
 			entidad.setUser(user);
 			entidadService.saveEntidad(entidad);
 			break;

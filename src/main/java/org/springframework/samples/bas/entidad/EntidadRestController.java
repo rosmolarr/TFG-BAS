@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/entidades")
+@Tag(name = "Entidades", description = "The Entidades managemet API")
 @SecurityRequirement(name = "bearerAuth")
 public class EntidadRestController {
     private final EntidadService entidadService;
@@ -40,13 +42,8 @@ public class EntidadRestController {
 		return new ResponseEntity<>((List<Entidad>) entidadService.findAll(), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/clinics")
-	public ResponseEntity<Entidad> findByUserId(@RequestParam(required = true) Integer userId) {
-		return new ResponseEntity<>(entidadService.findByUserId(userId), HttpStatus.OK);
-	}
-
-	@GetMapping(value = "/{entidadId}")
-	public ResponseEntity<Entidad> getEntidadById(@PathVariable("entidadesId") int entidadId) {
+	@GetMapping(value = "{entidadId}")
+	public ResponseEntity<Entidad> getEntidadById(@PathVariable("entidadId") int entidadId) {
 		return new ResponseEntity<>(entidadService.findById(entidadId), HttpStatus.OK);
 	}
 
@@ -62,7 +59,7 @@ public class EntidadRestController {
 		return new ResponseEntity<>(entidad, HttpStatus.CREATED);
 	}
 
-	@PutMapping(value = "/{entidadId}")
+	@PutMapping(value = "{entidadId}")
 	public ResponseEntity<Entidad> create(@PathVariable("entidadId") int entidadId, @Valid @RequestBody Entidad entidad) {
 		
 		Entidad entidadToUpdate= entidadService.findById(entidadId);
@@ -71,9 +68,9 @@ public class EntidadRestController {
 		return new ResponseEntity<>(entidadService.saveEntidad(entidadToUpdate), HttpStatus.CREATED);
 	}
 
-	@DeleteMapping(value = "/{entidadId}")
+	@DeleteMapping(value = "{entidadId}")
 	public ResponseEntity<MessageResponse> delete(@PathVariable("entidadId") int entidadId) {
 		entidadService.deleteById(entidadId);
-		return new ResponseEntity<>(new MessageResponse("Clinic Owner deleted successfully!"), HttpStatus.OK);
+		return new ResponseEntity<>(new MessageResponse("La Entidad ha sido eliminada correctamente!"), HttpStatus.OK);
 	}
 }

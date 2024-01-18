@@ -1,93 +1,216 @@
-import { useState } from "react";
+import React, { useRef, useState } from 'react';
 import { Link } from "react-router-dom";
-import { Button, ButtonGroup, Table } from "reactstrap";
 import tokenService from "../../services/token.service";
 import "../../static/css/admin/adminPage.css";
-import deleteFromList from "../../util/deleteFromList";
 import getErrorModal from "../../util/getErrorModal";
 import useFetchState from "../../util/useFetchState";
+import useFetchData from "../../util/useFetchData";
+import { Space, Table } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import { Button, Input } from 'antd';
+import Highlighter from 'react-highlight-words';
+
 
 const jwt = tokenService.getLocalAccessToken();
 
-export default function ClinicOwnerListAdmin() {
+export default function EntidadListAdmin() {
   const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
-  const [clinicOwners, setClinicOwners] = useFetchState(
+  const [entidad, setEntidad] = useFetchState(
     [],
-    `/api/v1/clinicOwners/all`,
+    `/api/v1/entidades/all`,
     jwt,
     setMessage,
     setVisible
   );
-  const [alerts, setAlerts] = useState([]);
 
-  const clinicOwnerList = clinicOwners.map((owner) => {
-    return (
-      <tr key={owner.id}>
-        <td style={{ whiteSpace: "nowrap" }}>
-          {owner.firstName} {owner.lastName}
-        </td>
-        <td>{owner.user.username}</td>
-        <td>
-          <ButtonGroup>
-            <Button
-              size="sm"
-              color="primary"
-              aria-label={"edit-" + owner.user.username}
-              tag={Link}
-              to={"/clinicOwners/" + owner.id}
-            >
-              Edit
-            </Button>
-            <Button
-              size="sm"
-              color="danger"
-              aria-label={"delete-" + owner.user.username}
-              onClick={() =>
-                deleteFromList(
-                  `/api/v1/clinicOwners/${owner.id}`,
-                  owner.id,
-                  [clinicOwners, setClinicOwners],
-                  [alerts, setAlerts],
-                  setMessage,
-                  setVisible
-                )
-              }
-            >
-              Delete
-            </Button>
-          </ButtonGroup>
-        </td>
-      </tr>
-    );
+  /** FILTROS */
+
+  const [filteredInfo, setFilteredInfo] = useState({});
+  const [sortedInfo, setSortedInfo] = useState({});
+
+  const handleChange = (pagination, filters, sorter) => {
+    console.log('Various parameters', pagination, filters, sorter);
+    setFilteredInfo(filters);
+    setSortedInfo(sorter);
+  };
+  const clearFilters = () => {
+    setFilteredInfo({});
+  };
+  const clearAll = () => {
+    setFilteredInfo({});
+    setSortedInfo({});
+  };
+
+  /** BUSCADOR */
+
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText('');
+  };
+  const getColumnSearchProps = (dataIndex, title) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Buscar ${title}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: 'block',
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Buscar
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Limpiar
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filtrar
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            Cerrar
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? '#0066c9' : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: '#0066c9',
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
   });
 
-  const modal = getErrorModal(setVisible, visible, message);
+  function formatTipoEntidad(enumValue) {
+    // Reemplazar "_" con espacio
+    return enumValue.replace(/_/g, ' ');
+  }
+
+  const columns = [
+    {
+      title: 'Código',
+      dataIndex: 'codigo',
+      key: 'codigo',
+      sorter: (a, b) => a.codigo - b.codigo,
+      sortOrder: sortedInfo.columnKey === 'codigo' ? sortedInfo.order : null,
+      ...getColumnSearchProps('codigo','Código'),
+    },
+    {
+      title: 'Nombre',
+      dataIndex: 'nombre',
+      key: 'nombre',
+      ...getColumnSearchProps('nombre','Nombre'),
+    },
+    {
+      title: 'Teléfono',
+      dataIndex: 'telefono1',
+      key: 'telefono1',
+      ...getColumnSearchProps('telefono1','Teléfono'),
+    },
+    {
+      title: 'Tipo de entidad',
+      dataIndex: 'tipo',
+      key: 'tipo',
+      filters: [
+        { text: 'COMUNIDAD RELIGIOSA', value: 'COMUNIDAD_RELIGIOSA' },
+        { text: 'CENTROS DE INSERCIÓN', value: 'CENTROS_DE_INSERCION' },
+        { text: 'CASAS DE AGOGIDAS', value: 'CASAS_DE_AGOGIDAS' },
+        { text: 'COMEDOR SOCIAL', value: 'COMEDOR_SOCIAL' },
+        { text: 'PARROQUIA', value: 'PARROQUIA' },
+        { text: 'CENTRO ASISTENCIAL', value: 'CENTRO_ASISTENCIAL' },
+        { text: 'GUARDERÍA', value: 'GUARDERIA' },
+        { text: 'APOYO ADICCIONES', value: 'APOYO_ADICCIONES' },
+        { text: 'APOYO A MENORES Y ADOLESCENTES', value: 'APOYO_A_MENORES_Y_ADOLESCENTES' }
+    
+      ],
+      filteredValue: filteredInfo.tipo || null,
+      onFilter: (value, record) => record.tipo.includes(value),
+      render: (tipo) => formatTipoEntidad(tipo)
+    },
+  ]
 
   return (
-    <div>
-      <div className="admin-page-container">
-        <h1 className="text-center">Clinic Owners</h1>
-        {alerts.map((a) => a.alert)}
-        {modal}
-        <div className="float-right">
-          <Button color="success" tag={Link} to="/clinicOwners/new">
-            Add Clinic Owner
-          </Button>
-        </div>
-        <div>
-          <Table aria-label="owners" className="mt-4">
-            <thead>
-              <tr>
-                <th width="30%">Name</th>
-                <th width="30%">User</th>
-                <th width="40%">Actions</th>
-              </tr>
-            </thead>
-            <tbody>{clinicOwnerList}</tbody>
-          </Table>
-        </div>
-      </div>
+    <div className="admin-page-container">
+      <h1>Entidades</h1>
+      <Space
+        style={{
+          marginBottom: 16,
+        }}
+      >
+        <Button onClick={clearFilters}>Limpiar filtros</Button>
+        <Button onClick={clearAll}>Limpiarlo todo</Button>
+      </Space>
+      <Table columns={columns} dataSource={entidad} onChange={handleChange}/>
     </div>
   );
 }
