@@ -58,3 +58,11 @@
   justify-content: space-evenly;
   align-items: center;
 }
+
+.admin-column{
+  margin-bottom: 2%;
+}
+
+/* .ant-card-head-title{
+  white-space: normal !important;
+} */

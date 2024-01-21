@@ -1,14 +1,11 @@
 import React, { useRef, useState } from 'react';
-import { Link } from "react-router-dom";
 import tokenService from "../../services/token.service";
 import "../../static/css/admin/adminPage.css";
-import getErrorModal from "../../util/getErrorModal";
 import useFetchState from "../../util/useFetchState";
-import useFetchData from "../../util/useFetchData";
-import { Space, Table } from 'antd';
+import { Space, Table, Tag, Button, Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Input } from 'antd';
 import Highlighter from 'react-highlight-words';
+import { useNavigate } from 'react-router-dom';
 
 
 const jwt = tokenService.getLocalAccessToken();
@@ -40,6 +37,8 @@ export default function EntidadListAdmin() {
   const clearAll = () => {
     setFilteredInfo({});
     setSortedInfo({});
+    setSearchText('');
+    setSearchedColumn('');
   };
 
   /** BUSCADOR */
@@ -100,19 +99,6 @@ export default function EntidadListAdmin() {
             type="link"
             size="small"
             onClick={() => {
-              confirm({
-                closeDropdown: false,
-              });
-              setSearchText(selectedKeys[0]);
-              setSearchedColumn(dataIndex);
-            }}
-          >
-            Filtrar
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
               close();
             }}
           >
@@ -124,7 +110,7 @@ export default function EntidadListAdmin() {
     filterIcon: (filtered) => (
       <SearchOutlined
         style={{
-          color: filtered ? '#0066c9' : undefined,
+          color: filtered ? '#0064c943' : undefined,
         }}
       />
     ),
@@ -139,7 +125,7 @@ export default function EntidadListAdmin() {
       searchedColumn === dataIndex ? (
         <Highlighter
           highlightStyle={{
-            backgroundColor: '#0066c9',
+            backgroundColor: '#0064c943',
             padding: 0,
           }}
           searchWords={[searchText]}
@@ -161,9 +147,15 @@ export default function EntidadListAdmin() {
       title: 'Código',
       dataIndex: 'codigo',
       key: 'codigo',
-      sorter: (a, b) => a.codigo - b.codigo,
+      sorter: (a, b) => {
+        // Extraer el número de la cadena 'codigo'
+        const aNumber = parseInt(a.codigo.slice(1), 10);
+        const bNumber = parseInt(b.codigo.slice(1), 10);
+  
+        // Comparar los números extraídos
+        return aNumber - bNumber;
+      },
       sortOrder: sortedInfo.columnKey === 'codigo' ? sortedInfo.order : null,
-      ...getColumnSearchProps('codigo','Código'),
     },
     {
       title: 'Nombre',
@@ -176,6 +168,29 @@ export default function EntidadListAdmin() {
       dataIndex: 'telefono1',
       key: 'telefono1',
       ...getColumnSearchProps('telefono1','Teléfono'),
+    },
+    {
+      title: 'Descripción',
+      dataIndex: 'descripcion',
+      key: 'descripcion',
+      render: (descripcion) => {
+        let color = 'geekblue';
+        if (descripcion === 'CONSUMO') {
+          color = 'magenta';
+        }
+        return (
+          <Tag color={color} key={descripcion}>
+            {descripcion}
+          </Tag>
+        );
+      },
+      filters: [
+        { text: 'CONSUMO', value: 'CONSUMO' },
+        { text: 'REPARTO', value: 'REPARTO' }
+    
+      ],
+      filteredValue: filteredInfo.descripcion || null,
+      onFilter: (value, record) => record.descripcion.includes(value),
     },
     {
       title: 'Tipo de entidad',
@@ -199,6 +214,18 @@ export default function EntidadListAdmin() {
     },
   ]
 
+  const filteredData = entidad.filter((record) => {
+    const valuesToSearch = Object.values(record).join(' ').toLowerCase();
+    return valuesToSearch.includes(searchText.toLowerCase());
+  });
+
+  const navigate = useNavigate();  
+
+  const handleRowClick = (record) => {
+    const entityId = record.id; 
+    navigate(`/entidades/${entityId}`);
+  };
+
   return (
     <div className="admin-page-container">
       <h1>Entidades</h1>
@@ -210,7 +237,15 @@ export default function EntidadListAdmin() {
         <Button onClick={clearFilters}>Limpiar filtros</Button>
         <Button onClick={clearAll}>Limpiarlo todo</Button>
       </Space>
-      <Table columns={columns} dataSource={entidad} onChange={handleChange}/>
+      <Table 
+        columns={columns} 
+        dataSource={filteredData} 
+        onChange={handleChange} 
+        pagination={{defaultPageSize: 7, pageSizeOptions: [7, 10, 20], showSizeChanger: true, showQuickJumper: true,}}
+        onRow={(record) => ({
+          onClick: () => handleRowClick(record),
+        })}
+        />
     </div>
   );
 }
