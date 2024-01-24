@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Col, Row, List, Tag, Button } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
+import CsvGenerator from '../../util/csvGenerator';
 import tokenService from "../../services/token.service";
 import useFetchState from "../../util/useFetchState";
 import notification_icon from '../../static/images/notification_icon.png';
@@ -138,6 +139,10 @@ export default function EntidadViewAdmin() {
     navigate(`/admin/entidades/${id}/edit`);
   }
 
+  /** Exportar a csv */
+  const csvHeaders = data.map(item => item.title);
+  const csvData = [data.map(item => item.data)];
+
   return (
     <div style={{ margin: '2%' }}>
       <Row justify="center" align="top" gutter={[16, 16]}>
@@ -250,6 +255,12 @@ export default function EntidadViewAdmin() {
             <Col className='admin-column' xs={24} sm={24} md={8} lg={8} xl={8}>
               <Card>
                 <Button onClick={navidateEditEntidad}>Editar</Button>
+                <CsvGenerator
+                  data={csvData}
+                  headers={csvHeaders}
+                  filename="datos.csv"
+                  buttonText="Exportar a CSV"
+                />
               </Card>
             </Col>
           </Row>
