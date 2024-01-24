@@ -58,8 +58,9 @@ public class SecurityConfiguration {
 			.authorizeHttpRequests(authorizeRequests ->	authorizeRequests
 			.requestMatchers("/resources/**", "/webjars/**", "/static/**", "/swagger-resources/**").permitAll()			
 			.requestMatchers("/", "/oups","/api/v1/auth/**","/v3/api-docs/**","/swagger-ui.html","/swagger-ui/**").permitAll()												
-			.requestMatchers("/api/v1/entidades/**").hasAnyAuthority(ADMIN)
-			.requestMatchers("/api/v1/comunicaciones/**").hasAuthority(ADMIN)
+			.requestMatchers("/api/v1/entidades/**").hasAnyAuthority(ADMIN, ENTIDAD)
+			.requestMatchers("/api/v1/comunicaciones/**").hasAnyAuthority(ADMIN, ENTIDAD)
+			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/users/**")).hasAnyAuthority(ADMIN, ENTIDAD)
 			.anyRequest().denyAll())					
 			
 			.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);		

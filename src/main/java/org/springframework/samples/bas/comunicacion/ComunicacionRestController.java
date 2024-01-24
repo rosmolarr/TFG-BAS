@@ -52,6 +52,11 @@ public class ComunicacionRestController {
 		return new ResponseEntity<>(comunicacionService.findComunicacionById(comunicacionId), HttpStatus.OK);
 	}
 
+	@GetMapping(value = "entidad/{entidadId}")
+	public ResponseEntity<List<Comunicacion>> findComunicacionByEntidadId(@PathVariable("entidadId") int entidadId) {
+		return new ResponseEntity<>(comunicacionService.findComunicacionByEntidadId(entidadId), HttpStatus.OK);
+	}
+
 	@PostMapping
 	public ResponseEntity<Comunicacion> createCommunication(@RequestBody @Valid Comunicacion communication) {
 

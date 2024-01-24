@@ -7,6 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ComunicacionRepository extends CrudRepository<Comunicacion, Integer> {
 
-    @Query("SELECT c FROM Comunicacion c WHERE c.entidad.user.id = :userId")
-    List<Comunicacion> findComunicacionByUserId(int userId);
+    @Query("SELECT c FROM Comunicacion c WHERE c.entidad.id = :entidadId ORDER BY c.fecha DESC")
+    List<Comunicacion> findComunicacionByEntidadId(int entidadId);
 }

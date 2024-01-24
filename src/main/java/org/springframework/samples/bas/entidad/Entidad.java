@@ -89,10 +89,10 @@ public class Entidad extends BaseEntity{
     @Pattern(regexp = "\\d{9}", message = "El teléfono 1 debe tener 9 dígitos")
     @Column(name = "telefono1")
     private String telefono1;
-
-    @Pattern(regexp = "\\d{9}", message = "El teléfono 2 debe tener 9 dígitos")
+    
+    @Pattern(regexp = "^$|\\d{9}", message = "El teléfono 2 debe tener 9 dígitos")
     @Column(name = "telefono2")
-    private String telefono2;
+    private String telefono2;    
 
     @Min(value = 0, message = "El número de beneficiarios no puede ser negativo")
     @Column(name = "beneficiarios")

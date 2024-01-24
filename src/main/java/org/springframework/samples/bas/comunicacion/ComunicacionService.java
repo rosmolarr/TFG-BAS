@@ -61,7 +61,7 @@ public class ComunicacionService {
 	}
 
 	@Transactional
-	public List<Comunicacion> findComunicacionsByUserId(int userId) throws DataAccessException {
-		return comunicacionRepository.findComunicacionByUserId(userId);
+	public List<Comunicacion> findComunicacionByEntidadId(int userId) throws DataAccessException {
+		return comunicacionRepository.findComunicacionByEntidadId(userId);
 	}
 }

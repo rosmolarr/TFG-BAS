@@ -14,6 +14,7 @@ import tokenService from "./services/token.service";
 import EntidadEdit from "./entidad/entidadEdit"
 import EntidadListAdmin from "./admin/entidades/EntidadListAdmin";
 import EntidadViewAdmin from "./admin/entidades/EntidadViewAdmin";
+import EntidadEditAdmin from "./admin/entidades/EntidadEditAdmin";
 import CommunicationListAdmin from "./admin/communications/CommunicationListAdmin";
 import CommunicationEditAdmin from "./admin/communications/CommunicationEditAdmin";
 import DashboardAdmin from "./admin/dashboard/DashboardAdmin";
@@ -55,6 +56,8 @@ function App() {
           <Route path="/comunicaciones/:id" exact={true} element={<PrivateRoute><CommunicationEditAdmin /></PrivateRoute>} />
           <Route path="/entidades" exact={true} element={<PrivateRoute><EntidadListAdmin /></PrivateRoute>} />
           <Route path="/entidades/:id" exact={true} element={<PrivateRoute><EntidadViewAdmin /></PrivateRoute>} />
+          <Route path="/entidades/new" exact={true} element={<PrivateRoute><EntidadEditAdmin /></PrivateRoute>} />
+          <Route path="/entidades/:id/edit" exact={true} element={<PrivateRoute><EntidadEditAdmin /></PrivateRoute>} />
           <Route path="/dashboard" exact={true} element={<PrivateRoute><DashboardAdmin /></PrivateRoute>} />
           </>)
     }

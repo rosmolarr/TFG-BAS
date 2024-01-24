@@ -47,7 +47,7 @@ public class AuthService {
 			user.setAuthority(role);
 			userService.saveUser(user);
 			break;
-		case "entidades": //default: ??
+		case "entidad":
 			role = authoritiesService.findByAuthority("ENTIDAD");
 			user.setAuthority(role);
 			userService.saveUser(user);

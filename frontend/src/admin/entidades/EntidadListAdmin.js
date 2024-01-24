@@ -226,6 +226,10 @@ export default function EntidadListAdmin() {
     navigate(`/entidades/${entityId}`);
   };
 
+  const navidateNewEntidad = () =>{
+    navigate(`/entidades/new`);
+  };
+
   return (
     <div className="admin-page-container">
       <h1>Entidades</h1>
@@ -234,6 +238,7 @@ export default function EntidadListAdmin() {
           marginBottom: 16,
         }}
       >
+        <Button onClick={navidateNewEntidad}>Nueva entidad</Button>
         <Button onClick={clearFilters}>Limpiar filtros</Button>
         <Button onClick={clearAll}>Limpiarlo todo</Button>
       </Space>
