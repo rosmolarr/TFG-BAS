@@ -106,3 +106,44 @@
 .estado {
   font-size: 14px;
 }
+
+.button-card-admin{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.notification-list-dashboard {
+  margin-bottom: 3%;
+  padding-right: 0px !important;
+  padding-top: 0px !important;
+}
+
+.notification-row-dashboard {
+  display: flex;
+  align-items: center;
+}
+
+.date-column-dashboard {
+  text-align: center;
+}
+
+.day-dashboard {
+  font-size: 24px;
+}
+
+.month-dashboard {
+  font-size: 12px;
+}
+
+.content-column-dashboard {
+  padding-left: 8px;
+}
+
+.title-dashboard {
+  font-size: 9px;
+}
+
+.estado-dashboard {
+  font-size: 6px;
+}

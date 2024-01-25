@@ -4,9 +4,11 @@ import { Button } from 'antd';
 
 const CsvGenerator = ({ data, headers, filename, buttonText }) => {
   return (
-    <CSVLink data={data} headers={headers} filename={filename}>
-      <Button>{buttonText}</Button>
-    </CSVLink>
+    <Button>
+      <CSVLink data={data} headers={headers} filename={filename} style={{ textDecoration: 'none' }}>
+        {buttonText}
+      </CSVLink>
+    </Button>
   );
 };
 

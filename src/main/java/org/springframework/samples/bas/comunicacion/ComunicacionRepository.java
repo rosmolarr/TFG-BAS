@@ -9,4 +9,7 @@ public interface ComunicacionRepository extends CrudRepository<Comunicacion, Int
 
     @Query("SELECT c FROM Comunicacion c WHERE c.entidad.id = :entidadId ORDER BY c.fecha DESC")
     List<Comunicacion> findComunicacionByEntidadId(int entidadId);
+
+    @Query("SELECT c FROM Comunicacion c ORDER BY c.fecha DESC")
+    List<Comunicacion> findComunicacionForDashboard();
 }

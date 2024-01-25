@@ -253,7 +253,7 @@ export default function EntidadViewAdmin() {
               </Card>
             </Col>
             <Col className='admin-column' xs={24} sm={24} md={8} lg={8} xl={8}>
-              <Card>
+              <Card className='button-card-admin'>
                 <Button onClick={navidateEditEntidad}>Editar</Button>
                 <CsvGenerator
                   data={csvData}

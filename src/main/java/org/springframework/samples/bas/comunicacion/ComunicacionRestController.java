@@ -85,4 +85,9 @@ public class ComunicacionRestController {
 		comunicacionService.delete(comunicacionId);
 		return new ResponseEntity<>(new MessageResponse("Comunicación borrada!"), HttpStatus.OK);
 	}
+
+	@GetMapping(value = "dashboard")
+	public ResponseEntity<List<Comunicacion>> findComunicacionForDashboard() {
+		return new ResponseEntity<>(comunicacionService.findComunicacionForDashboard(), HttpStatus.OK);
+	}
 }

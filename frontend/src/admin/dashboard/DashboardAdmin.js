@@ -1,8 +1,12 @@
-import React from 'react';
-import { Card, Row, Col, Statistic, Divider } from 'antd';
+import React, { useState } from 'react';
+import { Card, Row, Col, Statistic, Divider, List, Tag } from 'antd';
 import { LineChart, BarChart } from 'recharts';
 import { Line, XAxis, YAxis, Tooltip, Legend, Bar } from 'recharts';
+import tokenService from "../../services/token.service";
+import useFetchState from "../../util/useFetchState";
+import "../../static/css/admin/adminPage.css";
 
+const jwt = tokenService.getLocalAccessToken();
 
 const DashboardAdmin = () => {
     const entityData = [
@@ -23,23 +27,122 @@ const DashboardAdmin = () => {
         { id: 3, message: 'Notification 3' },
     ];
 
+    const [message, setMessage] = useState(null);
+    const [visible, setVisible] = useState(false);
+    const [entidad, setEntidad] = useFetchState(
+        [],
+        `/api/v1/entidades/all`,
+        jwt,
+        setMessage,
+        setVisible
+      );
+    
+    const [comunicacion, setComunicacion] = useFetchState(
+    [],
+    `/api/v1/comunicaciones/dashboard`,
+    jwt,
+    setMessage,
+    setVisible
+    );
+
+    const lastCommunications = comunicacion.slice(0, 2);
+    const totalCommunications = comunicacion.length;
+    const totalEntities = entidad.length;
+
+   /**
+   * Formatear la fecha de la comunicación
+   */
+
+  function formattedDate(fechaString) {
+    const opcionesFecha = { year: 'numeric', month: 'long', day: 'numeric' };
+    const fecha = new Date(fechaString);
+    const fechaFormateada = fecha.toLocaleDateString('es-ES', opcionesFecha);
+  
+    const [dia, mes] = fechaFormateada.split(' de ');
+  
+    return [dia, mes.charAt(0).toUpperCase() + mes.slice(1)]; 
+  }
+
+  const estadoColorMap = {
+    RESPONDIDA: 'green',
+    PENDIENTE: 'orange',
+    LLAMAR: 'volcano',
+    REUNION: 'blue',
+  };
+
+  const estadoName = {
+    RESPONDIDA: 'Respondida',
+    PENDIENTE: 'Pendiente',
+    LLAMAR: 'Falta llamar',
+    REUNION: 'Falta reunión',
+  };
+
     return (
-        <div>
-            <Row gutter={16}>
-                <Col span={6}>
+        <div style={{ margin: '2%' }}>
+            <Row gutter={[16, 16]} style={{marginBottom: '1%'}}>
+                <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                    <Row gutter={[8, 8]} style={{marginBottom: '1%'}}>
+                        <Col span={12}>
+                            <Card>
+                                <Statistic title="Entidades" value={totalEntities} />
+                            </Card>
+                        </Col>
+                        <Col span={12}>
+                            <Card>
+                                <Statistic title="Comunicaciones" value={totalCommunications} />
+                            </Card>
+                        </Col>
+                    </Row>
+                    <Row gutter={[8, 8]}>
+                        <Col span={12}>
+                            <Card>
+                                <Statistic title="Entidades" value={totalEntities} />
+                            </Card>
+                        </Col>
+                        <Col span={12}>
+                            <Card>
+                                <Statistic title="Comunicaciones" value={totalCommunications} />
+                            </Card>
+                        </Col>
+                    </Row>
+                </Col>
+                <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                     <Card>
-                        <Statistic title="Entities" value={entityData.length} />
+                        <Statistic title="Entidades" value={totalEntities} />
                     </Card>
                 </Col>
-                <Col span={6}>
-                    <Card>
-                        <Statistic title="Communications" value={communicationData.length} />
+                <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                    <Card title="Últimas Notificaciones" bodyStyle={{paddingBottom: '0px', paddingTop: '4px'}}>
+                        <List
+                            itemLayout="horizontal"
+                            size="large"
+                            dataSource={lastCommunications}
+                            renderItem={(item, index) => (
+                                <List.Item className='notification-list-dashboard'>
+                                    <Row justify="space-evenly" className='notification-row-dashboard'>
+                                        <Col className='date-column-dashboard'>
+                                            <div className='day-dashboard'>
+                                                <strong>{formattedDate(item.fecha)[0]}</strong>
+                                            </div>
+                                            <div className='month-dashboard'>
+                                                {formattedDate(item.fecha)[1]}
+                                            </div>
+                                        </Col>
+                                        <Col flex="auto" className='content-column'>
+                                            <div className='title-dashboard'>
+                                                <strong>{item.titulo}</strong>
+                                            </div>
+                                            <div className='estado-dashboard'>
+                                                <Tag color={estadoColorMap[item.estado]}>{estadoName[item.estado]}</Tag>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </List.Item>
+                            )}
+                        />
                     </Card>
                 </Col>
             </Row>
-
-            <Divider />
-
             <Row gutter={16}>
                 <Col span={12}>
                     <Card title="Entity Data">
@@ -64,14 +167,6 @@ const DashboardAdmin = () => {
                     </Card>
                 </Col>
             </Row>
-
-            <Divider />
-
-            <Card title="Notifications">
-                {notifications.map((notification) => (
-                    <p key={notification.id}>{notification.message}</p>
-                ))}
-            </Card>
         </div>
     );
 };
