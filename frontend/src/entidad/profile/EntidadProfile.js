@@ -1,23 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Col, Row, List, Tag, Button } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
-import CsvGenerator from '../../util/csvGenerator';
 import tokenService from "../../services/token.service";
 import useFetchState from "../../util/useFetchState";
 import notification_icon from '../../static/images/notification_icon.png';
 import cesta_icon from '../../static/images/cesta_icon.png';
 import description_icon from '../../static/images/description_icon.png';
-import "../../static/css/admin/adminPage.css";
+import "../../static/css/entidad/entidadPage.css";
 import Layout from '../../Layout.js';
+import jwt_decode from 'jwt-decode';
 
 const user = tokenService.getUser();
 const jwt = tokenService.getLocalAccessToken();
 
-export default function EntidadViewAdmin() {
+export default function EntidadProfile() {
 
   const { id } = useParams();
+  const navigate = useNavigate();  
   const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
+  const entidadId = jwt_decode(jwt).entidadId;
+
+  useEffect(() => {
+    // Verificar si el ID de la URL coincide con el ID de la entidad logueada
+    if (id !== entidadId) {
+      navigate(`/error`);
+    }
+  }, [id, entidadId]);
+
+
+
   const [entidad, setEntidad] = useFetchState(
     [],
     `/api/v1/entidades/${id}`,
@@ -112,8 +124,8 @@ export default function EntidadViewAdmin() {
 
   const data_entrega = [
     {
-      title: 'Entrega',
-      data: '10/12/2024',
+      title: 'Próxima entrega',
+      data: '16:00h 10/12/2024',
     }
   ];
 
@@ -137,11 +149,9 @@ export default function EntidadViewAdmin() {
     LLAMAR: 'Falta llamar',
     REUNION: 'Falta reunión',
   };
-  
-  const navigate = useNavigate();  
 
   const navidateEditEntidad = () => {
-    navigate(`/admin/entidades/${id}/edit`);
+    navigate(`/entidades/${id}/profile/edit`);
   }
 
   /** Exportar a csv */
@@ -228,7 +238,7 @@ export default function EntidadViewAdmin() {
             </Row>      
             <Row gutter={[16, 16]}>
               <Col className='admin-column' xs={24} sm={24} md={16} lg={16} xl={16}>
-                <Card title="Últimas Notificaciones">
+                <Card title="Últimas Notificaciones Enviadas">
                 <List
                     itemLayout="horizontal"
                     size="large"
@@ -260,13 +270,8 @@ export default function EntidadViewAdmin() {
               </Col>
               <Col className='admin-column' xs={24} sm={24} md={8} lg={8} xl={8}>
                 <Card className='button-card-admin' bodyStyle={{  display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  <Button onClick={navidateEditEntidad}>Editar</Button>
-                  <CsvGenerator
-                    data={csvData}
-                    headers={csvHeaders}
-                    filename="datos.csv"
-                    buttonText="Exportar a CSV"
-                  />
+                  <Button onClick={navidateEditEntidad}>Editar tus datos</Button>
+                  <Button onClick={navidateEditEntidad}>Nueva notificación</Button>
                 </Card>
               </Col>
             </Row>

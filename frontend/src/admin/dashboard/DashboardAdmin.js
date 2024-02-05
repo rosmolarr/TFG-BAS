@@ -5,6 +5,7 @@ import { Line, XAxis, YAxis, Tooltip, Legend, Bar } from 'recharts';
 import tokenService from "../../services/token.service";
 import useFetchState from "../../util/useFetchState";
 import "../../static/css/admin/adminPage.css";
+import Layout from '../../Layout.js';
 
 const jwt = tokenService.getLocalAccessToken();
 
@@ -78,96 +79,98 @@ const DashboardAdmin = () => {
   };
 
     return (
-        <div style={{ margin: '2%' }}>
-            <Row gutter={[16, 16]} style={{marginBottom: '1%'}}>
-                <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                    <Row gutter={[8, 8]} style={{marginBottom: '1%'}}>
-                        <Col span={12}>
-                            <Card>
-                                <Statistic title="Entidades" value={totalEntities} />
-                            </Card>
-                        </Col>
-                        <Col span={12}>
-                            <Card>
-                                <Statistic title="Comunicaciones" value={totalCommunications} />
-                            </Card>
-                        </Col>
-                    </Row>
-                    <Row gutter={[8, 8]}>
-                        <Col span={12}>
-                            <Card>
-                                <Statistic title="Entidades" value={totalEntities} />
-                            </Card>
-                        </Col>
-                        <Col span={12}>
-                            <Card>
-                                <Statistic title="Comunicaciones" value={totalCommunications} />
-                            </Card>
-                        </Col>
-                    </Row>
-                </Col>
-                <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                    <Card>
-                        <Statistic title="Entidades" value={totalEntities} />
-                    </Card>
-                </Col>
-                <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                    <Card title="Últimas Notificaciones" bodyStyle={{paddingBottom: '0px', paddingTop: '4px'}}>
-                        <List
-                            itemLayout="horizontal"
-                            size="large"
-                            dataSource={lastCommunications}
-                            renderItem={(item, index) => (
-                                <List.Item className='notification-list-dashboard'>
-                                    <Row justify="space-evenly" className='notification-row-dashboard'>
-                                        <Col className='date-column-dashboard'>
-                                            <div className='day-dashboard'>
-                                                <strong>{formattedDate(item.fecha)[0]}</strong>
-                                            </div>
-                                            <div className='month-dashboard'>
-                                                {formattedDate(item.fecha)[1]}
-                                            </div>
-                                        </Col>
-                                        <Col flex="auto" className='content-column'>
-                                            <div className='title-dashboard'>
-                                                <strong>{item.titulo}</strong>
-                                            </div>
-                                            <div className='estado-dashboard'>
-                                                <Tag color={estadoColorMap[item.estado]}>{estadoName[item.estado]}</Tag>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </List.Item>
-                            )}
-                        />
-                    </Card>
-                </Col>
-            </Row>
-            <Row gutter={16}>
-                <Col span={12}>
-                    <Card title="Entity Data">
-                        <LineChart width={400} height={300} data={entityData}>
+        <Layout>
+            <div style={{ margin: '2%' }}>
+                <Row gutter={[16, 16]} style={{marginBottom: '1%'}}>
+                    <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                        <Row gutter={[8, 8]} style={{marginBottom: '1%'}}>
+                            <Col span={12}>
+                                <Card>
+                                    <Statistic title="Entidades" value={totalEntities} />
+                                </Card>
+                            </Col>
+                            <Col span={12}>
+                                <Card>
+                                    <Statistic title="Comunicaciones" value={totalCommunications} />
+                                </Card>
+                            </Col>
+                        </Row>
+                        <Row gutter={[8, 8]}>
+                            <Col span={12}>
+                                <Card>
+                                    <Statistic title="Entidades" value={totalEntities} />
+                                </Card>
+                            </Col>
+                            <Col span={12}>
+                                <Card>
+                                    <Statistic title="Comunicaciones" value={totalCommunications} />
+                                </Card>
+                            </Col>
+                        </Row>
+                    </Col>
+                    <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                        <Card>
+                            <Statistic title="Entidades" value={totalEntities} />
+                        </Card>
+                    </Col>
+                    <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                        <Card title="Últimas Notificaciones" bodyStyle={{paddingBottom: '0px', paddingTop: '4px'}}>
+                            <List
+                                itemLayout="horizontal"
+                                size="large"
+                                dataSource={lastCommunications}
+                                renderItem={(item, index) => (
+                                    <List.Item className='notification-list-dashboard'>
+                                        <Row justify="space-evenly" className='notification-row-dashboard'>
+                                            <Col className='date-column-dashboard'>
+                                                <div className='day-dashboard'>
+                                                    <strong>{formattedDate(item.fecha)[0]}</strong>
+                                                </div>
+                                                <div className='month-dashboard'>
+                                                    {formattedDate(item.fecha)[1]}
+                                                </div>
+                                            </Col>
+                                            <Col flex="auto" className='content-column'>
+                                                <div className='title-dashboard'>
+                                                    <strong>{item.titulo}</strong>
+                                                </div>
+                                                <div className='estado-dashboard'>
+                                                    <Tag color={estadoColorMap[item.estado]}>{estadoName[item.estado]}</Tag>
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                    </List.Item>
+                                )}
+                            />
+                        </Card>
+                    </Col>
+                </Row>
+                <Row gutter={16}>
+                    <Col span={12}>
+                        <Card title="Entity Data">
+                            <LineChart width={400} height={300} data={entityData}>
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Line type="monotone" dataKey="value" stroke="#8884d8" />
+                            </LineChart>
+                        </Card>
+                    </Col>
+                    <Col span={12}>
+                        <Card title="Communication Data">
+                            <BarChart width={400} height={300} data={communicationData}>
                             <XAxis dataKey="name" />
                             <YAxis />
                             <Tooltip />
                             <Legend />
-                            <Line type="monotone" dataKey="value" stroke="#8884d8" />
-                        </LineChart>
-                    </Card>
-                </Col>
-                <Col span={12}>
-                    <Card title="Communication Data">
-                        <BarChart width={400} height={300} data={communicationData}>
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="value" fill="#82ca9d" />
-                        </BarChart>
-                    </Card>
-                </Col>
-            </Row>
-        </div>
+                            <Bar dataKey="value" fill="#82ca9d" />
+                            </BarChart>
+                        </Card>
+                    </Col>
+                </Row>
+            </div>
+        </Layout>
     );
 };
 

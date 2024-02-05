@@ -2,15 +2,17 @@ import React, { useRef, useState } from 'react';
 import tokenService from "../../services/token.service";
 import "../../static/css/admin/adminPage.css";
 import useFetchState from "../../util/useFetchState";
-import { Space, Table, Tag, Button, Input } from 'antd';
+import { Space, Table, Tag, Button, Input, Modal } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import { useNavigate } from 'react-router-dom';
-
+import ImportForm from './ImportForm';
+import Layout from '../../Layout.js';
 
 const jwt = tokenService.getLocalAccessToken();
 
 export default function EntidadListAdmin() {
+
   const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
   const [entidad, setEntidad] = useFetchState(
@@ -230,27 +232,49 @@ export default function EntidadListAdmin() {
     navigate(`/entidades/new`);
   };
 
+  const [isImportPopupVisible, setImportPopupVisible] = useState(false);
+
+  const handleImportClick = () => {
+    setImportPopupVisible(true);
+  };
+
+  const closeImportPopup = () => {
+    setImportPopupVisible(false);
+  };
+
   return (
-    <div className="admin-page-container">
-      <h1>Entidades</h1>
-      <Space
-        style={{
-          marginBottom: 16,
-        }}
-      >
-        <Button onClick={navidateNewEntidad}>Nueva entidad</Button>
-        <Button onClick={clearFilters}>Limpiar filtros</Button>
-        <Button onClick={clearAll}>Limpiarlo todo</Button>
-      </Space>
-      <Table 
-        columns={columns} 
-        dataSource={filteredData} 
-        onChange={handleChange} 
-        pagination={{defaultPageSize: 7, pageSizeOptions: [7, 10, 20], showSizeChanger: true, showQuickJumper: true,}}
-        onRow={(record) => ({
-          onClick: () => handleRowClick(record),
-        })}
-        />
-    </div>
+    <Layout>
+      <div className="admin-page-container">
+        <h1>Entidades</h1>
+        <Space
+          style={{
+            marginBottom: 16,
+          }}
+        >
+          <Button onClick={navidateNewEntidad}>Nueva entidad</Button>
+          <Button onClick={handleImportClick}>Importar entidades</Button>
+          <Button onClick={clearFilters}>Limpiar filtros</Button>
+          <Button onClick={clearAll}>Limpiarlo todo</Button>
+        </Space>
+        <Table 
+          columns={columns} 
+          dataSource={filteredData} 
+          onChange={handleChange} 
+          pagination={{defaultPageSize: 7, pageSizeOptions: [7, 10, 20], showSizeChanger: true, showQuickJumper: true,}}
+          onRow={(record) => ({
+            onClick: () => handleRowClick(record),
+          })}
+          />
+
+        <Modal
+          title="Importar Entidades"
+          visible={isImportPopupVisible}
+          onCancel={closeImportPopup}
+          footer={null}
+        >
+          <ImportForm onClose={closeImportPopup} />
+        </Modal>
+      </div>
+    </Layout>
   );
 }

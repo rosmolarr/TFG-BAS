@@ -4,17 +4,24 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.bas.comunicacion.ComunicacionRepository;
+import org.springframework.samples.bas.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EntidadService {
     private EntidadRepository EntidadRepository;
+	private ComunicacionRepository ComunicacionRepository;
+	private UserRepository UserRepository;
 
     @Autowired
-	public EntidadService(EntidadRepository EntidadRepository
+	public EntidadService(EntidadRepository EntidadRepository, ComunicacionRepository ComunicacionRepository, 
+	UserRepository UserRepository
 	) {
-		this.EntidadRepository = EntidadRepository
+		this.EntidadRepository = EntidadRepository;
+		this.ComunicacionRepository = ComunicacionRepository;
+		this.UserRepository = UserRepository
 		;
 	}
 
@@ -52,7 +59,13 @@ public class EntidadService {
 
 	@Transactional
 	public void deleteById(int entidadId) throws DataAccessException {
-		EntidadRepository
-		.deleteById(entidadId);
+		Integer userId = EntidadRepository.findById(entidadId).get().getUser().getId();
+		ComunicacionRepository.deleteByEntidadId(entidadId);
+		EntidadRepository.deleteById(entidadId);
+		UserRepository.deleteById(userId);
 	}
+
+	public boolean existsByNif(String nif) {
+        return EntidadRepository.existsByNif(nif);
+    }
 }

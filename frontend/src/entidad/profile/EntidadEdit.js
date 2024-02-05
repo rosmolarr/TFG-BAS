@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Form, Input, Label } from "reactstrap";
-import tokenService from "../../services/token.service";
-import getErrorModal from "../../util/getErrorModal";
-import getIdFromUrl from "../../util/getIdFromUrl";
-import useFetchState from "../../util/useFetchState";
+import tokenService from "../../services/token.service.js";
+import getErrorModal from "../../util/getErrorModal.js";
+import getIdFromUrl from "../../util/getIdFromUrl.js";
+import useFetchState from "../../util/useFetchState.js";
 import Layout from '../../Layout.js';
+import jwt_decode from 'jwt-decode';
 
 const jwt = tokenService.getLocalAccessToken();
 
-export default function EntidadEditAdmin() {
+export default function EntidadEdit() {
 
   const emptyItem = {
     id: "",
@@ -35,6 +36,16 @@ export default function EntidadEditAdmin() {
   };
 
   const id = getIdFromUrl(2);
+
+  const entidadId = jwt_decode(jwt).entidadId;
+  const navigate = useNavigate();  
+
+  useEffect(() => {
+    if (id !== entidadId) {
+      navigate(`/error`);
+    }
+  }, [id, entidadId]);
+
   const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
   const [entidad, setEntidad] = useFetchState(
@@ -87,7 +98,7 @@ export default function EntidadEditAdmin() {
         if (json.message) {
           setMessage(json.message);
           setVisible(true);
-        } else window.location.href = "/entidades";
+        } else window.location.href = "/entidades/" + entidadId + "/profile";
       })
       .catch((message) => alert(message));
   }
@@ -310,7 +321,7 @@ export default function EntidadEditAdmin() {
             <div className="custom-button-row">
               <button className="auth-button">Save</button>
               <Link
-                to={id !== "new" ? "/entidades/"  + entidad.id : "/entidades" }
+                to={`/entidades/${entidadId}/profile`}
                 className="auth-button"
                 style={{ textDecoration: "none" }}
               >

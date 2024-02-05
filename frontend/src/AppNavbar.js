@@ -4,25 +4,32 @@ import { Link, useLocation } from 'react-router-dom';
 import tokenService from './services/token.service';
 import jwt_decode from 'jwt-decode';
 import logo from './static/images/logo_banco.png';
+import useFetchState from './util/useFetchState';
 import './App.css';
 
 function AppNavbar() {
+  const [message, setMessage] = useState(null);
+  const [visible, setVisible] = useState(false);
   const [roles, setRoles] = useState([]);
   const [username, setUsername] = useState("");
   const jwt = tokenService.getLocalAccessToken();
   const [collapsed, setCollapsed] = useState(true);
   const location = useLocation();
+  const [entidadId, setEntidadId] = useState("");
 
   const toggleNavbar = () => setCollapsed(!collapsed);
+
 
   useEffect(() => {
     if (jwt) {
       setRoles(jwt_decode(jwt).authorities);
       setUsername(jwt_decode(jwt).sub);
+      setEntidadId(jwt_decode(jwt).entidadId);
     }
   }, [jwt]);
 
   let adminLinks = <></>;
+  let entidadesLinks = <></>;
   let userLogout = <></>;
   
   roles.forEach((role) => {
@@ -42,6 +49,17 @@ function AppNavbar() {
           <NavItem>
             <NavLink tag={Link} to="/comunicaciones" className={location.pathname === "/comunicaciones" ? "active" : ""}>
               Comunicaciones
+            </NavLink>
+          </NavItem>
+        </>
+      );
+    }
+    else if (role === "ENTIDAD"){
+      entidadesLinks = (
+        <>
+          <NavItem>
+            <NavLink tag={Link} to={`/entidades/${entidadId}/profile`}className={location.pathname === `/entidades/${entidadId}/profile` ? "active" : ""}>
+              Perfil
             </NavLink>
           </NavItem>
         </>
@@ -70,6 +88,7 @@ function AppNavbar() {
         <Collapse isOpen={!collapsed} navbar>
           <Nav className="me-auto mb-2 mb-lg-0" navbar>
             {adminLinks}
+            {entidadesLinks}
           </Nav>
           <Nav className="ms-auto mb-2 mb-lg-0" navbar>
             {userLogout}

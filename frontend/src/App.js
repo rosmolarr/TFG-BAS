@@ -11,10 +11,11 @@ import Register from "./auth/register";
 import Login from "./auth/login";
 import Logout from "./auth/logout";
 import tokenService from "./services/token.service";
-import EntidadEdit from "./entidad/entidadEdit"
 import EntidadListAdmin from "./admin/entidades/EntidadListAdmin";
 import EntidadViewAdmin from "./admin/entidades/EntidadViewAdmin";
 import EntidadEditAdmin from "./admin/entidades/EntidadEditAdmin";
+import EntidadProfile from "./entidad/profile/EntidadProfile";
+import EntidadEdit from "./entidad/profile/EntidadEdit";
 import CommunicationListAdmin from "./admin/communications/CommunicationListAdmin";
 import CommunicationEditAdmin from "./admin/communications/CommunicationEditAdmin";
 import DashboardAdmin from "./admin/dashboard/DashboardAdmin";
@@ -64,7 +65,8 @@ function App() {
     if (role === "ENTIDAD") {
       entidadRoutes = (
         <>
-          <Route path="/entidades/:id" exact={true} element={<PrivateRoute><EntidadEdit /></PrivateRoute>} />
+          <Route path="/entidades/:id/profile" exact={true} element={<PrivateRoute><EntidadProfile /></PrivateRoute>} />
+          <Route path="/entidades/:id/profile/edit" exact={true} element={<PrivateRoute><EntidadEdit /></PrivateRoute>} />
         </>)
     }
   })

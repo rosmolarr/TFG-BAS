@@ -1,5 +1,6 @@
 package org.springframework.samples.bas.entidad;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -65,6 +66,25 @@ public class EntidadRestController {
 		entidad.setUser(newUser);
 		entidadService.saveEntidad(entidad);
 		return new ResponseEntity<>(entidad, HttpStatus.CREATED);
+	}
+
+	@PostMapping(value = "/import")
+	public ResponseEntity<List<Entidad>> createImportEntidades(@Valid @RequestBody List<Entidad> entidades) {
+		List<Entidad> listaEntidades = new ArrayList<>();
+		for(Entidad entidad: entidades){
+			if (!entidadService.existsByNif(entidad.getNif())) {
+				User newUser = new User();
+				newUser.setUsername(entidad.getEmail());
+				newUser.setPassword(entidad.getNif()); 
+				newUser.setPassword(encoder.encode(entidad.getNif()));
+				newUser.setAuthority(authoritiesService.findByAuthority("ENTIDAD")); 
+				userService.saveUser(newUser);
+				entidad.setUser(newUser);
+				entidadService.saveEntidad(entidad);
+				listaEntidades.add(entidad);
+			}
+		}
+		return new ResponseEntity<>(listaEntidades, HttpStatus.CREATED);
 	}
 	
 

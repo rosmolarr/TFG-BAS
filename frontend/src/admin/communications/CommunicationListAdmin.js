@@ -6,6 +6,7 @@ import "../../static/css/admin/adminPage.css";
 import deleteFromList from "../../util/deleteFromList";
 import getErrorModal from "../../util/getErrorModal";
 import useFetchState from "../../util/useFetchState";
+import Layout from '../../Layout.js';
 
 const jwt = tokenService.getLocalAccessToken();
 
@@ -66,32 +67,34 @@ export default function ClinicListAdmin() {
   const modal = getErrorModal(setVisible, visible, message);
 
   return (
-    <div>
-      <div className="admin-page-container">
-        <h1 className="text-center">Clinic Owners</h1>
-        {alerts.map((a) => a.alert)}
-        {modal}
-        <div className="float-right">
-          <Button color="success" tag={Link} to="/clinics/new">
-            Add Clinic Owner
-          </Button>
-        </div>
-        <div>
-          <Table aria-label="owners" className="mt-4">
-            <thead>
-              <tr>
-                <th width="15%">Name</th>
-                <th width="20%">Address</th>
-                <th width="15%">Telephone</th>
-                <th width="15%">Clinic Owner</th>
-                <th width="15%">Plan</th>
-                <th width="20%">Actions</th>
-              </tr>
-            </thead>
-            <tbody>{clinicList}</tbody>
-          </Table>
+    <Layout>
+      <div>
+        <div className="admin-page-container">
+          <h1 className="text-center">Clinic Owners</h1>
+          {alerts.map((a) => a.alert)}
+          {modal}
+          <div className="float-right">
+            <Button color="success" tag={Link} to="/clinics/new">
+              Add Clinic Owner
+            </Button>
+          </div>
+          <div>
+            <Table aria-label="owners" className="mt-4">
+              <thead>
+                <tr>
+                  <th width="15%">Name</th>
+                  <th width="20%">Address</th>
+                  <th width="15%">Telephone</th>
+                  <th width="15%">Clinic Owner</th>
+                  <th width="15%">Plan</th>
+                  <th width="20%">Actions</th>
+                </tr>
+              </thead>
+              <tbody>{clinicList}</tbody>
+            </Table>
+          </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }

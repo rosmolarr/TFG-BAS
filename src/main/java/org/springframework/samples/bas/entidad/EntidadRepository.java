@@ -10,4 +10,6 @@ public interface EntidadRepository extends CrudRepository<Entidad, Integer> {
     @Query("SELECT entidad FROM Entidad entidad WHERE entidad.user.id = :userId")
     Optional<Entidad> findByUserId(int userId);
 
+    @Query("SELECT CASE WHEN COUNT(entidad) > 0 THEN true ELSE false END FROM Entidad entidad WHERE entidad.nif = :nif")
+    boolean existsByNif(String nif);
 }

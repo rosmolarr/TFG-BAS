@@ -7,6 +7,8 @@ import static org.springframework.security.config.Customizer.withDefaults;
  * and open the template in the editor.
  */
 
+import java.util.Arrays;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -57,13 +62,12 @@ public class SecurityConfiguration {
 			
 			.authorizeHttpRequests(authorizeRequests ->	authorizeRequests
 			.requestMatchers("/resources/**", "/webjars/**", "/static/**", "/swagger-resources/**").permitAll()			
-			.requestMatchers("/", "/oups","/api/v1/auth/**","/v3/api-docs/**","/swagger-ui.html","/swagger-ui/**").permitAll()												
+			.requestMatchers("/", "/oups","/api/v1/auth/**","/v3/api-docs/**","/swagger-ui.html","/swagger-ui/**").permitAll()	
+			.requestMatchers("/api/v1/entidades/{id}").hasAuthority(ENTIDAD)											
 			.requestMatchers("/api/v1/entidades/**").hasAuthority(ADMIN)
-			.requestMatchers("/api/v1/entidades/{id}").hasAuthority(ENTIDAD)
 			.requestMatchers("/api/v1/comunicaciones/**").hasAnyAuthority(ADMIN, ENTIDAD)
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/users/**")).hasAnyAuthority(ADMIN, ENTIDAD)
 			.anyRequest().denyAll())					
-			
 			.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);		
 		return http.build();
 	}
@@ -83,7 +87,5 @@ public class SecurityConfiguration {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
-	
 	
 }
