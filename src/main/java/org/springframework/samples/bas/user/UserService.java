@@ -27,6 +27,7 @@ import org.springframework.samples.bas.entidad.EntidadService;
 import org.springframework.samples.bas.exceptions.ResourceNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,10 +38,13 @@ public class UserService {
 
 	private EntidadService entidadService;
 
+	private PasswordEncoder encoder;
+
 	@Autowired
-	public UserService(UserRepository userRepository, EntidadService entidadService) {
+	public UserService(UserRepository userRepository, EntidadService entidadService, PasswordEncoder encoder) {
 		this.userRepository = userRepository;
 		this.entidadService = entidadService;
+		this.encoder = encoder;
 	}
 
 	@Transactional
@@ -63,13 +67,13 @@ public class UserService {
 	@Transactional(readOnly = true)
 	public Entidad findEntidadByUser(String username) {
 		return userRepository.findEntidadByUser(username)
-				.orElseThrow(() -> new ResourceNotFoundException("Owner", "username", username));
+				.orElseThrow(() -> new ResourceNotFoundException("entidad", "username", username));
 	}
 
 	@Transactional(readOnly = true)
 	public Entidad findEntidadByUser(int id) {
 		return userRepository.findEntidadByUser(id)
-		.orElseThrow(() -> new ResourceNotFoundException("Owner", "ID", id));
+		.orElseThrow(() -> new ResourceNotFoundException("entidad", "ID", id));
 	}
 
 	@Transactional(readOnly = true)
@@ -98,9 +102,9 @@ public class UserService {
 	@Transactional
 	public User updateUser(@Valid User user, Integer idToUpdate) {
 		User toUpdate = findUser(idToUpdate);
+		user.setPassword(encoder.encode(user.getPassword()));
 		BeanUtils.copyProperties(user, toUpdate, "id");
 		userRepository.save(toUpdate);
-
 		return toUpdate;
 	}
 

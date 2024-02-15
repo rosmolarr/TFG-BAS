@@ -5,8 +5,8 @@ import tokenService from "../../services/token.service.js";
 import getErrorModal from "../../util/getErrorModal.js";
 import getIdFromUrl from "../../util/getIdFromUrl.js";
 import useFetchState from "../../util/useFetchState.js";
-import Layout from '../../Layout.js';
 import jwt_decode from 'jwt-decode';
+import { notification } from 'antd';
 
 const jwt = tokenService.getLocalAccessToken();
 
@@ -42,7 +42,7 @@ export default function EntidadEdit() {
 
   useEffect(() => {
     if (id !== entidadId) {
-      navigate(`/error`);
+      navigate(`/error/profile`);
     }
   }, [id, entidadId]);
 
@@ -81,6 +81,13 @@ export default function EntidadEdit() {
     setEntidad({ ...entidad, [name]: value });
   }
 
+  function openNotificationWithIcon(type) {
+    notification[type]({
+      message: 'Perfil de Entidad',
+      description: 'Sus datos han sido actualizados con éxito.',
+    });
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
 
@@ -98,7 +105,10 @@ export default function EntidadEdit() {
         if (json.message) {
           setMessage(json.message);
           setVisible(true);
-        } else window.location.href = "/entidades/" + entidadId + "/profile";
+        } else {
+        navigate(`/entidades/${entidadId}/profile`);
+        openNotificationWithIcon('success');
+      };
       })
       .catch((message) => alert(message));
   }
@@ -106,7 +116,6 @@ export default function EntidadEdit() {
   const modal = getErrorModal(setVisible, visible, message);
 
   return (
-    <Layout>
       <div className="auth-page-container">
         {<h2>{id !== "new" ? "Editar Entidad" : "Añadir Entidad"}</h2>}
         {modal}
@@ -331,6 +340,5 @@ export default function EntidadEdit() {
           </Form>
         </div>
       </div>
-    </Layout>
   );
 }

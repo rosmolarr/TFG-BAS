@@ -7,7 +7,6 @@ import notification_icon from '../../static/images/notification_icon.png';
 import cesta_icon from '../../static/images/cesta_icon.png';
 import description_icon from '../../static/images/description_icon.png';
 import "../../static/css/entidad/entidadPage.css";
-import Layout from '../../Layout.js';
 import jwt_decode from 'jwt-decode';
 
 const user = tokenService.getUser();
@@ -24,7 +23,7 @@ export default function EntidadProfile() {
   useEffect(() => {
     // Verificar si el ID de la URL coincide con el ID de la entidad logueada
     if (id !== entidadId) {
-      navigate(`/error`);
+      navigate(`/error/profile`);
     }
   }, [id, entidadId]);
 
@@ -150,16 +149,27 @@ export default function EntidadProfile() {
     REUNION: 'Falta reunión',
   };
 
-  const navidateEditEntidad = () => {
+  const navigateEditEntidad = () => {
     navigate(`/entidades/${id}/profile/edit`);
-  }
+  };
+
+  const navigateEditUser = () => {
+    navigate(`/users/${entidad.user.id}`);
+  };
+
+  const navigateNewComunication = () => {
+    navigate(`/comunicaciones/new`);
+  };
+
+  const handleComunicacionesClick = () => {
+    navigate(`/comunicaciones/${id}`);
+  };
 
   /** Exportar a csv */
   const csvHeaders = data.map(item => item.title);
   const csvData = [data.map(item => item.data)];
 
   return (
-    <Layout>
       <div style={{ margin: '2%' }}>
         <Row justify="center" align="top" gutter={[16, 16]}>
           <Col className='admin-column' xs={24} sm={24} md={8} lg={8} xl={8}>
@@ -182,7 +192,7 @@ export default function EntidadProfile() {
           <Col className='admin-column' xs={24} sm={24} md={16} lg={16} xl={16}>
             <Row gutter={[16, 16]}>
               <Col className='admin-column' xs={24} sm={24} md={8} lg={8} xl={8}>
-                <div className='little-card'>
+                <div className='little-card' onClick={handleComunicacionesClick}>
                   <List
                     itemLayout="horizontal"
                     size="large"
@@ -270,14 +280,14 @@ export default function EntidadProfile() {
               </Col>
               <Col className='admin-column' xs={24} sm={24} md={8} lg={8} xl={8}>
                 <Card className='button-card-admin' bodyStyle={{  display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  <Button onClick={navidateEditEntidad}>Editar tus datos</Button>
-                  <Button onClick={navidateEditEntidad}>Nueva notificación</Button>
+                  <Button onClick={navigateEditEntidad}>Editar tus datos</Button>
+                  <Button onClick={navigateEditUser}>Editar tu usuario</Button>
+                  <Button onClick={navigateNewComunication}>Nueva notificación</Button>
                 </Card>
               </Col>
             </Row>
           </Col>
         </Row>
       </div>
-    </Layout>
   );
 }

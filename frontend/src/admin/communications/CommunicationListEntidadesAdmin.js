@@ -5,17 +5,18 @@ import useFetchState from "../../util/useFetchState.js";
 import { Space, Table, Tag, Button, Input, Modal } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const jwt = tokenService.getLocalAccessToken();
 
-export default function CommunicationListAdmin() {
+export default function CommunicationListEntidadesAdmin() {
 
+  const { id } = useParams();
   const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
   const [comunicacion, setComunicacion] = useFetchState(
     [],
-    `/api/v1/comunicaciones`,
+    `/api/v1/comunicaciones/entidad/${id}`,
     jwt,
     setMessage,
     setVisible
@@ -45,6 +46,7 @@ export default function CommunicationListAdmin() {
     return result;
   }
 
+  let nombreEntidad = entidadName(comunicacion[0]?.entidad?.nombre);
 
   /** FILTROS */
 
@@ -168,19 +170,12 @@ export default function CommunicationListAdmin() {
       dataIndex: 'fecha',
       key: 'fecha',
       sorter: (a, b) => new Date(a.fecha) - new Date(b.fecha),
-      defaultSortOrder: 'descend',
     },
     {
       title: 'Título',
       dataIndex: 'titulo',
       key: 'titulo',
       ...getColumnSearchProps('titulo','titulo'),
-    },
-    {
-      title: 'Entidad',
-      dataIndex: 'entidad',
-      key: 'entidad',
-      render: (entidad) => (entidadName(entidad.nombre)),
     },
     {
       title: 'Estado',
@@ -216,25 +211,26 @@ export default function CommunicationListAdmin() {
   };
 
   return (
-    <div className="admin-page-container">
-      <h1>Comunicaciones</h1>
-      <Space
-        style={{
-          marginBottom: 16,
-        }}
-      >
-        <Button onClick={clearFilters}>Limpiar filtros</Button>
-        <Button onClick={clearAll}>Limpiarlo todo</Button>
-      </Space>
-      <Table 
-        columns={columns} 
-        dataSource={filteredData} 
-        onChange={handleChange} 
-        pagination={{defaultPageSize: 7, pageSizeOptions: [7, 10, 20, 30], showSizeChanger: true, showQuickJumper: true,}}
-        onRow={(record) => ({
-          onClick: () => handleRowClick(record),
-        })}
-        />
-    </div>
+      <div className="admin-page-container">
+        <h1>Comunicaciones</h1>
+        <h5 style={{marginBottom:'2%'}}> {nombreEntidad} </h5>
+        <Space
+          style={{
+            marginBottom: 16,
+          }}
+        >
+          <Button onClick={clearFilters}>Limpiar filtros</Button>
+          <Button onClick={clearAll}>Limpiarlo todo</Button>
+        </Space>
+        <Table 
+          columns={columns} 
+          dataSource={filteredData} 
+          onChange={handleChange} 
+          pagination={{defaultPageSize: 7, pageSizeOptions: [7, 10, 20, 30], showSizeChanger: true, showQuickJumper: true,}}
+          onRow={(record) => ({
+            onClick: () => handleRowClick(record),
+          })}
+          />
+      </div>
   );
 }

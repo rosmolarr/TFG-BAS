@@ -1,12 +1,13 @@
 import React from 'react';
 import { Result, Button } from 'antd';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const ProfileError = () => {
-  const history = useHistory();
+
+  const navigate = useNavigate();
 
   const handleBackHome = () => {
-    history.push('/dashboard');
+    navigate('/dashboard');
   };
 
   return (

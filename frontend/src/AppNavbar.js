@@ -4,7 +4,6 @@ import { Link, useLocation } from 'react-router-dom';
 import tokenService from './services/token.service';
 import jwt_decode from 'jwt-decode';
 import logo from './static/images/logo_banco.png';
-import useFetchState from './util/useFetchState';
 import './App.css';
 
 function AppNavbar() {
@@ -58,8 +57,13 @@ function AppNavbar() {
       entidadesLinks = (
         <>
           <NavItem>
-            <NavLink tag={Link} to={`/entidades/${entidadId}/profile`}className={location.pathname === `/entidades/${entidadId}/profile` ? "active" : ""}>
+            <NavLink tag={Link} to={`/entidades/${entidadId}/profile`} className={location.pathname === `/entidades/${entidadId}/profile` ? "active" : ""}>
               Perfil
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink tag={Link} to={`/comunicaciones/${entidadId}`} className={location.pathname === `/comunicaciones/${entidadId}` ? "active" : ""}>
+              Comunicaciones
             </NavLink>
           </NavItem>
         </>

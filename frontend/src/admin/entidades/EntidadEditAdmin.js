@@ -5,7 +5,6 @@ import tokenService from "../../services/token.service";
 import getErrorModal from "../../util/getErrorModal";
 import getIdFromUrl from "../../util/getIdFromUrl";
 import useFetchState from "../../util/useFetchState";
-import Layout from '../../Layout.js';
 
 const jwt = tokenService.getLocalAccessToken();
 
@@ -95,7 +94,6 @@ export default function EntidadEditAdmin() {
   const modal = getErrorModal(setVisible, visible, message);
 
   return (
-    <Layout>
       <div className="auth-page-container">
         {<h2>{id !== "new" ? "Editar Entidad" : "Añadir Entidad"}</h2>}
         {modal}
@@ -320,6 +318,5 @@ export default function EntidadEditAdmin() {
           </Form>
         </div>
       </div>
-    </Layout>
   );
 }

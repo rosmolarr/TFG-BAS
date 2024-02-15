@@ -8,7 +8,6 @@ import notification_icon from '../../static/images/notification_icon.png';
 import cesta_icon from '../../static/images/cesta_icon.png';
 import description_icon from '../../static/images/description_icon.png';
 import "../../static/css/admin/adminPage.css";
-import Layout from '../../Layout.js';
 
 const user = tokenService.getUser();
 const jwt = tokenService.getLocalAccessToken();
@@ -141,7 +140,11 @@ export default function EntidadViewAdmin() {
   const navigate = useNavigate();  
 
   const navidateEditEntidad = () => {
-    navigate(`/admin/entidades/${id}/edit`);
+    navigate(`/entidades/${id}/edit`);
+  }
+
+  const handleComunicationClick = () => {
+    navigate(`/comunicaciones/entidad/${id}`);
   }
 
   /** Exportar a csv */
@@ -149,7 +152,6 @@ export default function EntidadViewAdmin() {
   const csvData = [data.map(item => item.data)];
 
   return (
-    <Layout>
       <div style={{ margin: '2%' }}>
         <Row justify="center" align="top" gutter={[16, 16]}>
           <Col className='admin-column' xs={24} sm={24} md={8} lg={8} xl={8}>
@@ -172,7 +174,7 @@ export default function EntidadViewAdmin() {
           <Col className='admin-column' xs={24} sm={24} md={16} lg={16} xl={16}>
             <Row gutter={[16, 16]}>
               <Col className='admin-column' xs={24} sm={24} md={8} lg={8} xl={8}>
-                <div className='little-card'>
+                <div className='little-card' onClick={handleComunicationClick}>
                   <List
                     itemLayout="horizontal"
                     size="large"
@@ -180,7 +182,9 @@ export default function EntidadViewAdmin() {
                     renderItem={(item, index) => (
                       <List.Item>
                         <List.Item.Meta
-                          avatar={<img src={notification_icon} className="logo-image-entidad"/>}
+                          avatar={
+                            <img src={notification_icon} className="logo-image-entidad"/>
+                          }
                           title={item.title}
                           description={item.data}
                         />
@@ -273,6 +277,5 @@ export default function EntidadViewAdmin() {
           </Col>
         </Row>
       </div>
-    </Layout>
   );
 }

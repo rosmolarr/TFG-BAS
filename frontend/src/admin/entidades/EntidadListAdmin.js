@@ -2,12 +2,12 @@ import React, { useRef, useState } from 'react';
 import tokenService from "../../services/token.service";
 import "../../static/css/admin/adminPage.css";
 import useFetchState from "../../util/useFetchState";
-import { Space, Table, Tag, Button, Input, Modal } from 'antd';
+import { Space, Tag, Button, Input, Modal, Divider, Checkbox } from 'antd';
+import { Table } from "ant-table-extensions";
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import { useNavigate } from 'react-router-dom';
 import ImportForm from './ImportForm';
-import Layout from '../../Layout.js';
 
 const jwt = tokenService.getLocalAccessToken();
 
@@ -242,13 +242,25 @@ export default function EntidadListAdmin() {
     setImportPopupVisible(false);
   };
 
+  /** Columnas mostradas */
+
+  const defaultCheckedList = columns.map((item) => item.key);
+
+  const [checkedList, setCheckedList] = useState(defaultCheckedList);
+
+  const options = columns.map(({ key, title }) => ({
+    label: title,
+    value: key,
+  }));
+
+  const newColumns = columns.filter((item) => checkedList.includes(item.key));
+
   return (
-    <Layout>
       <div className="admin-page-container">
-        <h1>Entidades</h1>
+        <h1>Entidades</h1> 
         <Space
           style={{
-            marginBottom: 16,
+            marginTop: 16,
           }}
         >
           <Button onClick={navidateNewEntidad}>Nueva entidad</Button>
@@ -256,14 +268,25 @@ export default function EntidadListAdmin() {
           <Button onClick={clearFilters}>Limpiar filtros</Button>
           <Button onClick={clearAll}>Limpiarlo todo</Button>
         </Space>
+
+        <Divider>Columnas mostradas</Divider>
+        <Checkbox.Group
+          value={checkedList}
+          options={options}
+          onChange={(value) => {
+            setCheckedList(value);
+          }}
+        />
+
         <Table 
-          columns={columns} 
+          columns={newColumns}
           dataSource={filteredData} 
           onChange={handleChange} 
-          pagination={{defaultPageSize: 7, pageSizeOptions: [7, 10, 20], showSizeChanger: true, showQuickJumper: true,}}
+          pagination={{defaultPageSize: 5, pageSizeOptions: [5, 10, 20], showSizeChanger: true, showQuickJumper: true,}}
           onRow={(record) => ({
             onClick: () => handleRowClick(record),
           })}
+          exportableProps={{ showColumnPicker: true }}
           />
 
         <Modal
@@ -275,6 +298,5 @@ export default function EntidadListAdmin() {
           <ImportForm onClose={closeImportPopup} />
         </Modal>
       </div>
-    </Layout>
   );
 }

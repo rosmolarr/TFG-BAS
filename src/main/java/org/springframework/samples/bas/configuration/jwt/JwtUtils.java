@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.samples.bas.configuration.services.UserDetailsImpl;
 import org.springframework.samples.bas.entidad.EntidadService;
 import org.springframework.samples.bas.user.Authorities;
+import org.springframework.samples.bas.user.AuthoritiesService;
 import org.springframework.samples.bas.user.User;
 import org.springframework.samples.bas.user.UserService;
 import org.springframework.security.core.Authentication;
@@ -33,6 +34,9 @@ public class JwtUtils {
 	@Autowired
     private EntidadService entidadService;
 
+	@Autowired
+	private AuthoritiesService authoritiesService;
+
 	private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
 	@Value("${bas.app.jwtSecret}")
@@ -50,7 +54,7 @@ public class JwtUtils {
 		claims.put("authorities",
 				userPrincipal.getAuthorities().stream().map(auth -> auth.getAuthority()).collect(Collectors.toList()));
 		
-		if(user.getAuthority().toString() == "ENTIDAD") {
+		if(user.getAuthority() == authoritiesService.findByAuthority("ENTIDAD")) {
 			Integer entidadId = entidadService.findByUserId(user.getId()).getId();
 			claims.put("entidadId", entidadId.toString());
 		}
@@ -65,7 +69,7 @@ public class JwtUtils {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("authorities", authority.getAuthority());
 
-		if(user.getAuthority().toString() == "ENTIDAD") {
+		if(user.getAuthority() == authoritiesService.findByAuthority("ENTIDAD")) {
 			Integer entidadId = entidadService.findByUserId(user.getId()).getId();
 			claims.put("entidadId", entidadId.toString());
 		}
