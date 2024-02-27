@@ -52,6 +52,8 @@ function App() {
     return jwt_decode(jwt).authorities;
   }
 
+  const idEntidad = jwt_decode(jwt).entidadId;
+
   /* Notificaciones*/
   const storedCount = parseInt(localStorage.getItem('notificacionesCount')) || 0;
   const [notificacionesCount, setNotificacionesCount] = useState(storedCount);
@@ -68,9 +70,26 @@ function App() {
     setNotificacionesCount(0);
   };
 
+  const storedCountResponse = parseInt(localStorage.getItem('responseCount')) || 0;
+  const [responseCount, setResponseCount] = useState(storedCountResponse);
+
+  const handleNuevaRespuestaNotificacion = () => {
+    // Incrementa el contador de notificaciones
+    setResponseCount(responseCount + 1);
+  };
+
+  const abrirNotificacionEntidad = () => {
+    navigate(`/comunicaciones/${idEntidad}`);
+    setResponseCount(0);
+  };
+
   useEffect(() => {
     localStorage.setItem('notificacionesCount', notificacionesCount.toString());
   }, [notificacionesCount]);
+
+  useEffect(() => {
+    localStorage.setItem('responseCount', responseCount.toString());
+  }, [responseCount]);
 
   let adminRoutes = <></>;
   let entidadRoutes = <></>;
@@ -82,7 +101,7 @@ function App() {
       adminRoutes = (
         <>
           <Route path="/comunicaciones" exact={true} element={<PrivateRoute><CommunicationListAdmin /></PrivateRoute>} />
-          <Route path="/comunicaciones/:id" exact={true} element={<PrivateRoute><CommunicationViewAdmin /></PrivateRoute>} />
+          <Route path="/comunicaciones/:id" exact={true} element={<PrivateRoute><CommunicationViewAdmin handleNuevaRespuestaNotificacion= {handleNuevaRespuestaNotificacion}/></PrivateRoute>} />
           <Route path="/comunicaciones/entidad/:id" exact={true} element={<PrivateRoute><CommunicationListEntidadesAdmin /></PrivateRoute>} />
           <Route path="/entidades" exact={true} element={<PrivateRoute><EntidadListAdmin /></PrivateRoute>} />
           <Route path="/entidades/:id" exact={true} element={<PrivateRoute><EntidadViewAdmin /></PrivateRoute>} />
@@ -139,6 +158,9 @@ function App() {
             <FloatButton.BackTop />
             {roles.includes('ADMIN') && (
               <NotificationAdmin notificacionesCount={notificacionesCount} abrirNotificacion={abrirNotificacion} />
+            )}
+            {roles.includes('ENTIDAD') && (
+              <NotificationAdmin notificacionesCount={responseCount} abrirNotificacion={abrirNotificacionEntidad} />
             )}
             {jwt && (
               <FloatButton icon={<RollbackOutlined />} onClick={goBack} />

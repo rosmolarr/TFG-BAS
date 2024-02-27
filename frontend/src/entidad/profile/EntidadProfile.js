@@ -165,6 +165,10 @@ export default function EntidadProfile() {
     navigate(`/comunicaciones/${id}`);
   };
 
+  const navigateComunication = (idCommunication) => {
+    navigate(`/comunicaciones/${idCommunication}/view`);
+  };
+
   /** Exportar a csv */
   const csvHeaders = data.map(item => item.title);
   const csvData = [data.map(item => item.data)];
@@ -265,7 +269,7 @@ export default function EntidadProfile() {
                             </div>
                           </Col>
                           <Col flex="auto" className='content-column'>
-                            <div className='title'>
+                            <div className='title' onClick={() => navigateComunication(item.id)}>
                               <strong>{item.titulo}</strong>
                             </div>
                             <div className='estado'>
