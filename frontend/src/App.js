@@ -28,6 +28,7 @@ import CommunicationNew from "./entidad/communications/CommunicationNew";
 import CommunicationView from "./entidad/communications/CommunicationView";
 import DashboardAdmin from "./admin/dashboard/DashboardAdmin";
 import NotificationAdmin from "./util/notificationAdmin";
+import CitasListAdmin from './admin/appointments/CitasListAdmin';
 
 setupIonicReact();
 
@@ -107,6 +108,7 @@ function App() {
           <Route path="/entidades/:id" exact={true} element={<PrivateRoute><EntidadViewAdmin /></PrivateRoute>} />
           <Route path="/entidades/new" exact={true} element={<PrivateRoute><EntidadEditAdmin /></PrivateRoute>} />
           <Route path="/entidades/:id/edit" exact={true} element={<PrivateRoute><EntidadEditAdmin /></PrivateRoute>} />
+          <Route path="/citas" exact={true} element={<PrivateRoute><CitasListAdmin /></PrivateRoute>} />
           <Route path="/dashboard" exact={true} element={<PrivateRoute><DashboardAdmin /></PrivateRoute>} />
           </>)
     }
