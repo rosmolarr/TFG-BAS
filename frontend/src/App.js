@@ -56,8 +56,6 @@ function App() {
     return jwt_decode(jwt).authorities;
   }
 
-  const idEntidad = jwt_decode(jwt).entidadId;
-
   /* Notificaciones*/
   const storedCount = parseInt(localStorage.getItem('notificacionesCount')) || 0;
   const [notificacionesCount, setNotificacionesCount] = useState(storedCount);
@@ -81,6 +79,8 @@ function App() {
     // Incrementa el contador de notificaciones
     setResponseCount(responseCount + 1);
   };
+
+  const [idEntidad, setIdEntidad] = useState("0");
 
   const abrirNotificacionEntidad = () => {
     navigate(`/comunicaciones/${idEntidad}`);
@@ -128,6 +128,8 @@ function App() {
           <Route path="/comunicaciones/:id/view" exact={true} element={<PrivateRoute><CommunicationView /></PrivateRoute>} />
           <Route path="/users/:id" exact={true} element={<PrivateRoute><UserEdit /></PrivateRoute>} />
         </>)
+
+      idEntidad = jwt_decode(jwt).entidadId
     }
   })
   if (!jwt) {

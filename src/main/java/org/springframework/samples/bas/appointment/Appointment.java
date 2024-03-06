@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -39,15 +40,15 @@ import java.time.LocalTime;
 public class Appointment extends BaseEntity{
 
     @Column(name = "fecha")
-    @NotBlank
+    @NotNull
     private LocalDate fecha;
 
     @Column(name = "hora")
-    @NotBlank
+    @NotNull
     private LocalTime hora;
 
     @Column(name = "palet")
-    @NotBlank
+    @Min(1)
     private Integer palet;
 
     @Enumerated(EnumType.STRING)

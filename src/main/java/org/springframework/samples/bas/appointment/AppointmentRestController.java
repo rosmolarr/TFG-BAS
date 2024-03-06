@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.bas.auth.payload.response.MessageResponse;
 import org.springframework.samples.bas.comunicacion.Comunicacion;
+import org.springframework.samples.bas.entidad.Entidad;
 import org.springframework.samples.bas.entidad.EntidadService;
 import org.springframework.samples.bas.util.RestPreconditions;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,10 +31,12 @@ import jakarta.validation.Valid;
 public class AppointmentRestController {
 
 	private final AppointmentService appointmentService;
+	private final EntidadService entidadService;
 
 	@Autowired
-	public AppointmentRestController(AppointmentService appointmentService) {
+	public AppointmentRestController(AppointmentService appointmentService, EntidadService entidadService) {
 		this.appointmentService = appointmentService;
+		this.entidadService = entidadService;
 	}
 
 	@GetMapping

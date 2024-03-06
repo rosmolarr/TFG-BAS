@@ -10,15 +10,6 @@ const jwt = tokenService.getLocalAccessToken();
 
 function CitasNewAdmin({ location }) {
 
-  const citasBase = (location && location.state && location.state.citasBase)  || {
-    id: "",
-    fecha: "",
-    hora: "",
-    estado: "ENVIADA",
-    palet: "",
-    entidad: "",
-  };
-
   const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
   const [entidades, setEntidades] = useFetchState(
@@ -27,18 +18,34 @@ function CitasNewAdmin({ location }) {
     jwt,
     setMessage,
     setVisible
-  ); 
+  );
 
-  const [cita, setCita] = useState(citasBase);
+  // Asignación directa en el estado inicial
+  const [cita, setCita] = useState({
+    id: "",
+    fecha: "",
+    hora: "",
+    estado: "ENVIADA",
+    palet: "",
+    entidad: ""
+  });
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setCita(citasBase);
-  }, []);
+  function handleChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
 
-  function handleChange(name, value) {
+    if (name === "entidad") {
+      const entidad = entidades.find((entidad) => entidad.id == value);
+      setCita({ ...cita, [name]: entidad });
+      return;
+    }
     setCita({ ...cita, [name]: value });
   }
+
+  console.log(cita);
 
   function openNotificationWithIcon(type) {
     notification[type]({
@@ -49,6 +56,8 @@ function CitasNewAdmin({ location }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    console.log(cita);
 
     fetch("/api/v1/citas", {
       method: "POST",
@@ -76,13 +85,6 @@ function CitasNewAdmin({ location }) {
   };
 
   const modal = getErrorModal(setVisible, visible, message);
-
-  const [searchTerm, setSearchTerm] = useState('');
-
-   // Filtra las entidades que coincidan con el término de búsqueda
-  const filteredEntidades = entidades.filter((entidad) =>
-  entidad.nombre.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <div className="auth-page-container">
@@ -136,29 +138,24 @@ function CitasNewAdmin({ location }) {
             <Label for="entidad" className="custom-form-input-label">
               Entidad
             </Label>
-            <InputGroup>
-              <InputGroupText>
-                <i className="fas fa-search"></i>
-              </InputGroupText>
-              <Input
-                type="select"
-                required
-                name="entidad"
-                id="entidad"
-                value={cita.entidad}
-                onChange={handleChange}
-                className="custom-input"
-              >
-                <option value="" disabled>
-                  Selecciona una entidad
+            <Input
+              type="select"
+              required
+              name="entidad"
+              id="entidad"
+              value={cita.entidad.id}
+              onChange={handleChange}
+              className="custom-input"
+            >
+              <option value="" disabled>
+                Selecciona una entidad
+              </option>
+              {entidades.map((entidad) => (
+                <option key={entidad.id} value={entidad.id}>
+                  {entidad.nombre}
                 </option>
-                {filteredEntidades.map((entidad) => (
-                  <option key={entidad.id} value={entidad.id}>
-                    {entidad.nombre}
-                  </option>
-                ))}
-              </Input>
-            </InputGroup>
+              ))}
+            </Input>
           </div>
           <div className="custom-button-row">
             <button className="auth-button">Guardar</button>
