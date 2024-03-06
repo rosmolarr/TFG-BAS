@@ -139,7 +139,7 @@ export default function EntidadViewAdmin() {
   
   const navigate = useNavigate();  
 
-  const navidateEditEntidad = () => {
+  const navigateEditEntidad = () => {
     navigate(`/entidades/${id}/edit`);
   }
 
@@ -264,7 +264,7 @@ export default function EntidadViewAdmin() {
               </Col>
               <Col className='admin-column' xs={24} sm={24} md={8} lg={8} xl={8}>
                 <Card className='button-card-admin' bodyStyle={{  display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  <Button onClick={navidateEditEntidad}>Editar</Button>
+                  <Button onClick={navigateEditEntidad}>Editar</Button>
                   <CsvGenerator
                     data={csvData}
                     headers={csvHeaders}

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.bas.auth.payload.response.MessageResponse;
+import org.springframework.samples.bas.comunicacion.Comunicacion;
 import org.springframework.samples.bas.entidad.EntidadService;
 import org.springframework.samples.bas.util.RestPreconditions;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -65,6 +66,11 @@ public class AppointmentRestController {
 		RestPreconditions.checkNotNull(appointmentService.findAppointmentById(appointmentId), "Appointment", "ID", appointmentId);
 		appointmentService.delete(appointmentId);
 		return new ResponseEntity<>(new MessageResponse("Comunicación borrada!"), HttpStatus.OK);
+	}
+
+	@GetMapping(value = "entidad/{entidadId}")
+	public ResponseEntity<List<Appointment>> findAppointmentByEntidadId(@PathVariable("entidadId") int entidadId) {
+		return new ResponseEntity<>(appointmentService.findAppointmentByEntidadId(entidadId), HttpStatus.OK);
 	}
 
 }

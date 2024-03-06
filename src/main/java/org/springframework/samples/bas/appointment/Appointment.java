@@ -19,6 +19,7 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.samples.bas.comunicacion.Comunicacion;
+import org.springframework.samples.bas.comunicacion.EstadoComunicacion;
 import org.springframework.samples.bas.entidad.Entidad;
 import org.springframework.samples.bas.model.BaseEntity;
 import org.springframework.samples.bas.user.User;
@@ -49,9 +50,9 @@ public class Appointment extends BaseEntity{
     @NotBlank
     private Integer palet;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "estado")
-    @NotBlank
-    private Boolean estado;
+    private EstadoAppointment estado;
 
     @ManyToOne
 	@JoinColumn(name = "entidad_id", referencedColumnName = "id")

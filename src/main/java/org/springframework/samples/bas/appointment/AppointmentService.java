@@ -6,13 +6,14 @@ import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.bas.comunicacion.Comunicacion;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AppointmentService {
     
-        private AppointmentRepository appointmentRepository;
+    private AppointmentRepository appointmentRepository;
 
     @Autowired
 	public AppointmentService(AppointmentRepository appointmentRepository) {
@@ -59,5 +60,10 @@ public class AppointmentService {
 	@Transactional
 	public void delete(int appointmentId) throws DataAccessException {
 		appointmentRepository.deleteById(appointmentId);
+	}
+
+		@Transactional
+	public List<Appointment> findAppointmentByEntidadId(int entidadId) throws DataAccessException {
+		return appointmentRepository.findAppointmentByEntidadId(entidadId);
 	}
 }

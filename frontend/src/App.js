@@ -29,6 +29,9 @@ import CommunicationView from "./entidad/communications/CommunicationView";
 import DashboardAdmin from "./admin/dashboard/DashboardAdmin";
 import NotificationAdmin from "./util/notificationAdmin";
 import CitasListAdmin from './admin/appointments/CitasListAdmin';
+import CitasCalendarAdmin from './admin/appointments/CitasCalendarAdmin';
+import CitasListEntidadAdmin from './admin/appointments/CitasListEntidadAdmin';
+import CitasNewAdmin from './admin/appointments/CitasNewAdmin';
 
 setupIonicReact();
 
@@ -108,7 +111,10 @@ function App() {
           <Route path="/entidades/:id" exact={true} element={<PrivateRoute><EntidadViewAdmin /></PrivateRoute>} />
           <Route path="/entidades/new" exact={true} element={<PrivateRoute><EntidadEditAdmin /></PrivateRoute>} />
           <Route path="/entidades/:id/edit" exact={true} element={<PrivateRoute><EntidadEditAdmin /></PrivateRoute>} />
-          <Route path="/citas" exact={true} element={<PrivateRoute><CitasListAdmin /></PrivateRoute>} />
+          <Route path="/citas" exact={true} element={<PrivateRoute><CitasCalendarAdmin /></PrivateRoute>} />
+          <Route path="/citas/list" exact={true} element={<PrivateRoute><CitasListAdmin /></PrivateRoute>} />
+          <Route path="/citas/entidad/:id" exact={true} element={<PrivateRoute><CitasListEntidadAdmin /></PrivateRoute>} />
+          <Route path="/citas/new" exact={true} element={<PrivateRoute><CitasNewAdmin/></PrivateRoute>} />
           <Route path="/dashboard" exact={true} element={<PrivateRoute><DashboardAdmin /></PrivateRoute>} />
           </>)
     }

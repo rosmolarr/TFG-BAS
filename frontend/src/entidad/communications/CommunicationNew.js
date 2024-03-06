@@ -128,7 +128,7 @@ function CommunicationNew({ handleNuevaNotificacion }) {
               />
             </div>
             <div className="custom-button-row">
-              <button className="auth-button">Save</button>
+              <button className="auth-button">Guardar</button>
               <Link
                 to="/comunicaciones"
                 className="auth-button"

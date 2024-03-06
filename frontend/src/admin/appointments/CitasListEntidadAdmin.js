@@ -6,21 +6,34 @@ import { Space, Tag, Button, Input, Modal, Divider, Checkbox } from 'antd';
 import { Table } from "ant-table-extensions";
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const jwt = tokenService.getLocalAccessToken();
 
-export default function CitasListAdmin() {
+export default function CitasListEntidadAdmin() {
 
+  const { id } = useParams();
   const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
   const [citas, setCitas] = useFetchState(
     [], 
-    `/api/v1/citas`, 
+    `/api/v1/citas/entidad/${id}`, 
     jwt, 
     setMessage, 
     setVisible
-    );
+  );
+
+  function entidadName(name) {
+    if (name === undefined) {
+      return ""; 
+    }
+    const lowerCaseName = name.toLowerCase();
+    const capitalizedFirstLetter = lowerCaseName.charAt(0).toUpperCase();
+    const result = capitalizedFirstLetter + lowerCaseName.slice(1);
+    return result;
+  }
+
+  let nombreEntidad = entidadName(citas[0]?.entidad?.nombre);
 
   /** FILTROS */
 
@@ -39,7 +52,6 @@ export default function CitasListAdmin() {
     setFilteredInfo({});
     setSortedInfo({});
     setSearchText('');
-    setSearchedColumn('');
   };
 
   /** BUSCADOR */
@@ -158,12 +170,6 @@ export default function CitasListAdmin() {
       key: 'hora',
     },
     {
-      title: 'Entidad',
-      dataIndex: 'entidad',
-      key: 'entidad',
-      render: (entidad) => (entidad.nombre),
-    },
-    {
       title: 'Estado',
       dataIndex: 'estado',
       key: 'estado',
@@ -193,56 +199,23 @@ export default function CitasListAdmin() {
     return valuesToSearch.includes(searchText.toLowerCase());
   });
 
-  /** Columnas mostradas */
-
-  const defaultCheckedList = columns.map((item) => item.key);
-
-  const [checkedList, setCheckedList] = useState(defaultCheckedList);
-
-  const options = columns.map(({ key, title }) => ({
-    label: title,
-    value: key,
-  }));
-
-  const newColumns = columns.filter((item) => checkedList.includes(item.key));
-
-  const navigate = useNavigate();
-
-  const handleRowClick = (record) => {
-    const entityId = record.entidad.id; 
-    navigate(`/citas/entidad/${entityId}`);
-  };
-
   return (
       <div className="admin-page-container">
         <h1>Citas</h1> 
-        <Space
-          style={{
-            marginTop: 8,
-          }}
-        >
+        <h5 style={{marginBottom:'2%'}}> {nombreEntidad} </h5>
+        <Space>
           <Button >Nueva cita</Button>
-          <Button >Importar citas</Button>
           <Button onClick={clearFilters}>Limpiar filtros</Button>
           <Button onClick={clearAll}>Limpiarlo todo</Button>
         </Space>
 
-        <Divider>Columnas mostradas</Divider>
-        <Checkbox.Group
-          value={checkedList}
-          options={options}
-          onChange={(value) => {
-            setCheckedList(value);
-          }}
-        />
-
         <Table 
-          columns={newColumns}
+          columns={columns}
           dataSource={filteredData} 
           onChange={handleChange} 
           pagination={{defaultPageSize: 5, pageSizeOptions: [5, 10, 20], showSizeChanger: true, showQuickJumper: true,}}
           onRow={(record) => ({
-            onClick: () => handleRowClick(record),
+            onClick: () => console.log(record),
           })}
           />
       </div>
