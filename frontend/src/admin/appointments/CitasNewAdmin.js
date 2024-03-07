@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { notification } from 'antd';
 import { Form, Input, Label, InputGroup, InputGroupText } from "reactstrap";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import useFetchState from "../../util/useFetchState";
 import tokenService from "../../services/token.service";
 import getErrorModal from "../../util/getErrorModal";
 
 const jwt = tokenService.getLocalAccessToken();
 
-function CitasNewAdmin({ location }) {
+function CitasNewAdmin() {
+
+  const location = useLocation();
 
   const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
@@ -21,13 +23,13 @@ function CitasNewAdmin({ location }) {
   );
 
   // Asignación directa en el estado inicial
-  const [cita, setCita] = useState({
+  const [cita, setCita] = useState ((location && location.state && location.state.citasBase)  || {
     id: "",
     fecha: "",
     hora: "",
     estado: "ENVIADA",
     palet: "",
-    entidad: ""
+    entidad: entidades[0]
   });
 
   const navigate = useNavigate();
@@ -45,8 +47,6 @@ function CitasNewAdmin({ location }) {
     setCita({ ...cita, [name]: value });
   }
 
-  console.log(cita);
-
   function openNotificationWithIcon(type) {
     notification[type]({
       message: 'Cita',
@@ -56,8 +56,6 @@ function CitasNewAdmin({ location }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    console.log(cita);
 
     fetch("/api/v1/citas", {
       method: "POST",
@@ -160,7 +158,7 @@ function CitasNewAdmin({ location }) {
           <div className="custom-button-row">
             <button className="auth-button">Guardar</button>
             <Link
-              to="/comunicaciones"
+              to="/citas"
               className="auth-button"
               style={{ textDecoration: "none" }}
             >

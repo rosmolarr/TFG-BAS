@@ -3,7 +3,8 @@ package org.springframework.samples.bas.appointment;
 public enum EstadoAppointment {
     ENVIADA("ENVIADA"),
     ACEPTADA("ACEPTADA"),
-    VALIDADA("VALIDADA");
+    VALIDADA("VALIDADA"),
+    CANCELADA("CANCELADA");
 
     private final String nombre;
 

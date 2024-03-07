@@ -71,6 +71,11 @@ function AppNavbar() {
               Comunicaciones
             </NavLink>
           </NavItem>
+          <NavItem>
+            <NavLink tag={Link} to="/citas" className={location.pathname === "/citas" ? "active" : ""}>
+              Citas
+            </NavLink>
+          </NavItem>
         </>
       );
     }

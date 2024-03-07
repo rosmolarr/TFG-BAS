@@ -32,6 +32,8 @@ import CitasListAdmin from './admin/appointments/CitasListAdmin';
 import CitasCalendarAdmin from './admin/appointments/CitasCalendarAdmin';
 import CitasListEntidadAdmin from './admin/appointments/CitasListEntidadAdmin';
 import CitasNewAdmin from './admin/appointments/CitasNewAdmin';
+import CitasViewAdmin from './admin/appointments/CitasViewAdmin';
+import CitasList from './entidad/appointments/CitasList';
 
 setupIonicReact();
 
@@ -80,13 +82,17 @@ function App() {
     setResponseCount(responseCount + 1);
   };
 
-  const [idEntidad, setIdEntidad] = useState("0");
+  let idEntidad = 0;
+
+  if(roles.includes("ENTIDAD")) {
+    idEntidad = jwt_decode(jwt).entidadId
+  }
 
   const abrirNotificacionEntidad = () => {
     navigate(`/comunicaciones/${idEntidad}`);
     setResponseCount(0);
   };
-
+ 
   useEffect(() => {
     localStorage.setItem('notificacionesCount', notificacionesCount.toString());
   }, [notificacionesCount]);
@@ -115,6 +121,7 @@ function App() {
           <Route path="/citas/list" exact={true} element={<PrivateRoute><CitasListAdmin /></PrivateRoute>} />
           <Route path="/citas/entidad/:id" exact={true} element={<PrivateRoute><CitasListEntidadAdmin /></PrivateRoute>} />
           <Route path="/citas/new" exact={true} element={<PrivateRoute><CitasNewAdmin/></PrivateRoute>} />
+          <Route path="/citas/:id" exact={true} element={<PrivateRoute><CitasViewAdmin/></PrivateRoute>} />
           <Route path="/dashboard" exact={true} element={<PrivateRoute><DashboardAdmin /></PrivateRoute>} />
           </>)
     }
@@ -127,9 +134,8 @@ function App() {
           <Route path="/comunicaciones/new" exact={true} element={<PrivateRoute><CommunicationNew handleNuevaNotificacion={handleNuevaNotificacion}/></PrivateRoute>} />
           <Route path="/comunicaciones/:id/view" exact={true} element={<PrivateRoute><CommunicationView /></PrivateRoute>} />
           <Route path="/users/:id" exact={true} element={<PrivateRoute><UserEdit /></PrivateRoute>} />
+          <Route path="/citas" exact={true} element={<PrivateRoute><CitasList /></PrivateRoute>} />
         </>)
-
-      idEntidad = jwt_decode(jwt).entidadId
     }
   })
   if (!jwt) {
@@ -171,7 +177,7 @@ function App() {
             )}
             {roles.includes('ENTIDAD') && (
               <NotificationAdmin notificacionesCount={responseCount} abrirNotificacion={abrirNotificacionEntidad} />
-            )}
+            )} 
             {jwt && (
               <FloatButton icon={<RollbackOutlined />} onClick={goBack} />
             )}

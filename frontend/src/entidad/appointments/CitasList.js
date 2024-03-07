@@ -7,12 +7,13 @@ import { Table } from "ant-table-extensions";
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import { useNavigate, useParams, Link } from 'react-router-dom';
+import jwt_decode from "jwt-decode";
 
 const jwt = tokenService.getLocalAccessToken();
 
 export default function CitasListEntidadAdmin() {
 
-  const { id } = useParams();
+  const { id } = jwt_decode(jwt).entidadId; 
   const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
   const [citas, setCitas] = useFetchState(
@@ -20,14 +21,6 @@ export default function CitasListEntidadAdmin() {
     `/api/v1/citas/entidad/${id}`, 
     jwt, 
     setMessage, 
-    setVisible
-  );
-
-  const [entidad, setEntidad] = useFetchState(
-    [],
-    `/api/v1/entidades/${id}`,
-    jwt,
-    setMessage,
     setVisible
   );
 
@@ -55,11 +48,6 @@ export default function CitasListEntidadAdmin() {
   };
   const clearFilters = () => {
     setFilteredInfo({});
-  };
-  const clearAll = () => {
-    setFilteredInfo({});
-    setSortedInfo({});
-    setSearchText('');
   };
 
   /** BUSCADOR */
@@ -197,11 +185,6 @@ export default function CitasListEntidadAdmin() {
         </Tag>
       ),
     },
-    {
-      title: 'Palet',
-      dataIndex: 'palet',
-      key: 'palet',
-    },
   ]
 
   const filteredData = citas.filter((record) => {
@@ -209,28 +192,11 @@ export default function CitasListEntidadAdmin() {
     return valuesToSearch.includes(searchText.toLowerCase());
   });
 
-  const selectedCita = {
-    id: "",
-    fecha: "",
-    hora: "",
-    estado: "ENVIADA",
-    entidad: entidad
-  };
-
-  const navigate = useNavigate();  
-
-  const navigateNuevaCita = () => {
-    navigate('/citas/new', { state: { citasBase: selectedCita } });
-  };
-
   return (
       <div className="admin-page-container">
         <h1>Citas</h1> 
-        <Link to={`/entidades/${id}`}>
-          <h5 style={{ marginBottom:"5%" }}>{nombreEntidad}</h5>
-        </Link> 
+        <h5 style={{ marginBottom:"2%" }}>{nombreEntidad}</h5>
         <Space>
-          <Button onClick={navigateNuevaCita}>Nueva cita</Button>
           <Button onClick={clearFilters}>Limpiar filtros</Button>
         </Space>
 

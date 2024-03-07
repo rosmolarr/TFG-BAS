@@ -36,7 +36,15 @@ export default function CitasCalendarAdmin() {
     jwt, 
     setMessage, 
     setVisible
-    );
+  );
+
+  const [entidades, setEntidades] = useFetchState(
+    [],
+    `/api/v1/entidades/all`,
+    jwt,
+    setMessage,
+    setVisible
+  );
 
   const handleDateClick = (value) => {
     setSelectedDate(value.format('YYYY-MM-DD'));
@@ -60,7 +68,8 @@ export default function CitasCalendarAdmin() {
   const estadoColorMap = {
     ENVIADA: 'gold',
     ACEPTADA: 'orange',
-    VALIDADA: 'green'
+    VALIDADA: 'green',
+    CANCELADA: 'red'
   };
     
   const navigate = useNavigate();  
@@ -74,11 +83,15 @@ export default function CitasCalendarAdmin() {
     fecha: selectedDate,
     hora: "",
     estado: "ENVIADA",
-    entidad: ""
+    entidad: entidades[0]
   };
 
   const navigateNuevaCita = () => {
     navigate('/citas/new', { state: { citasBase: selectedCita } });
+  };
+
+  const handleCitaClick = (id) => {
+    navigate(`/citas/${id}`);
   };
 
   return (
@@ -108,7 +121,7 @@ export default function CitasCalendarAdmin() {
               <List
                 dataSource={filteredAppointments}
                 renderItem={(item) => (
-                  <List.Item style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                  <List.Item style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis' }} onClick={() => handleCitaClick(item.id)}>
                     <Row justify="space-evenly" className='notification-row-dashboard' >
                       <Col className='date-column-dashboard'>
                         <strong>{formattedHour(item.hora)}</strong>

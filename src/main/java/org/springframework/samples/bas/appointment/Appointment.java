@@ -55,6 +55,10 @@ public class Appointment extends BaseEntity{
     @Column(name = "estado")
     private EstadoAppointment estado;
 
+    @Column(name = "comentario")
+    @Size(max = 255, min = 0)
+    private String comentario;
+
     @ManyToOne
 	@JoinColumn(name = "entidad_id", referencedColumnName = "id")
 	private Entidad entidad;

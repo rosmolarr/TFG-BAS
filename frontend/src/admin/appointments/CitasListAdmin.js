@@ -141,7 +141,8 @@ export default function CitasListAdmin() {
   const estadoColorMap = {
     ENVIADA: 'gold',
     ACEPTADA: 'orange',
-    VALIDADA: 'green'
+    VALIDADA: 'green',
+    CANCELADA: 'red'
   };
 
   const columns = [
@@ -170,7 +171,8 @@ export default function CitasListAdmin() {
       filters: [
         { text: 'ENVIADA', value: 'ENVIADA' },
         { text: 'ACEPTADA', value: 'ACEPTADA' },
-        { text: 'VALIDADA', value: 'VALIDADA' }
+        { text: 'VALIDADA', value: 'VALIDADA' },
+        { text: 'CANCELADA', value: 'CANCELADA' }
     
       ],
       filteredValue: filteredInfo.estado || null,
@@ -209,8 +211,8 @@ export default function CitasListAdmin() {
   const navigate = useNavigate();
 
   const handleRowClick = (record) => {
-    const entityId = record.entidad.id; 
-    navigate(`/citas/entidad/${entityId}`);
+    const id = record.id; 
+    navigate(`/citas/${id}`);
   };
 
   return (

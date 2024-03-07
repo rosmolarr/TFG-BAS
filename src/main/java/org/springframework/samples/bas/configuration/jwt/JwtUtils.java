@@ -53,7 +53,7 @@ public class JwtUtils {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("authorities",
 				userPrincipal.getAuthorities().stream().map(auth -> auth.getAuthority()).collect(Collectors.toList()));
-		
+
 		if(user.getAuthority() == authoritiesService.findByAuthority("ENTIDAD")) {
 			Integer entidadId = entidadService.findByUserId(user.getId()).getId();
 			claims.put("entidadId", entidadId.toString());
@@ -69,9 +69,18 @@ public class JwtUtils {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("authorities", authority.getAuthority());
 
+		System.out.println("-----------------------------------------------------");
+		System.out.println("-----------------------------------------------------");
+		System.out.println("-----------------------------------------------------");
+		System.out.println("-----------------------------------------------------");
+		System.out.println("-----------------------------------------------------");
+		System.out.println("-----------------------------------------------------");
+		
 		if(user.getAuthority() == authoritiesService.findByAuthority("ENTIDAD")) {
 			Integer entidadId = entidadService.findByUserId(user.getId()).getId();
 			claims.put("entidadId", entidadId.toString());
+			System.out.println(entidadId);
+			System.out.println(claims);
 		}
 
 		return Jwts.builder().setClaims(claims).setSubject(username).setIssuedAt(new Date())

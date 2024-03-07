@@ -28,7 +28,7 @@ public class EntidadService {
 	@Transactional(readOnly = true)
 	public Iterable<Entidad> findAll() throws DataAccessException {
 		return EntidadRepository
-		.findAll();
+		.findAllOrder();
 	}
 
 	@Transactional(readOnly = true)

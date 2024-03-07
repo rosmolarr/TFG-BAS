@@ -147,6 +147,10 @@ export default function EntidadViewAdmin() {
     navigate(`/comunicaciones/entidad/${id}`);
   }
 
+  const handleCitasClick = () => {
+    navigate(`/citas/entidad/${id}`);
+  }
+
   /** Exportar a csv */
   const csvHeaders = data.map(item => item.title);
   const csvData = [data.map(item => item.data)];
@@ -194,7 +198,7 @@ export default function EntidadViewAdmin() {
                 </div>
               </Col>
               <Col className='admin-column' xs={24} sm={24} md={8} lg={8} xl={8}>
-                <div className='little-card'>
+                <div className='little-card' onClick={handleCitasClick}>
                   <List
                     itemLayout="horizontal"
                     size="large"
