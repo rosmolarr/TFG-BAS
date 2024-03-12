@@ -10,7 +10,7 @@ public interface AppointmentRepository extends CrudRepository<Appointment, Integ
     @Query("SELECT a FROM Appointment a ORDER BY a.fecha, a.hora")
     List<Appointment> findAllOrderByDate();
 
-    @Query("SELECT a FROM Appointment a WHERE a.entidad.id = :entidadId")
+    @Query("SELECT a FROM Appointment a WHERE a.entidad.id = :entidadId ORDER BY a.fecha, a.hora")
     List<Appointment> findAppointmentByEntidadId(int entidadId);
 
 }

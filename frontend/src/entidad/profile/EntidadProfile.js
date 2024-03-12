@@ -45,6 +45,37 @@ export default function EntidadProfile() {
     setVisible
   );
 
+  const [citas, setCitas] = useFetchState(
+    [], 
+    `/api/v1/citas/entidad/${id}`, 
+    jwt, 
+    setMessage, 
+    setVisible
+  );
+
+  const today = new Date();
+
+  const nearestCitaAfter = citas.length > 0
+    ? citas
+        .filter(cita => cita.estado !== "CANCELADA")
+        .sort((a, b) => new Date(a.fecha) - new Date(b.fecha))
+        .find(cita => new Date(cita.fecha) >= today)
+    : today;
+
+  const nearestCitaBefore = citas.length > 0
+    ? citas
+        .filter(cita => cita.estado !== "CANCELADA")
+        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+        .find(cita => new Date(cita.fecha) <= today)
+    : today;
+
+  const nearestCita = nearestCitaAfter || nearestCitaBefore;
+
+  const nearestCitaTime = nearestCita ? new Date(nearestCita.fecha).getTime() : null;
+  const currentTime = today.getTime();
+
+  const nextCita = nearestCitaTime > currentTime ? nearestCita : nearestCitaBefore;
+
   /**
    * Obtener las dos últimas comunicaciones
    * y el recuento total
@@ -66,6 +97,22 @@ export default function EntidadProfile() {
   
     return [dia, mes.charAt(0).toUpperCase() + mes.slice(1)]; 
   }
+
+  function formattedDate2() {
+    if (!nextCita.fecha) return "Cargando...";
+    const opcionesFecha = { day: 'numeric', month: 'numeric', year: 'numeric' };
+    const fecha = new Date(nextCita.fecha);
+    return fecha.toLocaleDateString('es-ES', opcionesFecha);
+  }
+
+  function formattedTime() {
+    if (!nextCita.hora) return "Cargando...";
+
+    const horaFormateada = nextCita.hora.slice(0, -3);
+    return horaFormateada;
+  }
+
+  const dateCita = formattedDate2() + " " + formattedTime();
 
   const data = [
     {
@@ -124,7 +171,7 @@ export default function EntidadProfile() {
   const data_entrega = [
     {
       title: 'Próxima entrega',
-      data: '16:00h 10/12/2024',
+      data: dateCita,
     }
   ];
 
@@ -224,7 +271,7 @@ export default function EntidadProfile() {
                         <List.Item.Meta
                           avatar={<img src={cesta_icon} className="logo-image-entidad"/>}
                           title={item.title}
-                          description={item.data}
+                          description={item.data ? item.data : "Sin cita"}
                         />
                       </List.Item>
                     )}

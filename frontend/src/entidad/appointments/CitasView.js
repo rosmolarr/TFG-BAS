@@ -2,9 +2,9 @@ import { useState } from "react";
 import tokenService from "../../services/token.service.js";
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import useFetchState from "../../util/useFetchState.js";
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import "../../static/css/admin/adminPage.css";
-import { Card, Col, Row, Tag, Button } from 'antd';
+import { Card, Col, Row, Tag, Button, Form, Input } from 'antd';
 
 const jwt = tokenService.getLocalAccessToken();
 
@@ -21,6 +21,38 @@ export default function CommunicationView() {
   );
 
   const navigate = useNavigate();
+  const [form] = Form.useForm();
+
+  const handleSubmit = (values) => {
+    
+    const nuevaCita = {
+      ...cita,
+      comentario: values.respuesta,
+    };
+  
+    fetch(`/api/v1/citas/${id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${tokenService.getLocalAccessToken()}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(nuevaCita),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.message) {
+          setMessage(json.message);
+          setVisible(true);
+        } else {
+          window.location.reload();
+        }
+      })
+      .catch((error) => {
+        console.error('Error creando la cita:', error);
+        alert('Un error ha ocurrido intentand crear la cita.');
+      });
+  };
 
   const handleActionClick = (action) => {
     const nuevaCita = {
@@ -47,8 +79,8 @@ export default function CommunicationView() {
           }
         })
         .catch((error) => {
-          console.error('Error creating cita:', error);
-          alert('An error occurred while creating the cita.');
+          console.error('Error creando la cita:', error);
+          alert('Un error ha ocurrido intentand crear la cita.');
         });
   };
 
@@ -71,17 +103,15 @@ export default function CommunicationView() {
     return horaFormateada;
   }
 
+  console.log(cita.estado == 'ENVIADA' && !cita.comentario);
+
   return (
       <div style={{ marginLeft: '5%', marginRight: '5%' }}>
         <Row justify="center" align="top" gutter={[16, 16]}>
           <h1>{formattedDate()[0]} de {formattedDate()[1]} del {formattedDate()[2]}</h1>
         </Row>
         <Row justify="center" align="top" gutter={[16, 16]}>
-        {cita.entidad && (
-          <Link to={`/citas/entidad/${cita.entidad.id}`}>
-            <h6>{cita.entidad && cita.entidad.nombre}</h6>
-          </Link>
-        )}
+          <h3>{`Hora: ${formattedTime(cita.hora)}`}</h3>
         </Row>
         <Row justify="center" align="top" gutter={[16, 16]} style={{ marginBottom: '2%' }}>
           <Tag 
@@ -89,58 +119,39 @@ export default function CommunicationView() {
             {cita.estado}
           </Tag>
         </Row>
-        <Row justify="center" gutter={[16, 16]} style={{ marginBottom: '2%' }}>
-          <Col span={24}>
-          <Card title={`Hora: ${formattedTime(cita.hora)}`}>
-            <p>Palet: {cita.palet}</p>
-          </Card>
-          </Col>
-        </Row>
         {cita.comentario && (
           <Row justify="center" gutter={[16, 16]} style={{ marginBottom: '2%' }}>
             <Col span={24}>
-              <Card title="Respuesta del Banco">
+              <Card title="Incidencia">
                 <p>{cita.comentario}</p>
               </Card>
             </Col>
           </Row>
         )}
         {!cita.comentario && (
-          <Row justify="center" gutter={[16, 16]} style={{ marginBottom: '2%' }}>
+          <Row justify="center" gutter={[16, 16]} style={{marginBottom: "2%"}}>
             <Col span={24}>
-              <Card title="Incidencia" >
-              <p> <ExclamationCircleOutlined /> Actualmente no hay ninguna incidencia</p>
+              <Card title="Enviar incidencia para que el banco cancele su cita">
+                <Form form={form} onFinish={handleSubmit}>
+                  <Form.Item name="respuesta" rules={[{ required: true, message: 'Ingrese la incidencia.' }]}>
+                    <Input.TextArea placeholder="Escriba su incidencia aquí" />
+                  </Form.Item>
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      Enviar Incidencia
+                    </Button>
+                  </Form.Item>
+                </Form>
               </Card>
             </Col>
           </Row>
         )}
 
         <Row justify="start" align="top" gutter={[16, 16]}>
-          {cita.estado == 'ACEPTADA' && (
+          {(cita.estado == 'ENVIADA' && !cita.comentario) && (
             <Col xs={24} sm={24} md={3} lg={3} xl={3}>
-              <Button onClick={() => handleActionClick('VALIDADA')}>
-                Validar cita
-              </Button>
-            </Col>
-          )}
-          {cita.estado == 'ENVIADA' && (
-            <Col xs={24} sm={24} md={3} lg={3} xl={3}>
-              <Button onClick={() => handleActionClick('CANCELADA')}>
-                Cancelar cita
-              </Button>
-            </Col>
-          )}
-          {cita.estado == 'ACEPTADA' && (
-            <Col xs={24} sm={24} md={3} lg={3} xl={3}>
-              <Button onClick={() => handleActionClick('CANCELADA')}>
-                Cancelar cita
-              </Button>
-            </Col>
-          )}
-          {cita.estado == 'VALIDADA' && (
-            <Col xs={24} sm={24} md={3} lg={3} xl={3}>
-              <Button onClick={() => handleActionClick('CANCELADA')}>
-                Cancelar cita
+              <Button onClick={() => handleActionClick('ACEPTADA')}>
+                Aceptar cita
               </Button>
             </Col>
           )}

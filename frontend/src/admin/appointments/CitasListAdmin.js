@@ -2,9 +2,11 @@ import React, { useRef, useState } from 'react';
 import tokenService from "../../services/token.service";
 import "../../static/css/admin/adminPage.css";
 import useFetchState from "../../util/useFetchState";
-import { Space, Tag, Button, Input, Modal, Divider, Checkbox } from 'antd';
+import { Space, Tag, Button, Input, Modal, Divider, Checkbox, Tooltip } from 'antd';
 import { Table } from "ant-table-extensions";
 import { SearchOutlined } from '@ant-design/icons';
+import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
+import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import Highlighter from 'react-highlight-words';
 import { useNavigate } from 'react-router-dom';
 
@@ -140,7 +142,7 @@ export default function CitasListAdmin() {
 
   const estadoColorMap = {
     ENVIADA: 'gold',
-    ACEPTADA: 'orange',
+    ACEPTADA: 'purple',
     VALIDADA: 'green',
     CANCELADA: 'red'
   };
@@ -187,6 +189,30 @@ export default function CitasListAdmin() {
       title: 'Palet',
       dataIndex: 'palet',
       key: 'palet',
+    },
+    {
+      title: 'Incidencia',
+      dataIndex: 'comentario',
+      key: 'comentario',
+      render: (comentario) => (
+        comentario ? (
+          <Tooltip title="Tiene incidencia">
+            <CheckCircleOutlined style={{ color: 'green' }} />
+          </Tooltip>
+        ) : (
+          <Tooltip title="Sin incidencia">
+          </Tooltip>
+        )
+      ),
+      filters: [
+        { text: 'Con incidencia', value: true },
+        { text: 'Sin incidencia', value: false },
+      ],
+      filteredValue: filteredInfo.comentario || null,
+      onFilter: (value, record) => {
+        const tieneComentario = record.comentario !== null && record.comentario !== undefined && record.comentario !== '';
+        return value ? tieneComentario : !tieneComentario;
+      },
     },
   ]
 

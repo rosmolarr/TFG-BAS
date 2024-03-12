@@ -160,7 +160,7 @@ export default function CitasListEntidadAdmin() {
 
   const estadoColorMap = {
     ENVIADA: 'gold',
-    ACEPTADA: 'orange',
+    ACEPTADA: 'purple',
     VALIDADA: 'green',
     CANCELADA: 'red'
   };
@@ -223,6 +223,12 @@ export default function CitasListEntidadAdmin() {
     navigate('/citas/new', { state: { citasBase: selectedCita } });
   };
 
+  
+  const handleRowClick = (record) => {
+    const id = record.id; 
+    navigate(`/citas/${id}`);
+  };
+
   return (
       <div className="admin-page-container">
         <h1>Citas</h1> 
@@ -240,7 +246,7 @@ export default function CitasListEntidadAdmin() {
           onChange={handleChange} 
           pagination={{defaultPageSize: 5, pageSizeOptions: [5, 10, 20], showSizeChanger: true, showQuickJumper: true,}}
           onRow={(record) => ({
-            onClick: () => console.log(record),
+            onClick: () => handleRowClick(record),
           })}
           />
       </div>

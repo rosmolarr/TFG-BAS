@@ -13,7 +13,7 @@ const jwt = tokenService.getLocalAccessToken();
 
 export default function CitasListEntidadAdmin() {
 
-  const { id } = jwt_decode(jwt).entidadId; 
+  const id = jwt_decode(jwt).entidadId; 
   const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
   const [citas, setCitas] = useFetchState(
@@ -148,7 +148,7 @@ export default function CitasListEntidadAdmin() {
 
   const estadoColorMap = {
     ENVIADA: 'gold',
-    ACEPTADA: 'orange',
+    ACEPTADA: 'purple',
     VALIDADA: 'green',
     CANCELADA: 'red'
   };
@@ -166,25 +166,6 @@ export default function CitasListEntidadAdmin() {
       dataIndex: 'hora',
       key: 'hora',
     },
-    {
-      title: 'Estado',
-      dataIndex: 'estado',
-      key: 'estado',
-      filters: [
-        { text: 'ENVIADA', value: 'ENVIADA' },
-        { text: 'ACEPTADA', value: 'ACEPTADA' },
-        { text: 'VALIDADA', value: 'VALIDADA' },
-        { text: 'CANCELADA', value: 'CANCELADA' }
-    
-      ],
-      filteredValue: filteredInfo.estado || null,
-      onFilter: (value, record) => record.estado.includes(value),
-      render: (estado) => (
-        <Tag color={estadoColorMap[estado]} key={estado}>
-          {estado}
-        </Tag>
-      ),
-    },
   ]
 
   const filteredData = citas.filter((record) => {
@@ -192,10 +173,16 @@ export default function CitasListEntidadAdmin() {
     return valuesToSearch.includes(searchText.toLowerCase());
   });
 
+  const navigate = useNavigate();
+
+  const handleRowClick = (record) => {
+    const id = record.id; 
+    navigate(`/citas/${id}`);
+  };
+
   return (
       <div className="admin-page-container">
-        <h1>Citas</h1> 
-        <h5 style={{ marginBottom:"2%" }}>{nombreEntidad}</h5>
+        <h1>Tus citas</h1> 
         <Space>
           <Button onClick={clearFilters}>Limpiar filtros</Button>
         </Space>
@@ -206,7 +193,7 @@ export default function CitasListEntidadAdmin() {
           onChange={handleChange} 
           pagination={{defaultPageSize: 5, pageSizeOptions: [5, 10, 20], showSizeChanger: true, showQuickJumper: true,}}
           onRow={(record) => ({
-            onClick: () => console.log(record),
+            onClick: () => handleRowClick(record),
           })}
           />
       </div>

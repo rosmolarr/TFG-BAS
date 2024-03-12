@@ -67,7 +67,7 @@ export default function CitasCalendarAdmin() {
 
   const estadoColorMap = {
     ENVIADA: 'gold',
-    ACEPTADA: 'orange',
+    ACEPTADA: 'purple',
     VALIDADA: 'green',
     CANCELADA: 'red'
   };
