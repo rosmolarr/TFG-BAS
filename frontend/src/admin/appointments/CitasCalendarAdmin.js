@@ -8,6 +8,7 @@ import moment from 'moment';
 import 'moment/locale/es';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
+import MediaQuery from 'react-responsive';
 
 const { Title, Text } = Typography;
 const jwt = tokenService.getLocalAccessToken();
@@ -98,22 +99,42 @@ export default function CitasCalendarAdmin() {
     <div className="admin-page-container">
       <h1>Citas para recoger cestas</h1> 
       <Row gutter={[16, 16]} style={{marginTop: '1%'}}>
-        <Col className='admin-column' xs={24} sm={24} md={9} lg={9} xl={9}>
-          <Calendar
-            onSelect={handleDateClick}
-            fullscreen={false}
-            style={{ width: '300px' }}
-            locale={{
-              lang: {
-                locale: 'es',
-                month: moment().locale('es').format('MMMM'),
-                year: moment().locale('es').format('YYYY'),
-                day: moment().locale('es').format('D'),
-                date: moment().locale('es').format('Fecha'),
-              },
-            }}
-          />
-        </Col>
+        <MediaQuery minWidth={1225}>
+          <Col className='admin-column' xs={24} sm={24} md={9} lg={9} xl={9}>
+            <Calendar
+              onSelect={handleDateClick}
+              fullscreen={false}
+              style={{ width: '300px' }}
+              locale={{
+                lang: {
+                  locale: 'es',
+                  month: moment().locale('es').format('MMMM'),
+                  year: moment().locale('es').format('YYYY'),
+                  day: moment().locale('es').format('D'),
+                  date: moment().locale('es').format('Fecha'),
+                },
+              }}
+            />
+          </Col>
+        </MediaQuery>
+        <MediaQuery maxWidth={1224}>
+          <Col className='admin-column' xs={24} sm={24} md={9} lg={9} xl={9}>
+            <Calendar
+              onSelect={handleDateClick}
+              fullscreen={false}
+              style={{ width: '100%' }}
+              locale={{
+                lang: {
+                  locale: 'es',
+                  month: moment().locale('es').format('MMMM'),
+                  year: moment().locale('es').format('YYYY'),
+                  day: moment().locale('es').format('D'),
+                  date: moment().locale('es').format('Fecha'),
+                },
+              }}
+            />
+          </Col>
+        </MediaQuery>
         <Col className='admin-column' xs={24} sm={24} md={10} lg={10} xl={10}>
           {selectedDate && (
             <Card>

@@ -60,7 +60,7 @@ public class EntidadRestController {
 		User newUser = new User();
 		newUser.setUsername(entidad.getEmail());
 		newUser.setPassword(entidad.getNif()); 
-		newUser.setPassword(encoder.encode(entidad.getNif()));
+		newUser.setPassword(encoder.encode(entidad.getCodigo() + entidad.getNif()));
 		newUser.setAuthority(authoritiesService.findByAuthority("ENTIDAD")); 
 		userService.saveUser(newUser);
 		entidad.setUser(newUser);
@@ -75,7 +75,7 @@ public class EntidadRestController {
 			if (!entidadService.existsByNif(entidad.getNif())) {
 				User newUser = new User();
 				newUser.setUsername(entidad.getEmail());
-				newUser.setPassword(entidad.getNif()); 
+				newUser.setPassword(entidad.getCodigo() + entidad.getNif()); 
 				newUser.setPassword(encoder.encode(entidad.getNif()));
 				newUser.setAuthority(authoritiesService.findByAuthority("ENTIDAD")); 
 				userService.saveUser(newUser);

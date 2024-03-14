@@ -166,6 +166,25 @@ export default function CitasListEntidadAdmin() {
       dataIndex: 'hora',
       key: 'hora',
     },
+    {
+      title: 'Estado',
+      dataIndex: 'estado',
+      key: 'estado',
+      filters: [
+        { text: 'ENVIADA', value: 'ENVIADA' },
+        { text: 'ACEPTADA', value: 'ACEPTADA' },
+        { text: 'VALIDADA', value: 'VALIDADA' },
+        { text: 'CANCELADA', value: 'CANCELADA' }
+    
+      ],
+      filteredValue: filteredInfo.estado || null,
+      onFilter: (value, record) => record.estado.includes(value),
+      render: (estado) => (
+        <Tag color={estadoColorMap[estado]} key={estado}>
+          {estado}
+        </Tag>
+      ),
+    },
   ]
 
   const filteredData = citas.filter((record) => {

@@ -27,8 +27,6 @@ export default function EntidadProfile() {
     }
   }, [id, entidadId]);
 
-
-
   const [entidad, setEntidad] = useFetchState(
     [],
     `/api/v1/entidades/${id}`,

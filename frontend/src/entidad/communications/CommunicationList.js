@@ -6,6 +6,7 @@ import { Space, Table, Tag, Button, Input, Modal } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import { useNavigate, useParams } from 'react-router-dom';
+import MediaQuery from 'react-responsive';
 
 const jwt = tokenService.getLocalAccessToken();
 
@@ -217,15 +218,38 @@ export default function CommunicationListAdmin() {
   return (
       <div className="admin-page-container">
         <h1>Comunicaciones</h1>
-        <Space
-          style={{
-            marginBottom: 16,
-          }}
-        >
-          <Button onClick={navidateNewCommunication}>Nueva comunicación</Button>
-          <Button onClick={clearFilters}>Limpiar filtros</Button>
-          <Button onClick={clearAll}>Limpiarlo todo</Button>
-        </Space>
+        <MediaQuery minDeviceWidth={1224}>
+          <Space
+            style={{
+              marginBottom: 16,
+            }}
+          >
+            <Button onClick={navidateNewCommunication}>Nueva comunicación</Button>
+            <Button onClick={clearFilters}>Limpiar filtros</Button>
+            <Button onClick={clearAll}>Limpiarlo todo</Button>
+          </Space>
+        </MediaQuery>
+        <MediaQuery maxDeviceWidth={1224}>
+          <Space
+            style={{
+              marginBottom: 8,
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <Button onClick={navidateNewCommunication}>Nueva comunicación</Button>
+          </Space>
+          <Space
+            style={{
+              marginBottom: 8,
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <Button onClick={clearFilters}>Limpiar filtros</Button>
+            <Button onClick={clearAll}>Limpiarlo todo</Button>
+          </Space>
+        </MediaQuery>
         <Table 
           columns={columns} 
           dataSource={filteredData} 

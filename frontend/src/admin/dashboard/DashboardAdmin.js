@@ -8,6 +8,8 @@ import useFetchState from "../../util/useFetchState";
 import { startOfWeek, endOfWeek, eachDayOfInterval, format, addDays  } from 'date-fns';
 import { es } from 'date-fns/locale';
 import "../../static/css/admin/adminPage.css";
+import MediaQuery from 'react-responsive';
+
 const jwt = tokenService.getLocalAccessToken();
 
 const DashboardAdmin = () => {
@@ -83,20 +85,20 @@ const DashboardAdmin = () => {
             ? entidad.nombre.substring(0, maxLength)
             : entidad.nombre;
     
-        const pendingCommunications = comunicacion.filter(
+        const comunicacionesPendientes = comunicacion.filter(
             (com) => com.estado === 'PENDIENTE' && com.entidad.id === entidad.id
         ).length;
     
         return {
             entityName,
-            pendingCommunications,
+            comunicacionesPendientes,
         };
     });
 
     console.log(communicationsByEntity);
 
     // Ordenar los datos por la cantidad de comunicaciones pendientes de mayor a menor
-    const sortedData = communicationsByEntity.sort((a, b) => b.pendingCommunications - a.pendingCommunications);
+    const sortedData = communicationsByEntity.sort((a, b) => b.comunicacionesPendientes - a.comunicacionesPendientes);
     // Tomar las primeras 5 entidades
     const topEntities = sortedData.slice(0, 3);
       
@@ -108,7 +110,7 @@ const DashboardAdmin = () => {
     const totalCommunications = comunicacion.length;
     const totalEntities = entidades.length;
 
-    const pendingCommunications = comunicacion.filter(
+    const comunicacionesPendientes = comunicacion.filter(
         (comunicacion) => comunicacion.estado === 'PENDIENTE'
     ).length;
 
@@ -170,7 +172,12 @@ const DashboardAdmin = () => {
                         </Col>
                         <Col span={12}>
                             <Card onClick={handleComunicacionesClick}>
-                                <Statistic title="Total Comunicaciones" value={totalCommunications} />
+                                <MediaQuery minWidth={1225}>
+                                    <Statistic title="Total Comunicaciones" value={totalCommunications} />
+                                </MediaQuery>
+                                <MediaQuery maxWidth={1224}>
+                                    <Statistic title="Total Comunic." value={totalCommunications} />
+                                </MediaQuery>
                             </Card>
                         </Col>
                     </Row>
@@ -182,29 +189,49 @@ const DashboardAdmin = () => {
                         </Col>
                         <Col span={12}>
                             <Card>
-                                <Statistic title="Comunic. por leer" value={pendingCommunications} />
+                                <Statistic title="Comunic. por leer" value={comunicacionesPendientes} />
                             </Card>
                         </Col>
                     </Row>
                 </Col>
                 <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                     <Card title="Métrica entidades">
-                        <PieChart width={400} height={130}>
-                            <Pie
-                                data={pieChartData}
-                                cx={200}
-                                cy={60}
-                                labelLine={false}
-                                label={(entry) => entry.name}
-                                outerRadius={65}
-                                fill="#8884d8"
-                            >
-                                {pieChartData.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                ))}
-                            </Pie>
-                            <Tooltip />
-                        </PieChart>
+                        <MediaQuery minWidth={1225}>
+                            <PieChart width={400} height={130}>
+                                <Pie
+                                    data={pieChartData}
+                                    cx={200}
+                                    cy={60}
+                                    labelLine={false}
+                                    label={(entry) => entry.name}
+                                    outerRadius={65}
+                                    fill="#8884d8"
+                                >
+                                    {pieChartData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                    ))}
+                                </Pie>
+                                <Tooltip />
+                            </PieChart>
+                        </MediaQuery>
+                        <MediaQuery maxWidth={1224}>
+                            <PieChart width={400} height={130}>
+                                <Pie
+                                    data={pieChartData}
+                                    cx={150}
+                                    cy={60}
+                                    labelLine={false}
+                                    label={(entry) => entry.name}
+                                    outerRadius={65}
+                                    fill="#8884d8"
+                                >
+                                    {pieChartData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                    ))}
+                                </Pie>
+                                <Tooltip />
+                            </PieChart>
+                        </MediaQuery>
                     </Card>
                 </Col>
                 <Col xs={24} sm={24} md={8} lg={8} xl={8}>
@@ -241,30 +268,59 @@ const DashboardAdmin = () => {
             </Row>
             <Row gutter={16}>
                 <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-                    <Card title="Citas por día de la semana">
-                        <BarChart width={600} height={300} data={citasPorDia}>
-                        <XAxis dataKey="day" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                            <Bar dataKey="porcentaje" fill={COLORS[0]}>
-                                {citasPorDia.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                ))}
-                            </Bar>
-                        </BarChart>
-                    </Card>
-                </Col>
-                <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-                    <Card title="Comunicaciones pendientes por entidad">
-                        <BarChart width={600} height={300} data={topEntities}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="entityName" />
+                    <MediaQuery minWidth={1225}>
+                        <Card title="Citas por día de la semana">
+                            <BarChart width={600} height={300} data={citasPorDia}>
+                            <XAxis dataKey="day" />
                             <YAxis />
                             <Tooltip />
                             <Legend />
-                            <Bar dataKey="pendingCommunications" fill="#2757da" />
-                        </BarChart>
+                                <Bar dataKey="porcentaje" fill={COLORS[0]}>
+                                    {citasPorDia.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                    ))}
+                                </Bar>
+                            </BarChart>
+                        </Card>
+                    </MediaQuery>
+                    <MediaQuery maxWidth={1224}>
+                        <Card title="Citas por día de la semana">
+                            <BarChart width={300} height={250} data={citasPorDia} style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
+                            <XAxis dataKey="day"  tick={{ fontSize: 10 }}/>
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                                <Bar dataKey="porcentaje" fill={COLORS[0]}>
+                                    {citasPorDia.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                    ))}
+                                </Bar>
+                            </BarChart>
+                        </Card>
+                    </MediaQuery>
+                </Col>
+                <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                    <Card title="Comunicaciones pendientes por entidad">
+                        <MediaQuery minWidth={1225}>
+                            <BarChart width={600} height={300} data={topEntities}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="entityName" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="comunicacionesPendientes" fill="#2757da" />
+                            </BarChart>
+                        </MediaQuery>
+                        <MediaQuery maxWidth={1224}>
+                            <BarChart width={300} height={250} data={topEntities}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="entityName" tick={{ fontSize: 10 }}/>
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="comunicacionesPendientes" fill="#2757da" />
+                            </BarChart>
+                        </MediaQuery>
                     </Card>
                 </Col>
             </Row>
