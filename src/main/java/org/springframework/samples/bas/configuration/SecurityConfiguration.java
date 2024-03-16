@@ -75,6 +75,10 @@ public class SecurityConfiguration {
 			.requestMatchers("/api/v1/citas").hasAnyAuthority(ADMIN, ENTIDAD)
 			.requestMatchers("/api/v1/citas/{id}").hasAnyAuthority(ADMIN, ENTIDAD)
 			.requestMatchers("/api/v1/citas/entidad/{id}").hasAnyAuthority(ADMIN, ENTIDAD)
+			.requestMatchers("/api/v1/personas").hasAnyAuthority(ADMIN, ENTIDAD)
+			.requestMatchers("/api/v1/personas/{id}").hasAnyAuthority(ADMIN, ENTIDAD)
+			.requestMatchers("/api/v1/personas/all").hasAnyAuthority(ADMIN, ENTIDAD)
+			.requestMatchers("/api/v1/personas/entidad/{id}").hasAnyAuthority(ADMIN, ENTIDAD)
 			.anyRequest().denyAll())					
 			.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);		
 		return http.build();

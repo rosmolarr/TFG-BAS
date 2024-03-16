@@ -36,6 +36,7 @@ import CitasViewAdmin from './admin/appointments/CitasViewAdmin';
 import CitasList from './entidad/appointments/CitasList';
 import CitasView from './entidad/appointments/CitasView';
 import Dashboard from './entidad/dashboard/Dashboard';
+import PersonasNewAdmin from './admin/entidades/PersonasNewAdmin';
 
 setupIonicReact();
 
@@ -125,6 +126,7 @@ function App() {
           <Route path="/citas/new" exact={true} element={<PrivateRoute><CitasNewAdmin/></PrivateRoute>} />
           <Route path="/citas/:id" exact={true} element={<PrivateRoute><CitasViewAdmin/></PrivateRoute>} />
           <Route path="/dashboard" exact={true} element={<PrivateRoute><DashboardAdmin /></PrivateRoute>} />
+          <Route path="/personas/entidad/:id" exact={true} element={<PrivateRoute><PersonasNewAdmin /></PrivateRoute>} />
           </>)
     }
     if (role === "ENTIDAD") {

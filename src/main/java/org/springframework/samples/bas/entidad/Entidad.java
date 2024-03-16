@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -19,6 +20,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.samples.bas.comunicacion.Comunicacion;
 import org.springframework.samples.bas.model.BaseEntity;
+import org.springframework.samples.bas.persona.Persona;
 import org.springframework.samples.bas.user.User;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,6 +28,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -43,6 +47,11 @@ public class Entidad extends BaseEntity{
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Set<Comunicacion> communications;
+
+    @OneToMany(mappedBy = "entidad", orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private List<Persona> personasTuteladas = new ArrayList<>();
 
 	@NotBlank(message = "El código no puede estar en blanco")
 	@Pattern(regexp = "B\\d{4}", message = "El código debe seguir el patrón B seguido de cuatro dígitos")
