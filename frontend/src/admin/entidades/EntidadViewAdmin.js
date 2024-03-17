@@ -11,6 +11,7 @@ import notification_icon from '../../static/images/notification_icon.png';
 import cesta_icon from '../../static/images/cesta_icon.png';
 import description_icon from '../../static/images/description_icon.png';
 import "../../static/css/admin/adminPage.css";
+import MediaQuery from 'react-responsive';
 
 const user = tokenService.getUser();
 const jwt = tokenService.getLocalAccessToken();
@@ -370,7 +371,7 @@ export default function EntidadViewAdmin() {
                   <List.Item>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                       <div style={{ marginRight: '10px', fontWeight: 'bold' }}>{item.title}: </div>
-                      <div>{item.data}</div>
+                      <div style={{  maxWidth: '80vw', wordWrap: 'break-word', wordBreak: 'break-all' }}>{item.data}</div>
                     </div>
                   </List.Item>
                 )}
@@ -483,24 +484,55 @@ export default function EntidadViewAdmin() {
           </Col>
         </Row>
         {entidad.descripcion == "REPARTO" && (
-          <Row justify="center" align="top" gutter={[16, 16]}>
-            <Col className='admin-column' xs={24} sm={24} md={24} lg={24} xl={24}>
-            <Card
-              title={
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span>Personas tuteladas</span>
-                <Button onClick={handleNewPersona}>Agregar Personas</Button>
-              </div>
-            }>
-                <Table 
-                  dataSource={personas} 
-                  columns={columns}           
-                  onChange={handleChange} 
-                  pagination={{defaultPageSize: 5, pageSizeOptions: [5, 10, 20], showSizeChanger: true, showQuickJumper: true,}}
-                />
-              </Card>
-            </Col>
-          </Row>
+          <>
+            <MediaQuery minWidth={1225}>
+              <Row justify="center" align="top" gutter={[16, 16]}>
+                <Col className='admin-column' xs={24} sm={24} md={24} lg={24} xl={24}>
+                <Card
+                  title={
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>Personas tuteladas</span>
+                    <Button onClick={handleNewPersona}>Agregar Personas</Button>
+                  </div>
+                }>
+                    <Table 
+                      dataSource={personas} 
+                      columns={columns}           
+                      onChange={handleChange} 
+                      pagination={{defaultPageSize: 5, pageSizeOptions: [5, 10, 20], showSizeChanger: true, showQuickJumper: true,}}
+                    />
+                  </Card>
+                </Col>
+              </Row>
+            </MediaQuery>
+            <MediaQuery maxWidth={1224}>
+              <Row justify="center" align="top" gutter={[16, 16]}>
+                <Col className='admin-column' xs={24} sm={24} md={24} lg={24} xl={24}>
+                <Card
+                  title={
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>Personas tuteladas</span>
+                    <Button onClick={handleNewPersona}>Agregar</Button>
+                  </div>
+                }>
+                  <List
+                    itemLayout="horizontal"
+                    size="large"
+                    dataSource={personas}
+                    renderItem={(item, index) => (
+                      <List.Item>
+                        <List.Item.Meta
+                          title={item.nombre + " " + item.apellidos}
+                          description={item.otros? item.edad + " años"  + " - " + item.otros : item.edad + " años"}
+                        />
+                      </List.Item>
+                    )}
+                  />
+                  </Card>
+                </Col>
+              </Row>
+            </MediaQuery>
+          </>
           )}
       </div>
   );

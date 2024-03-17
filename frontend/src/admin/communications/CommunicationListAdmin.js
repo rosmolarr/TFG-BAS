@@ -6,6 +6,7 @@ import { Space, Table, Tag, Button, Input, Modal } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import { useNavigate } from 'react-router-dom';
+import MediaQuery from 'react-responsive';
 
 const jwt = tokenService.getLocalAccessToken();
 
@@ -203,6 +204,41 @@ export default function CommunicationListAdmin() {
     },
   ]
 
+  const columnsMobile = [
+    {
+      title: 'Fecha',
+      dataIndex: 'fecha',
+      key: 'fecha',
+      sorter: (a, b) => new Date(a.fecha) - new Date(b.fecha),
+      defaultSortOrder: 'descend',
+    },
+    {
+      title: 'Entidad',
+      dataIndex: 'entidad',
+      key: 'entidad',
+      render: (entidad) => (entidadName(entidad.nombre)),
+    },
+    {
+      title: 'Estado',
+      dataIndex: 'estado',
+      key: 'estado',
+      filters: [
+        { text: 'RESPONDIDA', value: 'RESPONDIDA' },
+        { text: 'PENDIENTE', value: 'PENDIENTE' },
+        { text: 'FALTA LLAMAR', value: 'LLAMAR' },
+        { text: 'FALTA REUNIÓN', value: 'REUNION' }
+    
+      ],
+      filteredValue: filteredInfo.estado || null,
+      onFilter: (value, record) => record.estado.includes(value),
+      render: (estado) => (
+        <Tag color={estadoColorMap[estado]} key={estado}>
+          {estadoName[estado]}
+        </Tag>
+      ),
+    },
+  ]
+
   const filteredData = comunicacion.filter((record) => {
     const valuesToSearch = Object.values(record).join(' ').toLowerCase();
     return valuesToSearch.includes(searchText.toLowerCase());
@@ -226,15 +262,38 @@ export default function CommunicationListAdmin() {
         <Button onClick={clearFilters}>Limpiar filtros</Button>
         <Button onClick={clearAll}>Limpiarlo todo</Button>
       </Space>
-      <Table 
-        columns={columns} 
-        dataSource={filteredData} 
-        onChange={handleChange} 
-        pagination={{defaultPageSize: 7, pageSizeOptions: [7, 10, 20, 30], showSizeChanger: true, showQuickJumper: true,}}
-        onRow={(record) => ({
-          onClick: () => handleRowClick(record),
-        })}
-        />
+      <MediaQuery minWidth={1225}>
+        <Table 
+          columns={columns} 
+          dataSource={filteredData} 
+          onChange={handleChange} 
+          pagination={{defaultPageSize: 7, pageSizeOptions: [7, 10, 20, 30], showSizeChanger: true, showQuickJumper: true,}}
+          onRow={(record) => ({
+            onClick: () => handleRowClick(record),
+          })}
+          />
+        </MediaQuery>
+        <MediaQuery maxWidth={1224}>
+          <Table
+            columns={columnsMobile}
+            rowKey="id"
+            expandable={{
+              expandedRowRender: (record) => (
+                <p
+                  style={{
+                    margin: 0,
+                  }}
+                >
+                  Título: {record.titulo}
+                </p>
+              ),
+            }}
+            dataSource={filteredData}
+            onRow={(record) => ({
+              onClick: () => handleRowClick(record),
+            })}
+          />
+        </MediaQuery>
     </div>
   );
 }

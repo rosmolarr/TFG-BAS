@@ -109,14 +109,14 @@ const Dashboard = () => {
   const nextCita = nearestCitaTime > currentTime ? nearestCita : nearestCitaBefore;
 
   function formattedDate2() {
-    if (!nextCita.fecha) return "Cargando...";
+    if (!nextCita.fecha) return "Ninguna cita programada";
     const opcionesFecha = { day: 'numeric', month: 'numeric', year: 'numeric' };
     const fecha = new Date(nextCita.fecha);
     return fecha.toLocaleDateString('es-ES', opcionesFecha);
   }
 
   function formattedTime() {
-    if (!nextCita.hora) return "Cargando...";
+    if (!nextCita.hora) return "";
 
     const horaFormateada = nextCita.hora.slice(0, -3);
     return horaFormateada;

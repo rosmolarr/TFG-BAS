@@ -8,6 +8,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import { useNavigate } from 'react-router-dom';
 import ImportForm from './ImportForm';
+import MediaQuery from 'react-responsive';
 
 const jwt = tokenService.getLocalAccessToken();
 
@@ -258,25 +259,49 @@ export default function EntidadListAdmin() {
   return (
       <div className="admin-page-container">
         <h1>Entidades</h1> 
-        <Space
-          style={{
-            marginTop: 16,
-          }}
-        >
-          <Button onClick={navidateNewEntidad}>Nueva entidad</Button>
-          <Button onClick={handleImportClick}>Importar entidades</Button>
-          <Button onClick={clearFilters}>Limpiar filtros</Button>
-          <Button onClick={clearAll}>Limpiarlo todo</Button>
-        </Space>
+        <MediaQuery minWidth={1225}>
+          <Space
+            style={{
+              marginTop: 16,
+            }}
+          >
+            <Button onClick={navidateNewEntidad}>Nueva entidad</Button>
+            <Button onClick={handleImportClick}>Importar entidades</Button>
+            <Button onClick={clearFilters}>Limpiar filtros</Button>
+            <Button onClick={clearAll}>Limpiarlo todo</Button>
+          </Space>
+        </MediaQuery>
+        <MediaQuery maxWidth={1224}>
+          <Space
+            style={{
+              marginTop: 8,
+            }}
+          >
+            <Button onClick={navidateNewEntidad}>Nueva entidad</Button>
+            <Button onClick={clearAll}>Limpiarlo todo</Button>
+          </Space>
+        </MediaQuery>
 
         <Divider>Columnas mostradas</Divider>
-        <Checkbox.Group
-          value={checkedList}
-          options={options}
-          onChange={(value) => {
-            setCheckedList(value);
-          }}
-        />
+        <MediaQuery minWidth={1225}>
+          <Checkbox.Group
+            value={checkedList}
+            options={options}
+            onChange={(value) => {
+              setCheckedList(value);
+            }}
+          />
+        </MediaQuery>
+        <MediaQuery maxWidth={1224}>
+          <Checkbox.Group
+            value={checkedList}
+            options={options}
+            onChange={(value) => {
+              setCheckedList(value);
+            }}
+            style={{ display: 'flex', justifyContent: 'center', marginBottom: 16}}
+          />
+        </MediaQuery>
 
         <Table 
           columns={newColumns}
@@ -287,7 +312,7 @@ export default function EntidadListAdmin() {
             onClick: () => handleRowClick(record),
           })}
           exportableProps={{ showColumnPicker: true }}
-          />
+        />
 
         <Modal
           title="Importar Entidades"

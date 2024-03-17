@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Form, Input, Button, Space, notification, Row } from 'antd';
+import { Form, Input, Button, Space, notification } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import useFetchState from "../../util/useFetchState";
-import tokenService from "../../services/token.service";
+import useFetchState from "../../util/useFetchState.js";
+import tokenService from "../../services/token.service.js";
 import getErrorModal from "../../util/getErrorModal.js";
-import "../../static/css/auth/authPage.css";
-import MediaQuery from 'react-responsive';
 
 const jwt = tokenService.getLocalAccessToken();
 
@@ -28,8 +26,8 @@ const PersonasNewAdmin = () => {
           message: 'Personas tuteladas',
           description: 'Las personas tuteladas han sido añadidas correctamente.',
         });
-      }
-    
+    }
+
     const navigate = useNavigate(); 
 
     const onFinish = async (values) => {
@@ -61,7 +59,7 @@ const PersonasNewAdmin = () => {
 
             if (allSuccessful) {
                 openNotificationWithIcon('success');
-                navigate(`/entidades/${entidad.id}`);
+                navigate(`/entidades/${entidad.id}/profile`);
             } else {
                 throw new Error('Al menos una solicitud de POST falló');
             }

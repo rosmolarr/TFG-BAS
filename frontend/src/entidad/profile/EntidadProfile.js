@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Col, Row, List, Tag, Button } from 'antd';
+import React, { useState, useEffect, useRef } from 'react';
+import { Card, Col, Row, List, Tag, Button, Space, Input } from 'antd';
+import { Table } from "ant-table-extensions";
+import { SearchOutlined } from '@ant-design/icons';
+import Highlighter from 'react-highlight-words';
 import { useNavigate, useParams } from 'react-router-dom';
 import tokenService from "../../services/token.service";
 import useFetchState from "../../util/useFetchState";
@@ -8,6 +11,7 @@ import cesta_icon from '../../static/images/cesta_icon.png';
 import description_icon from '../../static/images/description_icon.png';
 import "../../static/css/entidad/entidadPage.css";
 import jwt_decode from 'jwt-decode';
+import MediaQuery from 'react-responsive';
 
 const user = tokenService.getUser();
 const jwt = tokenService.getLocalAccessToken();
@@ -46,6 +50,14 @@ export default function EntidadProfile() {
   const [citas, setCitas] = useFetchState(
     [], 
     `/api/v1/citas/entidad/${id}`, 
+    jwt, 
+    setMessage, 
+    setVisible
+  );
+
+  const [personas, setPersonas] = useFetchState(
+    [], 
+    `/api/v1/personas/entidad/${id}`, 
     jwt, 
     setMessage, 
     setVisible
@@ -218,6 +230,148 @@ export default function EntidadProfile() {
   const csvHeaders = data.map(item => item.title);
   const csvData = [data.map(item => item.data)];
 
+  /** Tabla de personas tuteladas */
+
+  const [sortedInfo, setSortedInfo] = useState({});
+
+  const handleChange = (pagination, filters, sorter) => {
+    console.log('Various parameters', pagination, filters, sorter);
+    setSortedInfo(sorter);
+  };
+
+  const clearAll = () => {
+    setSortedInfo({});
+    setSearchText('');
+    setSearchedColumn('');
+  };
+
+    /** BUSCADOR */
+
+    const [searchText, setSearchText] = useState('');
+    const [searchedColumn, setSearchedColumn] = useState('');
+    const searchInput = useRef(null);
+    const handleSearch = (selectedKeys, confirm, dataIndex) => {
+      confirm();
+      setSearchText(selectedKeys[0]);
+      setSearchedColumn(dataIndex);
+    };
+    const handleReset = (clearFilters) => {
+      clearFilters();
+      setSearchText('');
+    };
+    const getColumnSearchProps = (dataIndex, title) => ({
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+        <div
+          style={{
+            padding: 8,
+          }}
+          onKeyDown={(e) => e.stopPropagation()}
+        >
+          <Input
+            ref={searchInput}
+            placeholder={`Buscar ${title}`}
+            value={selectedKeys[0]}
+            onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+            onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            style={{
+              marginBottom: 8,
+              display: 'block',
+            }}
+          />
+          <Space>
+            <Button
+              type="primary"
+              onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+              icon={<SearchOutlined />}
+              size="small"
+              style={{
+                width: 90,
+              }}
+            >
+              Buscar
+            </Button>
+            <Button
+              onClick={() => clearFilters && handleReset(clearFilters)}
+              size="small"
+              style={{
+                width: 90,
+              }}
+            >
+              Limpiar
+            </Button>
+            <Button
+              type="link"
+              size="small"
+              onClick={() => {
+                close();
+              }}
+            >
+              Cerrar
+            </Button>
+          </Space>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined
+          style={{
+            color: filtered ? '#0064c943' : undefined,
+          }}
+        />
+      ),
+      onFilter: (value, record) =>
+        record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+      onFilterDropdownOpenChange: (visible) => {
+        if (visible) {
+          setTimeout(() => searchInput.current?.select(), 100);
+        }
+      },
+      render: (text) =>
+        searchedColumn === dataIndex ? (
+          <Highlighter
+            highlightStyle={{
+              backgroundColor: '#0064c943',
+              padding: 0,
+            }}
+            searchWords={[searchText]}
+            autoEscape
+            textToHighlight={text ? text.toString() : ''}
+          />
+        ) : (
+          text
+        ),
+    });
+
+  const columns = [
+    {
+      title: 'Nombre',
+      dataIndex: 'nombre',
+      key: 'nombre',
+      ...getColumnSearchProps('nombre','Nombre'),
+    },
+    {
+      title: 'Apellidos',
+      dataIndex: 'apellidos',
+      key: 'apellidos',
+      ...getColumnSearchProps('apellidos','Apellidos'),
+    },
+    {
+      title: 'Edad',
+      dataIndex: 'edad',
+      key: 'edad',
+      sorter: (a, b) => a.edad - b.edad,
+      sortOrder: sortedInfo.columnKey === 'edad' && sortedInfo.order,
+    },
+    {
+      title: 'Otros',
+      dataIndex: 'otros',
+      key: 'otros',
+    },
+  ];
+
+  const handleNewPersona= () =>{
+    navigate(`/personas/entidad/${id}`);
+  };
+
   return (
       <div style={{ margin: '2%' }}>
         <Row justify="center" align="top" gutter={[16, 16]}>
@@ -337,6 +491,57 @@ export default function EntidadProfile() {
             </Row>
           </Col>
         </Row>
+        {entidad.descripcion == "REPARTO" && (
+          <>
+            <MediaQuery minWidth={1225}>
+              <Row justify="center" align="top" gutter={[16, 16]}>
+                <Col className='admin-column' xs={24} sm={24} md={24} lg={24} xl={24}>
+                <Card
+                  title={
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>Personas tuteladas</span>
+                    <Button onClick={handleNewPersona}>Agregar Personas</Button>
+                  </div>
+                }>
+                    <Table 
+                      dataSource={personas} 
+                      columns={columns}           
+                      onChange={handleChange} 
+                      pagination={{defaultPageSize: 5, pageSizeOptions: [5, 10, 20], showSizeChanger: true, showQuickJumper: true,}}
+                    />
+                  </Card>
+                </Col>
+              </Row>
+            </MediaQuery>
+            <MediaQuery maxWidth={1224}>
+              <Row justify="center" align="top" gutter={[16, 16]}>
+                <Col className='admin-column' xs={24} sm={24} md={24} lg={24} xl={24}>
+                <Card
+                  title={
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>Personas tuteladas</span>
+                    <Button onClick={handleNewPersona}>Agregar</Button>
+                  </div>
+                }>
+                  <List
+                    itemLayout="horizontal"
+                    size="large"
+                    dataSource={personas}
+                    renderItem={(item, index) => (
+                      <List.Item>
+                        <List.Item.Meta
+                          title={item.nombre + " " + item.apellidos}
+                          description={item.otros? item.edad + " años"  + " - " + item.otros : item.edad + " años"}
+                        />
+                      </List.Item>
+                    )}
+                  />
+                  </Card>
+                </Col>
+              </Row>
+            </MediaQuery>
+          </>
+          )}
       </div>
   );
 }
