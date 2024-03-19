@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Statistic, Divider, List, Tag } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { BarChart } from 'recharts';
 import { XAxis, YAxis, Tooltip, Legend, Bar, Pie, Cell } from 'recharts';
-import tokenService from "../../services/token.service";
 import useFetchState from "../../util/useFetchState";
 import "../../static/css/admin/adminPage.css";
 import jwt_decode from "jwt-decode";
 import MediaQuery from 'react-responsive';
+import tokenService from '../../services/token.service'; 
+import { notification } from 'antd';
 
 const jwt = tokenService.getLocalAccessToken();
 
@@ -121,6 +122,26 @@ const Dashboard = () => {
     const horaFormateada = nextCita.hora.slice(0, -3);
     return horaFormateada;
   }
+
+  function openNotificationWithIcon(type) {
+    notification[type]({
+      message: 'Contraseña',
+      description: 'Le aconsejamos cambiar su contraseña por seguridad. Recuerde guardarla en un lugar seguro, ya que el equipo del banco no tendrá acceso a ella.',
+    });
+  }
+
+  useEffect(() => {
+    // Verifica si el usuario se ha logueado previamente
+    const hasLoggedInBefore = localStorage.getItem('hasLoggedInBefore');
+
+    // Si es la primera vez que el usuario inicia sesión, muestra el popup
+    if (!hasLoggedInBefore && jwt) {
+        openNotificationWithIcon('warning');
+
+      // Actualiza el estado para indicar que el usuario ha iniciado sesión por primera vez
+      localStorage.setItem('hasLoggedInBefore', true);
+    }
+  }, []);
 
   const dateCita = formattedDate2() + " " + formattedTime();
 

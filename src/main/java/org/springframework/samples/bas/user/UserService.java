@@ -102,7 +102,11 @@ public class UserService {
 	@Transactional
 	public User updateUser(@Valid User user, Integer idToUpdate) {
 		User toUpdate = findUser(idToUpdate);
-		user.setPassword(encoder.encode(user.getPassword()));
+
+		if (!user.getPassword().equals(toUpdate.getPassword())) {
+			// La contraseña ha cambiado, así que la hasheamos antes de actualizar el usuario
+			user.setPassword(encoder.encode(user.getPassword()));
+		}
 		BeanUtils.copyProperties(user, toUpdate, "id");
 		userRepository.save(toUpdate);
 		return toUpdate;

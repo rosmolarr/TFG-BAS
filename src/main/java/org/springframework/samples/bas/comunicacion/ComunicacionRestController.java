@@ -90,4 +90,9 @@ public class ComunicacionRestController {
 	public ResponseEntity<List<Comunicacion>> findComunicacionForDashboard() {
 		return new ResponseEntity<>(comunicacionService.findComunicacionForDashboard(), HttpStatus.OK);
 	}
+
+	@GetMapping(value = "last/{n}")
+	public ResponseEntity<List<Comunicacion>> findFirstNComunicacionesOrderedByIdDesc(@PathVariable("n") int n) {
+		return new ResponseEntity<>(comunicacionService.findFirstNComunicacionesOrderedByIdDesc(n), HttpStatus.OK);
+	}
 }

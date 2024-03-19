@@ -26,6 +26,7 @@ import CommunicationViewAdmin from "./admin/communications/CommunicationViewAdmi
 import CommunicationListEntidadesAdmin from "./admin/communications/CommunicationListEntidadesAdmin";
 import CommunicationNew from "./entidad/communications/CommunicationNew";
 import CommunicationView from "./entidad/communications/CommunicationView";
+import LastCommunicationListAdmin from "./admin/communications/LastCommunicationListAdmin";
 import DashboardAdmin from "./admin/dashboard/DashboardAdmin";
 import NotificationAdmin from "./util/notificationAdmin";
 import CitasListAdmin from './admin/appointments/CitasListAdmin';
@@ -74,36 +75,15 @@ function App() {
   const navigate = useNavigate();
 
   const abrirNotificacion = () => {
-    navigate(`/comunicaciones`);
+    let n = notificacionesCount;
+    navigate(`/comunicaciones/last/${n}`);
     setNotificacionesCount(0);
-  };
-
-  const storedCountResponse = parseInt(localStorage.getItem('responseCount')) || 0;
-  const [responseCount, setResponseCount] = useState(storedCountResponse);
-
-  const handleNuevaRespuestaNotificacion = () => {
-    // Incrementa el contador de notificaciones
-    setResponseCount(responseCount + 1);
-  };
-
-  let idEntidad = 0;
-
-  if(roles.includes("ENTIDAD")) {
-    idEntidad = jwt_decode(jwt).entidadId
-  }
-
-  const abrirNotificacionEntidad = () => {
-    navigate(`/comunicaciones/${idEntidad}`);
-    setResponseCount(0);
   };
  
   useEffect(() => {
     localStorage.setItem('notificacionesCount', notificacionesCount.toString());
   }, [notificacionesCount]);
 
-  useEffect(() => {
-    localStorage.setItem('responseCount', responseCount.toString());
-  }, [responseCount]);
 
   let adminRoutes = <></>;
   let entidadRoutes = <></>;
@@ -115,8 +95,9 @@ function App() {
       adminRoutes = (
         <>
           <Route path="/comunicaciones" exact={true} element={<PrivateRoute><CommunicationListAdmin /></PrivateRoute>} />
-          <Route path="/comunicaciones/:id" exact={true} element={<PrivateRoute><CommunicationViewAdmin handleNuevaRespuestaNotificacion= {handleNuevaRespuestaNotificacion}/></PrivateRoute>} />
+          <Route path="/comunicaciones/:id" exact={true} element={<PrivateRoute><CommunicationViewAdmin/></PrivateRoute>} />
           <Route path="/comunicaciones/entidad/:id" exact={true} element={<PrivateRoute><CommunicationListEntidadesAdmin /></PrivateRoute>} />
+          <Route path="/comunicaciones/last/:n" exact={true} element={<PrivateRoute><LastCommunicationListAdmin /></PrivateRoute>} />
           <Route path="/entidades" exact={true} element={<PrivateRoute><EntidadListAdmin /></PrivateRoute>} />
           <Route path="/entidades/:id" exact={true} element={<PrivateRoute><EntidadViewAdmin /></PrivateRoute>} />
           <Route path="/entidades/new" exact={true} element={<PrivateRoute><EntidadEditAdmin /></PrivateRoute>} />
@@ -183,9 +164,6 @@ function App() {
             {roles.includes('ADMIN') && (
               <NotificationAdmin notificacionesCount={notificacionesCount} abrirNotificacion={abrirNotificacion} />
             )}
-            {roles.includes('ENTIDAD') && (
-              <NotificationAdmin notificacionesCount={responseCount} abrirNotificacion={abrirNotificacionEntidad} />
-            )} 
             {jwt && (
               <FloatButton icon={<RollbackOutlined />} onClick={goBack} />
             )}

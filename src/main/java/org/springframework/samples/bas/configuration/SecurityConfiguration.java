@@ -70,6 +70,7 @@ public class SecurityConfiguration {
 			.requestMatchers("/api/v1/comunicaciones").hasAnyAuthority(ADMIN, ENTIDAD)
 			.requestMatchers("/api/v1/comunicaciones/{id}").hasAnyAuthority(ADMIN, ENTIDAD)
 			.requestMatchers("/api/v1/comunicaciones/entidad/{id}").hasAnyAuthority(ADMIN, ENTIDAD)
+			.requestMatchers("/api/v1/comunicaciones/last/{n}").hasAnyAuthority(ADMIN, ENTIDAD)
 			.requestMatchers("/api/v1/users").hasAnyAuthority(ADMIN, ENTIDAD)
 			.requestMatchers("/api/v1/users/{id}").hasAnyAuthority(ADMIN, ENTIDAD)
 			.requestMatchers("/api/v1/citas").hasAnyAuthority(ADMIN, ENTIDAD)

@@ -71,4 +71,9 @@ public class ComunicacionService {
 	public List<Comunicacion> findComunicacionForDashboard() throws DataAccessException {
 		return comunicacionRepository.findComunicacionForDashboard();
 	}
+
+	@Transactional
+	public List<Comunicacion> findFirstNComunicacionesOrderedByIdDesc(int n) throws DataAccessException {
+		return comunicacionRepository.findFirstNComunicacionesOrderedByIdDesc(n);
+	}
 }

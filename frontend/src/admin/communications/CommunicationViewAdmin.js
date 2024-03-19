@@ -7,7 +7,7 @@ import "../../static/css/admin/adminPage.css";
 
 const jwt = tokenService.getLocalAccessToken();
 
-export default function CommunicationViewAdmin({ handleNuevaRespuestaNotificacion }) {
+export default function CommunicationViewAdmin() {
   const { id } = useParams();
   const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
@@ -45,7 +45,6 @@ export default function CommunicationViewAdmin({ handleNuevaRespuestaNotificacio
           setMessage(json.message);
           setVisible(true);
         } else {
-          handleNuevaRespuestaNotificacion();
           window.location.reload();
         }
       })
