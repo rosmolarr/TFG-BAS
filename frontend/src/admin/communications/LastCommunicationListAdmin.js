@@ -23,9 +23,6 @@ export default function LastCommunicationListAdmin() {
     setVisible
   );
 
-  console.log(n);
-  console.log(comunicacion);
-
   const estadoColorMap = {
     RESPONDIDA: 'green',
     PENDIENTE: 'orange',

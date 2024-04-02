@@ -66,7 +66,7 @@ public class SecurityConfiguration {
 			.requestMatchers("/api/v1/entidades/{id}").hasAnyAuthority(ENTIDAD, ADMIN)	
 			.requestMatchers("/api/v1/entidades").hasAuthority(ADMIN)										
 			.requestMatchers("/api/v1/entidades/all").hasAuthority(ADMIN)
-			.requestMatchers("/api/v1/entidades/import").hasAuthority(ADMIN)
+			.requestMatchers("/api/v1/entidades/import").hasAnyAuthority(ADMIN, ENTIDAD)
 			.requestMatchers("/api/v1/comunicaciones").hasAnyAuthority(ADMIN, ENTIDAD)
 			.requestMatchers("/api/v1/comunicaciones/{id}").hasAnyAuthority(ADMIN, ENTIDAD)
 			.requestMatchers("/api/v1/comunicaciones/entidad/{id}").hasAnyAuthority(ADMIN, ENTIDAD)

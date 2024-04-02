@@ -63,7 +63,7 @@ public class Entidad extends BaseEntity{
     private String nombre;
 
     @NotBlank(message = "El NIF no puede estar en blanco")
-    @Pattern(regexp = "[A-Z0-9]+", message = "El NIF debe contener solo letras mayúsculas y números")
+    @Pattern(regexp = "^[A-HJNPQRSUVW]{1}[0-9]{7}[0-9A-J]$", message = "El CIF no es válido")
     @Size(max = 20, message = "El NIF debe tener como máximo 20 caracteres")
     @Column(name = "nif")
     private String nif;

@@ -95,8 +95,6 @@ const DashboardAdmin = () => {
         };
     });
 
-    console.log(communicationsByEntity);
-
     // Ordenar los datos por la cantidad de comunicaciones pendientes de mayor a menor
     const sortedData = communicationsByEntity.sort((a, b) => b.comunicacionesPendientes - a.comunicacionesPendientes);
     // Tomar las primeras 5 entidades
@@ -197,11 +195,11 @@ const DashboardAdmin = () => {
                 <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                     <Card title="Métrica entidades">
                         <MediaQuery minWidth={1225}>
-                            <PieChart width={400} height={130}>
+                            <PieChart width={400} height={180}>
                                 <Pie
                                     data={pieChartData}
-                                    cx={200}
-                                    cy={60}
+                                    cx={250}
+                                    cy={75}
                                     labelLine={false}
                                     label={(entry) => entry.name}
                                     outerRadius={65}
@@ -215,11 +213,11 @@ const DashboardAdmin = () => {
                             </PieChart>
                         </MediaQuery>
                         <MediaQuery maxWidth={1224}>
-                            <PieChart width={400} height={130}>
+                            <PieChart width={400} height={150}>
                                 <Pie
                                     data={pieChartData}
                                     cx={150}
-                                    cy={60}
+                                    cy={70}
                                     labelLine={false}
                                     label={(entry) => entry.name}
                                     outerRadius={65}

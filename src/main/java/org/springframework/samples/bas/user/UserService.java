@@ -60,6 +60,12 @@ public class UserService {
 	}
 
 	@Transactional(readOnly = true)
+	public User findUserByUsername(String username) {
+		return userRepository.findByUsername(username).orElse(null);
+	}
+
+
+	@Transactional(readOnly = true)
 	public User findUser(Integer id) {
 		return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
 	}

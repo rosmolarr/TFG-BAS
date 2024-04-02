@@ -103,8 +103,6 @@ export default function CommunicationView() {
     return horaFormateada;
   }
 
-  console.log(cita.estado == 'ENVIADA' && !cita.comentario);
-
   return (
       <div style={{ marginLeft: '5%', marginRight: '5%' }}>
         <Row justify="center" align="top" gutter={[16, 16]}>

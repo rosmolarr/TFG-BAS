@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EntidadService {
+	
     private EntidadRepository EntidadRepository;
 	private ComunicacionRepository ComunicacionRepository;
 	private UserRepository UserRepository;
@@ -52,9 +53,12 @@ public class EntidadService {
 
     @Transactional
 	public Entidad saveEntidad(Entidad entidad) throws DataAccessException {
-		EntidadRepository
-		.save(entidad);
-		return entidad;
+		try {
+			return EntidadRepository.save(entidad);
+		} catch (Exception e) {
+			throw new DataAccessException("Error al guardar la entidad") {
+			};
+		}
 	}
 
 	@Transactional

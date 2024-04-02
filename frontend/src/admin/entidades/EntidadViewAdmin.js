@@ -175,8 +175,6 @@ export default function EntidadViewAdmin() {
     }
   ];
 
-  console.log(data_entrega);
-
   const data_description = [
     {
       title: 'Descripción',

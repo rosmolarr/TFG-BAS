@@ -58,6 +58,11 @@ public class EntidadRestController {
 	@PostMapping
 	public ResponseEntity<Entidad> create(@Valid @RequestBody Entidad entidad) {
 		User newUser = new User();
+		User existingUser = userService.findUserByUsername(entidad.getEmail());
+		if (existingUser != null) {
+			entidad.setUser(existingUser);
+			entidadService.saveEntidad(entidad);
+		} else {
 		newUser.setUsername(entidad.getEmail());
 		newUser.setPassword(entidad.getNif()); 
 		newUser.setPassword(encoder.encode(entidad.getCodigo() + entidad.getNif()));
@@ -65,27 +70,24 @@ public class EntidadRestController {
 		userService.saveUser(newUser);
 		entidad.setUser(newUser);
 		entidadService.saveEntidad(entidad);
+		}
 		return new ResponseEntity<>(entidad, HttpStatus.CREATED);
 	}
 
 	@PostMapping(value = "/import")
 	public ResponseEntity<List<Entidad>> createImportEntidades(@Valid @RequestBody List<Entidad> entidades) {
 		List<Entidad> listaEntidades = new ArrayList<>();
-		for(Entidad entidad: entidades){
-			if (!entidadService.existsByNif(entidad.getNif())) {
-				User newUser = new User();
-				newUser.setUsername(entidad.getEmail());
-				newUser.setPassword(entidad.getCodigo() + entidad.getNif()); 
-				newUser.setPassword(encoder.encode(entidad.getNif()));
-				newUser.setAuthority(authoritiesService.findByAuthority("ENTIDAD")); 
-				userService.saveUser(newUser);
-				entidad.setUser(newUser);
-				entidadService.saveEntidad(entidad);
-				listaEntidades.add(entidad);
+		for (Entidad entidad : entidades) {
+			// Comprobar si la entidad ya existe
+			if (entidadService.existsByNif(entidad.getNif())) {
+				continue; // Saltar al siguiente registro del CSV
 			}
+			create(entidad);
+			listaEntidades.add(entidad);
 		}
 		return new ResponseEntity<>(listaEntidades, HttpStatus.CREATED);
 	}
+	
 	
 
 	@PutMapping(value = "{entidadId}")

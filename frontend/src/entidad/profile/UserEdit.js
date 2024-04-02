@@ -51,7 +51,6 @@ export default function UserEditAdmin() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(user);
 
     fetch("/api/v1/users" + (user.id ? "/" + user.id : ""), {
       method: user.id ? "PUT" : "POST",
