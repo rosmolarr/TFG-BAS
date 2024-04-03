@@ -1,0 +1,10 @@
+steps:
+  # Paso 1: Construir la aplicación con Maven
+  - name: 'maven:3.8.4-openjdk-17'
+    entrypoint: 'mvn'
+    args: ['package', '-DskipTests']
+
+  # Paso 2: Desplegar la aplicación en App Engine
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app', 'deploy', 'target/my-app.jar', '--version=1.0.0', '--project=tfg-bas']
+    dir: 'https://github.com/rosmolarr/TFG-BAS'
