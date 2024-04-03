@@ -38,7 +38,7 @@ const ImportForm = ({ onClose }) => {
   function openNotificationWithIcon(type, description) {
     notification[type]({
       message: 'Importación exitosa. Recargue la página para ver los cambios.',
-      description: description || 'Los datos han sido importados correctamente.',
+      description: description || 'Las entidades han sido importadas correctamente.',
     });
   }
 
