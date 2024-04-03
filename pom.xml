@@ -162,6 +162,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<outputDirectory>C:\Users\Rosa\Desktop\TFG\Code\TFG-BAS\src\main\appengine</outputDirectory>
+				</configuration>
 				<executions>
 					<execution>
 						<!-- Spring Boot Actuator displays build-related information if a META-INF/build-info.properties 

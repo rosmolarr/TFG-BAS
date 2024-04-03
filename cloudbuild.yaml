@@ -6,5 +6,6 @@ steps:
 
   # Paso 2: Desplegar la aplicación en App Engine
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['app', 'deploy', 'target/tfg-bas-1.0.0.jar', '--version=v1-0-0', '--project=tfg-bas']
+    args: ['app', 'deploy', 'src/main/appengine/tfg-bas-1.0.0.jar', '--version=v1-0-0', '--project=tfg-bas']
     dir: 'https://github.com/rosmolarr/TFG-BAS'
+
