@@ -163,7 +163,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<outputDirectory>C:\Users\Rosa\Desktop\TFG\Code\TFG-BAS\src\main\appengine</outputDirectory>
+					<outputDirectory>C:\Users\Rosa\Desktop\TFG\Code\TFG-BAS\src</outputDirectory>
 				</configuration>
 				<executions>
 					<execution>
