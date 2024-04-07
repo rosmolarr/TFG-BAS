@@ -1,11 +1,13 @@
 steps:
-- name: 'maven:3.6.0-jdk-8'
-  args: ['mvn', 'package']
-  dir: './src'
+  # Paso 1: Construir la aplicación con Maven
+  - name: 'maven:3.8.4-openjdk-17'
+    entrypoint: 'mvn'
+    args: ['package', '-DskipTests']
+    dir: '/workspace'
 
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'deploy']
-  dir: './src'
-
+  # Paso 2: Desplegar la aplicación en App Engine
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app', 'deploy', 'target/tfg-bas-1.0.0.jar', '--version=v1-0-0', '--project=tfg-bas']
+    dir: '/workspace'
 
 
