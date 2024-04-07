@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '@ionic/react/css/core.css';
 import { setupIonicReact } from '@ionic/react';
 import { Route, Routes, useNavigate } from "react-router-dom";
+import { HashRouter as Router } from 'react-router-dom';
 import { RollbackOutlined } from '@ant-design/icons';
 import jwt_decode from "jwt-decode";
 import { FloatButton } from 'antd';

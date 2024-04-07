@@ -1,0 +1,11 @@
+steps:
+- name: 'maven:3.6.0-jdk-8'
+  args: ['mvn', 'package']
+  dir: './src'
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['app', 'deploy']
+  dir: './src'
+
+
+
