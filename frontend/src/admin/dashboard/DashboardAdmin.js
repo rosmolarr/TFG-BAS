@@ -198,7 +198,7 @@ const DashboardAdmin = () => {
                             <PieChart width={400} height={180}>
                                 <Pie
                                     data={pieChartData}
-                                    cx={250}
+                                    cx={200}
                                     cy={75}
                                     labelLine={false}
                                     label={(entry) => entry.name}
