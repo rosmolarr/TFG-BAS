@@ -9,7 +9,7 @@ steps:
   dir: './frontend'
 
 - name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', '-r', 'frontend/build', 'gs://[tfg-bas.appspot.com]']
+  args: ['cp', '-r', 'frontend/build', 'gs://[tfg-bas-testing]']
 
 
 

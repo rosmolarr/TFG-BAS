@@ -5,6 +5,11 @@ handlers:
 # Serve all API calls to Spring
 - url: /api/.*
   script: auto
+# Serve calls to Swagger-UI to Spring too
+- url: /v3/api-docs.*
+  script: auto
+- url: /swagger-ui.*
+  script: auto
 # Serve all static files with url ending with a file extension
 - url: /(.*\..+)$
   static_files: frontend/build/\1
