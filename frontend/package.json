@@ -1,5 +1,5 @@
 {
-  "proxy": "http://localhost:8080",
+  "proxy": "http://tfg-bas.ew.r.appspot.com",
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
