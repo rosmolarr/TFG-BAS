@@ -171,6 +171,7 @@
                         file is present -->
 						<goals>
 							<goal>build-info</goal>
+							<goal>repackage</goal>
 						</goals>
 						
 						<configuration>
