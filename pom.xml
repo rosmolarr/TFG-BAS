@@ -358,7 +358,7 @@
 					<manifest>
 						<addClasspath>true</addClasspath>
 						<classpathPrefix>lib/</classpathPrefix>
-						<mainClass>src.main.java.org.springframework.samples.bas.BasApplication</mainClass> <!-- Reemplaza esto con la ruta a tu clase principal -->
+						<mainClass>org.springframework.samples.bas.BasApplication</mainClass> <!-- Reemplaza esto con la ruta a tu clase principal -->
 					</manifest>
 					</archive>
 				</configuration>
