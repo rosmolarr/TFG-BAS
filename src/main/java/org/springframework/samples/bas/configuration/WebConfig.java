@@ -22,7 +22,8 @@ public class WebConfig implements WebMvcConfigurer {
             .allowedOrigins(
                 "https://tfg-bas.vercel.app",
                 "https://tfg-bas-git-main-rosmolarrs-projects.vercel.app",
-                "https://tfg-kpuul0z51-rosmolarrs-projects.vercel.app"
+                "https://tfg-kpuul0z51-rosmolarrs-projects.vercel.app",
+                "https://tfg-bas.ew.r.appspot.com/"
             )
             .allowedMethods("GET", "POST", "PUT", "DELETE")
             .allowCredentials(true);
