@@ -40,7 +40,6 @@ public class SecurityConfiguration {
 
 	@Bean
 	protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        http.requiresChannel(requiresChannel -> requiresChannel.anyRequest().requiresSecure());
 		
 		http
 			.cors(withDefaults())		
