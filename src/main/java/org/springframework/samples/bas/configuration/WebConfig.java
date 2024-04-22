@@ -20,7 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
             .allowedOrigins(
-                "https://tfg-bas.vercel.app",
+                "https://tfg-bas.vercel.app/api/v1",
                 "https://tfg-bas-git-main-rosmolarrs-projects.vercel.app",
                 "https://localhost:3000",
                 "https://tfg-bas.ew.r.appspot.com/"
