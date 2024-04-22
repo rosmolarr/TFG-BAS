@@ -96,7 +96,7 @@ public class SecurityConfiguration {
 	@Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://tfg-bas.vercel.app/api/v1"));
+        configuration.setAllowedOrigins(Arrays.asList("https://tfg-bas.vercel.app/"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("Content-Type"));
 
