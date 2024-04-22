@@ -18,7 +18,7 @@ export default function Login() {
     const reqBody = values;
     setMessage(null);
 
-    await fetch("https://tfg-bas.vercel.app/api/v1/auth/signin", {
+    await fetch("https://tfg-bas.ew.r.appspot.com/api/v1/auth/signin", {
       headers: { "Content-Type": "application/json" },
       method: "POST",
       body: JSON.stringify(reqBody),
