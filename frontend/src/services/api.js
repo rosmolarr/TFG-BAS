@@ -2,7 +2,7 @@ import axios from "axios";
 import TokenService from "./token.service";
 
 const instance = axios.create({
-    baseURL: "https://tfg-bas.ew.r.appspot.com/api/v1",
+    baseURL: "https://tfg-bas.ew.r.appspot.com",
     headers: {
         "Content-Type": "application/json",
     },
