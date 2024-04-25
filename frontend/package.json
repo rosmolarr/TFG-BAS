@@ -1,5 +1,5 @@
 {
-  "proxy": "http://tfg-bas.ew.r.appspot.com/",
+  "proxy": "https://tfg-bas.ew.r.appspot.com/",
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
