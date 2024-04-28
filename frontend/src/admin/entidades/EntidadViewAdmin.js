@@ -468,7 +468,7 @@ export default function EntidadViewAdmin() {
                 </Card>
               </Col>
               <Col className='admin-column' xs={24} sm={24} md={8} lg={8} xl={8}>
-                <Card className='button-card-admin' bodyStyle={{  display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <Card className='button-card-admin' styles={{ body: {  display: 'flex', flexDirection: 'column', gap: '20px' } }}>
                   <Button onClick={navigateEditEntidad}>Editar</Button>
                   <CsvGenerator
                     data={csvData}

@@ -165,7 +165,7 @@ export default function CitasCalendarAdmin() {
           )}
         </Col>
         <Col className='admin-column' xs={24} sm={24} md={5} lg={5} xl={5}>
-          <Card className='button-card-admin' bodyStyle={{  display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <Card className='button-card-admin' styles={{ body: { display: 'flex', flexDirection: 'column', gap: '20px' } }}>
             <Button onClick={navigateNuevaCita}>Nueva cita</Button>
             <Button onClick={navigateVerLista}>Ver en lista</Button>
           </Card>

@@ -184,7 +184,7 @@ const Dashboard = () => {
                     </Card>
                 </Col>
                 <Col xs={24} sm={24} md={8} lg={9} xl={9}>
-                    <Card title="Últimas Comunicaciones Enviadas" bodyStyle={{paddingBottom: '0px', paddingTop: '4px'}}>
+                    <Card title="Últimas Comunicaciones Enviadas" styles={{ body: { paddingBottom: '0px', paddingTop: '4px'} }}>
                         <List
                             itemLayout="horizontal"
                             size="large"

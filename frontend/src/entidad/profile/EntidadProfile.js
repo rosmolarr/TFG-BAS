@@ -482,7 +482,7 @@ export default function EntidadProfile() {
                 </Card>
               </Col>
               <Col className='admin-column' xs={24} sm={24} md={8} lg={8} xl={8}>
-                <Card className='button-card-admin' bodyStyle={{  display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <Card className='button-card-admin' styles={{ body: {  display: 'flex', flexDirection: 'column', gap: '20px' } }}>
                   <Button onClick={navigateEditEntidad}>Editar tus datos</Button>
                   <Button onClick={navigateEditUser}>Editar tu usuario</Button>
                   <Button onClick={navigateNewComunication}>Nueva notificación</Button>

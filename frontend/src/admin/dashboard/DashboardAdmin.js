@@ -233,7 +233,7 @@ const DashboardAdmin = () => {
                     </Card>
                 </Col>
                 <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                    <Card title="Últimas Notificaciones" bodyStyle={{paddingBottom: '0px', paddingTop: '4px'}}>
+                    <Card title="Últimas Notificaciones" styles={{ body: { paddingBottom: '0px', paddingTop: '4px' } }}>
                         <List
                             itemLayout="horizontal"
                             size="large"
