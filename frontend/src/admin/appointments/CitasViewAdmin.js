@@ -99,7 +99,7 @@ export default function CommunicationView() {
         {cita.comentario && (
           <Row justify="center" gutter={[16, 16]} style={{ marginBottom: '2%' }}>
             <Col span={24}>
-              <Card title="Respuesta del Banco">
+              <Card title="Incidencia">
                 <p>{cita.comentario}</p>
               </Card>
             </Col>

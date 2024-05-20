@@ -5,7 +5,7 @@ import useFetchState from "../../util/useFetchState";
 import { Space, Tag, Button, Input, Modal, Divider, Checkbox, Tooltip } from 'antd';
 import { Table } from "ant-table-extensions";
 import { SearchOutlined } from '@ant-design/icons';
-import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
+import ExclamationCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import Highlighter from 'react-highlight-words';
 import { useNavigate } from 'react-router-dom';
 import MediaQuery from 'react-responsive';
@@ -197,7 +197,7 @@ export default function CitasListAdmin() {
       render: (comentario) => (
         comentario ? (
           <Tooltip title="Tiene incidencia">
-            <CheckCircleOutlined style={{ color: 'green' }} />
+            <ExclamationCircleOutlined style={{ color: 'orange' }} />
           </Tooltip>
         ) : (
           <Tooltip title="Sin incidencia">
@@ -241,6 +241,40 @@ export default function CitasListAdmin() {
     navigate(`/citas/${id}`);
   };
 
+  const [selectedDate, setSelectedDate] = useState(formatToday());
+
+  function formatToday() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = padZero(today.getMonth() + 1); // Suma 1 porque los meses van de 0 a 11
+    const day = padZero(today.getDate());
+    return `${year}-${month}-${day}`;
+  }
+
+  function padZero(value) {
+    return value < 10 ? `0${value}` : value; // Agrega un cero inicial si el valor es menor que 10
+  }
+
+  const [entidades, setEntidades] = useFetchState(
+    [],
+    `/api/v1/entidades/all`,
+    jwt,
+    setMessage,
+    setVisible
+  );
+
+  const selectedCita = {
+    id: "",
+    fecha: selectedDate,
+    hora: "",
+    estado: "ENVIADA",
+    entidad: entidades[0]
+  };
+
+  const navigateNuevaCita = () => {
+    navigate('/citas/new', { state: { citasBase: selectedCita } });
+  };
+
   return (
       <div className="admin-page-container">
         <h1>Citas</h1> 
@@ -250,8 +284,7 @@ export default function CitasListAdmin() {
               marginTop: 8,
             }}
           >
-            <Button >Nueva cita</Button>
-            <Button >Importar citas</Button>
+            <Button onClick={navigateNuevaCita}>Nueva cita</Button>
             <Button onClick={clearFilters}>Limpiar filtros</Button>
             <Button onClick={clearAll}>Limpiarlo todo</Button>
           </Space>
@@ -262,8 +295,7 @@ export default function CitasListAdmin() {
               marginTop: 8,
             }}
           >
-            <Button >Nueva cita</Button>
-            <Button >Importar citas</Button>
+            <Button  onClick={navigateNuevaCita}>Nueva cita</Button>
           </Space>
         </MediaQuery>
         <Divider>Columnas mostradas</Divider>

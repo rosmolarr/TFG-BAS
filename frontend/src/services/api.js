@@ -3,7 +3,7 @@ import TokenService from "./token.service";
 
 const instance = axios.create({
     timeout: 10000,
-    baseURL: "https://tfg-bas.ew.r.appspot.com",
+    baseURL: "http://localhost:8080/api/v1",
     headers: {
         "Content-Type": "application/json",
     },
