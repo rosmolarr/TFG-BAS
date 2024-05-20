@@ -1,96 +1,53 @@
-# React Petclinic
-Small project based on spring-petclinic for teaching SPA architectures with react, java and spring developer for teaching DP1 at the Software Engineering degree of University of Sevilla.
+# TFG para el Banco de Alimentos de Sevilla
+Este proyecto se centra en el desarrollo de una aplicación web diseñada para optimizar la forma de gestión que se lleva a cabo en la ONG el Banco de Alimentos de
+Sevilla. La aplicación ofrece a los administradores la capacidad de coordinar citas, comunicaciones y datos de las beneficiarias de la actividad desarrollada por el banco de
+alimentos, mientras que permite a estas últimas enviar consultas y acceder a información relevante, como próximas citas y mensajes dirigidos al personal del banco.
 
-This is a fork of https://github.com/spring-projects/spring-petclinic  The main changes that have been performed were:
-- Trimming several parts of the application to keep the example low
-- Reorganize some parts of the code according to best practices introduced in the course
-- Modifying the Controllers to work as RestControllers creating several API endpoings
-- Modifying the security configuration to use JWT
-- Creating a React frontend.
+### Requisitos
+Los siguientes elementos deben estar instalados en el sistema:
+* [Java 17 o mayor](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) *Recordamos que hay que actualizar las variables de entorno, este [vídeo](https://www.youtube.com/watch?v=Zi3nDD7KNEg) puede servir de ayuda
+* [Node.js 18 o mayor](https://learn.microsoft.com/es-es/windows/dev-environment/javascript/nodejs-on-windows)
+* La línea de comandos de git.
+* Tu IDE preferido
+  * Eclipse
+  * [Spring Tools Suite](https://spring.io/tools) (STS)
+  * IntelliJ IDEA 
+  * [VS Code](https://code.visualstudio.com) *Recomendamos
+  * 
+ Para ver que versión teneis instalada podéis usar estos comandos:
 
-## Understanding the Spring Petclinic application  backend with a few diagrams
-<a href="https://speakerdeck.com/michaelisvy/spring-petclinic-sample-application">See the presentation here</a>
+![image](https://github.com/rosmolarr/TFG-BAS/assets/80246352/cc4f007d-6588-4536-9cff-66bf42c6b5bb)
 
-## Running petclinic backend locally
-Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/). You can build a jar file and run it from the command line:
-
+  
+## Como ejecutar el backend localmente
+TFG-BAS es una aplicación de [Spring Boot](https://spring.io/guides/gs/spring-boot) contruida usando [Maven](https://spring.io/guides/gs/maven/). Puedes crear un archivo JAR y ejecutarlo desde la línea de comandos, o puedes ejecutarlo directamente desde Maven usando el plugin de Maven de Spring Boot. Si haces esto, recogerá los cambios que realices en el proyecto de inmediato (los cambios en los archivos fuente de Java también requieren una compilación - la mayoría de la gente usa un IDE para esto). Recomendamos lo segundo, para ello primero utiliza un IDE ( VSCode por ejemplo ), instala los plugins necesarios (Maven for Java, el paquete de Java,..). Clona el proyecto en cualquier carpeta de su ordenador y abrelo en el IDE File -> Import -> Maven -> Existing Maven project:
 
 ```
-git clone https://github.com/gii-is-DP1/spring-petclinic.git
-cd spring-petclinic
+git clone https://github.com/rosmolarr/TFG-BAS.git
+cd TFG-BAS
 ./mvnw package
 java -jar target/*.jar
 ```
 
-You can then access petclinic backend here: [http://localhost:8080/](http://localhost:8080/swagger-ui/index.html)
-
-
-
-Or you can run it from Maven directly using the Spring Boot Maven plugin. If you do this it will pick up changes that you make in the project immediately (changes to Java source files require a compile as well - most people use an IDE for this):
+Podrás acceder al backend desde aquí: [http://localhost:8080/](http://localhost:8080/swagger-ui/index.html) usando el siguiente comando desde la consola del IDE:
 
 ```
 ./mvnw spring-boot:run
 ```
-## Database configuration
 
-In its default configuration, Petclinic uses an in-memory database (H2) which
-gets populated at startup with data. The INSERTs are specified in the file data.sql.
+## Configuración de la base de datos
 
-## Working with React Petclinic in your IDE
+El proyecto usa mysql, que puede ser adminitrado a traves de la aplicación dbeaver. Para que funcione, deberás crear una base de datos y construir las tablas. Las tablas podrás encontrarlas en la carpeta: database. Primero deberás ejecutar Tablas.sql, despues Trigger.sql, y por último Datos.sql que creara datos de prueba para la página web.
 
-### Prerequisites
-The following items should be installed in your system:
-* Java 17 or newer.
-* Node.js 18 or newer.
-* git command line tool (https://help.github.com/articles/set-up-git)
-* Your preferred IDE 
-  * Eclipse with the m2e plugin. Note: when m2e is available, there is an m2 icon in `Help -> About` dialog. If m2e is
-  not there, just follow the install process here: https://www.eclipse.org/m2e/
-  * [Spring Tools Suite](https://spring.io/tools) (STS)
-  * IntelliJ IDEA
-  * [VS Code](https://code.visualstudio.com)
+Cuando tenga su usuario administrador y el nombre de su base de datos (que recomendamos usar "bas" como nombre) deberás añadir sus credenciales en el archivo:
 
-### Steps:
+![image](https://github.com/rosmolarr/TFG-BAS/assets/80246352/50b814f5-e4b5-4460-a25e-e2895d09b927)
 
-1) On the command line
-```
-git clone https://github.com/gii-is-DP1/spring-petclinic.git
-```
-2) Inside Eclipse or STS
-```
-File -> Import -> Maven -> Existing Maven project
-```
+## Para ejecutar el frontend
 
-Then either build on the command line `./mvnw generate-resources` or using the Eclipse launcher (right click on project and `Run As -> Maven install`) to generate the css. Run the application main method by right clicking on it and choosing `Run As -> Java Application`.
-
-3) Inside IntelliJ IDEA
-
-In the main menu, choose `File -> Open` and select the Petclinic [pom.xml](pom.xml). Click on the `Open` button.
-
-CSS files are generated from the Maven build. You can either build them on the command line `./mvnw generate-resources`
-or right click on the `spring-petclinic` project then `Maven -> Generates sources and Update Folders`.
-
-A run configuration named `PetClinicApplication` should have been created for you if you're using a recent Ultimate
-version. Otherwise, run the application by right clicking on the `PetClinicApplication` main class and choosing
-`Run 'PetClinicApplication'`.
-
-4) Navigate to Petclinic
-Visit [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) in your browser.
-
-
-## Looking for something in particular?
-
-|Spring Boot Configuration | Class or Java property files  |
-|--------------------------|---|
-|The Main Class | [PetClinicApplication](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java) |
-|Properties Files | [application.properties](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/resources) |
-
-
-## Starting the frontend
-
-The Spring Petclinic is implemented with a React frontend in the folder named "frontend".
-You can start the development server to see frontend using the command (maybe you should use the command npm insall prior to this):
+TFG-BAS está implementado con un frontend en React en la carpeta llamada "frontend". Recomendamos instalar la extensión de React en VSCode, y recordamos que hay que tener instalado node.
+Puedes iniciar el servidor de desarrollo para ver el frontend usando el comando (quizás debas usar el comando `npm install` antes de esto):
 ```
 npm start
 ```
-You can then access the PetClinic frontend at [http://localhost:3000](http://localhost:3000)
+Puedes acceder al frontend a través de esta url [http://localhost:3000](http://localhost:3000)
