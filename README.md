@@ -20,7 +20,7 @@ Los siguientes elementos deben estar instalados en el sistema:
 java --version
 node --version
 ```
-
+<image src="/versiones.png" alt="Versiones instaladas">
   
 ## Como ejecutar el backend localmente
 TFG-BAS es una aplicación de [Spring Boot](https://spring.io/guides/gs/spring-boot) contruida usando [Maven](https://spring.io/guides/gs/maven/). Puedes crear un archivo JAR y ejecutarlo desde la línea de comandos, o puedes ejecutarlo directamente desde Maven usando el plugin de Maven de Spring Boot. Si haces esto, recogerá los cambios que realices en el proyecto de inmediato (los cambios en los archivos fuente de Java también requieren una compilación - la mayoría de la gente usa un IDE para esto). Recomendamos lo segundo, para ello primero utiliza un IDE ( VSCode por ejemplo ), instala los plugins necesarios (Maven for Java, el paquete de Java,..). Clona el proyecto en cualquier carpeta de su ordenador y abrelo en el IDE File -> Import -> Maven -> Existing Maven project:
@@ -44,7 +44,7 @@ El proyecto usa mysql, que puede ser adminitrado a traves de la aplicación dbea
 
 Cuando tenga su usuario administrador y el nombre de su base de datos (que recomendamos usar "bas" como nombre) deberás añadir sus credenciales en el archivo:
 
-![image](https://github.com/rosmolarr/TFG-BAS/assets/80246352/50b814f5-e4b5-4460-a25e-e2895d09b927)
+<image src="/bd.png" alt="Usuarios base de datos">
 
 ## Para ejecutar el frontend
 
