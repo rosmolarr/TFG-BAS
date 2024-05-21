@@ -16,7 +16,10 @@ Los siguientes elementos deben estar instalados en el sistema:
   * 
  Para ver que versión teneis instalada podéis usar estos comandos:
 
-![image](https://github.com/rosmolarr/TFG-BAS/assets/80246352/cc4f007d-6588-4536-9cff-66bf42c6b5bb)
+```
+java --version
+node --version
+```
 
   
 ## Como ejecutar el backend localmente
